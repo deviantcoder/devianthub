@@ -1,0 +1,42 @@
+*** DeviantHub ToDo ***
+
+Templates:
+1. home (main feed) --------|DONE| (b)
+2. profile page ------------|DONE| (b)
+3. user page ---------------|DONE| (b)
+4. community page ----------|DONE| (b)
+5. popular page ------------||
+6. explore page ------------||
+7. all page ----------------||
+8. post creation page ------|DONE| (b)
+9. chat page ---------------|DONE| (b)
+10. notifications ----------||
+11. post page --------------|DONE| (b)
+12. settings page ----------||
+13. profile pic dropdown ---|| (optional)
+14. login page -------------|DONE| (b)
+15. register page ----------|DONE| (b)
+------------------------------
+Django Project Apps Design:
+1. accounts    (b)
+2. posts       (b)
+3. communities (b)
+4. chatroom    (b)
+------------------------------
+Preliminary tasks:
+1. basic templates (b) -----|DONE|
+2. db design ---------------|IN PROGRESS|
+3. django project design ---|DONE|
+------------------------------
+Project progress:
+1. posts app ---------------|IN PROGRESS|
+        feed ---------------|IN PROGRESS|
+        comments -----------||
+        upvotes/downvotes --||
+        CRUD ---------------||
+        either link ot media|| (post creation)
+        video url ----------|DONE|
+
+2. users app ---------------||
+3. comunities --------------||
+4. chatroom ----------------||

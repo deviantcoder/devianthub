@@ -1,0 +1,54 @@
+{% load static %}
+
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="" href="">
+                <img src="{% static 'img/logo.png' %}" alt="DeviantHub" class="navbar-logo mt-2">
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start"></div>
+
+            <div class="navbar-center">
+                <div class="control has-icons-left">
+                    <input class="input is-rounded" type="text" placeholder="Search DeviantHub">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span> 
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <a class="navbar-item a-button">
+                    <span class="icon is-left">
+                        <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="navbar-item a-button">
+                    <span class="icon is-left">
+                        <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <a class="navbar-item a-button">
+                    <span class="icon is-left">
+                        <i class="fas fa-bell" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <div class="buttons">
+                    <a class="">
+                        <img class="profile-image mt-2 mr-2 ml-5" src="{% static 'img/profile.jpg' %}" alt="Profile">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>  

@@ -1,0 +1,202 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block content %}
+    
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+
+            <!-- SIDE PANEL -->
+            {% include 'posts/left_side_panel.html' %}
+
+            <!-- FEED -->
+            <div class="column is-8">
+                <div class="content">
+                    <h1 class="title">Recent Posts</h1>
+
+                    {% for post in posts %}
+
+                    <div class="box">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    
+                                    <div class="community-item recent-item">
+                                        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="item" style="display: flex; align-items: center;">
+                                                <a href="" class="recent-post-link" style="display: flex; align-items: center;">
+                                                    <img src="{% static 'img/profile.jpg' %}" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                                                    <span class="is-size-7">c/webdesign</span>
+                                                </a>
+                                                <span class="is-size-7 ml-1"> • {{ post.time_since_posted }} hours ago</span>
+                                            </div>
+                                            <div class="item">
+                                                <div class="dropdown is-hoverable">
+                                                    <div class="dropdown-trigger">
+                                                      <button aria-haspopup="true" aria-controls="dropdown-menu4">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-ellipsis-v" style="font-size: 16px;"></i>
+                                                        </span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                                      <div class="dropdown-content">
+                                                        <div class="dropdown-item">
+                                                            <a href="" class="post-title">
+                                                                <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
+                                                                <strong>Save</strong>
+                                                            </a>
+                                                        </div>
+                                                        <div class="dropdown-item">
+                                                            <a href="" class="post-title">
+                                                                <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
+                                                                <strong>Hide</strong>
+                                                            </a>
+                                                        </div>
+                                                        <div class="dropdown-item">
+                                                            <a href="" class="post-title">
+                                                                <i class="fas fa-flag mr-3" aria-hidden="true"></i>
+                                                                <strong>Report</strong>
+                                                            </a>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if post.has_media_files != False %}
+                                        {% if post.has_media_files == 1 %}
+                                            <div class="post-header">
+                                                <a href="#" class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
+                                                    <img src="{{ post.postmedia_set.all.first.file.url }}" alt="Post" class="post-image">
+                                                </a>
+                                            </div>
+                                    
+                                            <!-- Modal -->
+                                            <div id="modal-single-{{ forloop.counter }}" class="modal">
+                                                <div class="modal-background"></div>
+                                                <div class="modal-content">
+                                                    <img id="modal-image" src="{{ post.postmedia_set.all.first.file.url }}" alt="Full Size Image">
+                                                </div>
+                                                <button class="modal-close is-large" aria-label="close"></button>
+                                            </div>
+                                        {% else %}
+                                        <section class="carousel">
+                                            <div class="carousel-wrapper">
+                                                
+                                                {% for media in post.postmedia_set.all %}
+                                                    <div class="carousel-slide">
+                                                        <a href="#" class="js-modal-trigger" data-target="modal-{{forloop.counter}}" data-image="{{media.file.url}}">
+                                                            <img src="{{ media.file.url }}" alt="Post" class="post-image">
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                                
+                                            </div>
+                                            <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
+                                            <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
+                                        
+                                            <!-- Modal -->
+                                            <div id="modal-{{forloop.counter}}" class="modal">
+                                                <div class="modal-background"></div>
+                                                <div class="modal-content">
+                                                    <img id="modal-image" src="" alt="Full Size Image">
+                                                </div>
+                                                <button class="modal-close is-large" aria-label="close"></button>
+                                            </div>
+                                        
+                                            <!-- Indicators -->
+                                            <div class="carousel-indicators">
+                                                <!-- Dynamically created -->
+                                            </div>
+                                        </section>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if post.video_url %}
+                                        <div class="post-header">
+                                            {% if 'youtube' in post.video_url %}
+                                                {% with post.video_url|slice:"32:" as video_id %}
+                                                    <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+                                                {% endwith %}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="post-content">
+                                        <p>
+                                            <strong><a href="" class="post-title">{{ post.title }}</a></strong>
+                                            <br>
+                                            <span class="post-text">
+                                                {{ post.body }}
+                                            </span>
+                                            <br>
+                                            <small class="additional-info">Posted on: {{ post.created }}</small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <nav class="level is-mobile">
+                                    <div class="level-left">
+
+                                        <!-- up/down voting -->
+                                        <div class="vote-group">
+                                            <a class="vote-button" aria-label="upvote">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                            <span class="vote-count">123</span>
+                                            <a class="vote-button" aria-label="downvote">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <!-- commenting -->
+                                        <div class="vote-group">
+                                            <a class="vote-button" aria-label="comments">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-comments" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                            <span class="vote-count">78</span>
+                                        </div>
+                                        <!-- sharing -->
+                                        <div class="vote-group">
+                                            <a class="vote-button" aria-label="comments">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-share" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </article>
+                    </div>
+
+                    <hr>
+
+                    {% endfor %}
+
+                    
+                    
+                </div>
+            </div>
+
+            <!-- SIDE PANEL -->
+            {% include 'posts/right_side_panel.html' %}
+            
+        </div>
+    </div>
+</section>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+{% endblock content %}
