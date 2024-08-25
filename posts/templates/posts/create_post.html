@@ -1,0 +1,60 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <!-- PAGE CONTENT -->
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+
+                <!-- SIDE PANEL -->
+                {% include 'posts/left_side_panel.html' %}
+
+                <!-- FORM -->
+                <div class="column is-8">
+                    <div class="content">
+
+                        <h4>Create Post</h4>
+                        
+                        <div class="box mb-3">
+                            <article class="media">
+                                <div class="media-content">
+                                    <div class="content">
+
+                                        <form method="POST">
+                                            {% csrf_token %}
+
+                                            {% for field in form %}
+                                                <div class="field">
+                                                    <label class="label">{{ field.label }}</label>
+                                                    <div class="control">
+                                                        {{ field }}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+
+                                            <div class="field is-grouped">
+                                                <div class="control">
+                                                    <button type="submit" class="button" style="border-radius: 20px; background-color: rgb(1, 59, 66);">
+                                                        Post
+                                                    </button>
+                                                </div>
+                                                <div class="control">
+                                                    <button type="reset" class="button" style="border-radius: 20px; background-color: rgb(34, 34, 34);;">
+                                                        Save draft
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+{% endblock content %}

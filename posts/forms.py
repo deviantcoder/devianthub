@@ -1,0 +1,27 @@
+from django import forms
+from .models import Post
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = [
+            'title', 'body', 'video_url',
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'input post-creation-field', 'placeholder': 'Enter your post title', 'type': 'text', 'title': 'title'
+            }),
+            'body': forms.Textarea(attrs={
+                'class': 'textarea post-creation-field', 'placeholder': 'Write your post here...', 'name': 'body', 'rows': 4, 
+                'style': 'resize: vertical; min-height: 50px;'
+            }),
+            'video_url': forms.TextInput(attrs={
+                'class': 'input post-creation-field', 'placeholder': 'YouTube video link', 'type': 'text', 'name': 'video_url'
+            }),
+        }
+        labels = {
+            'title': 'Title',
+            'body': 'Content',
+            'video_url': 'YouTube video link'
+        }

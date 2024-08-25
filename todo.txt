@@ -29,7 +29,7 @@ Preliminary tasks:
 3. django project design ---|DONE|
 ------------------------------
 Project progress:
-1. posts app ---------------|IN PROGRESS|
+1. posts app
         feed ---------------|IN PROGRESS|
         comments -----------||
         upvotes/downvotes --||
@@ -37,6 +37,6 @@ Project progress:
         either link ot media|| (post creation)
         video url ----------|DONE|
 
-2. users app ---------------||
-3. comunities --------------||
-4. chatroom ----------------||
+2. users app
+3. comunities
+4. chatroom
