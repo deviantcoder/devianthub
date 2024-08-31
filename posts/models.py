@@ -13,6 +13,8 @@ class Post(models.Model):
 
     video_url = models.URLField(null=True, blank=True)
 
+    draft = models.BooleanField(default=False, null=True, blank=True)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
@@ -27,8 +29,32 @@ class Post(models.Model):
     
     def time_since_posted(self):
         time_diff = timezone.now() - self.created
-        time_diff = time_diff.total_seconds() // 3600
-        return int(time_diff)
+        time_diff = time_diff.total_seconds() / 3600
+
+        week_hours = 24 * 7
+        month_hours = 24 * 30
+
+        data = {'type': '', 'num': 0}
+
+        if time_diff < 1 / 60:
+            data['type'] = 'now'
+        elif time_diff < 1:
+            data['type'] = 'minute'
+            data['num'] = int(time_diff * 60)             # minutes
+        elif time_diff < 24:
+            data['type'] = 'hour'
+            data['num'] = int(time_diff)                  # hours
+        elif 24 <= time_diff < week_hours:
+            data['type'] = 'day'
+            data['num'] = int(time_diff // 24)            # days
+        elif week_hours <= time_diff < month_hours:
+            data['type'] = 'week'
+            data['num'] = int(time_diff / 24 / 7)         # weeks
+        elif time_diff >= month_hours:
+            data['type'] = 'month'
+            data['num'] = int(time_diff / 24 / 30)        # months 
+
+        return data
 
     def __str__(self):
         return self.title
@@ -50,9 +76,10 @@ class PostMedia(models.Model):
             validate_file_size,
         ]
     )
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f'{self.post.title}_{self.file.name}'
     
     class Meta:
-        ordering = ['post']
+        ordering = ['-post']

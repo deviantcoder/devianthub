@@ -34,9 +34,12 @@ Project progress:
         comments -----------||
         upvotes/downvotes --||
         CRUD ---------------||
-        either link ot media|| (post creation)
+        either link or media|| (post creation)
+        multiple media files||
         video url ----------|DONE|
-
+        time posted --------|DONE|
+        form post type -----|| (text/media/URL)
+        choose where to post|| (user app needed)
 2. users app
 3. comunities
 4. chatroom

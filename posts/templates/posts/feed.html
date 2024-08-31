@@ -30,7 +30,14 @@
                                                     <img src="{% static 'img/profile.jpg' %}" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
                                                     <span class="is-size-7">c/webdesign</span>
                                                 </a>
-                                                <span class="is-size-7 ml-1"> • {{ post.time_since_posted }} hours ago</span>
+                                                <span class="is-size-7 ml-1"> • 
+                                                    {% if post.time_since_posted.type != 'now' %}
+                                                    {{ post.time_since_posted.num }} 
+                                                    {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+                                                    {% else %}
+                                                    {{ post.time_since_posted.type }}
+                                                    {% endif %}
+                                                </span>
                                             </div>
                                             <div class="item">
                                                 <div class="dropdown is-hoverable">
