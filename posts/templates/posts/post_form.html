@@ -20,7 +20,7 @@
                                 <div class="media-content">
                                     <div class="content">
 
-                                        <form method="POST">
+                                        <form method="POST" enctype="multipart/form-data">
                                             {% csrf_token %}
 
                                             {% for field in form %}
@@ -31,6 +31,26 @@
                                                     </div>
                                                 </div>
                                             {% endfor %}
+
+                                            <div id="media-formset">
+                                                {{ media_formset.management_form }}
+                                                {% for form in media_formset %}
+                                                    <div class="media-form">
+                                                        {{ form.as_p }}
+                                                        <button type="button" class="delete-media">Remove</button>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            
+                                            <!-- hidden form template -->
+                                            <div id="empty-form" style="display: none;">
+                                                <div class="media-form">
+                                                    {{ media_formset.empty_form.as_p }}
+                                                    <button type="button" class="delete-media">Remove</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="button" id="add-media">Add Media</button>
 
                                             <div class="field is-grouped">
                                                 <div class="control">
@@ -57,4 +77,33 @@
             </div>
         </div>
     </section>
+
+
+    <script>
+        document.getElementById('add-media').addEventListener('click', function() {
+            var formsetDiv = document.getElementById('media-formset');
+            var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
+            var formNum = parseInt(totalForms.value);
+    
+            var newForm = document.getElementById('empty-form').innerHTML;
+    
+            newForm = newForm.replace(/__prefix__/g, formNum);
+    
+            formsetDiv.insertAdjacentHTML('beforeend', newForm);
+    
+            totalForms.value = formNum + 1;
+        });
+    
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-media')) {
+                event.target.closest('.media-form').remove();
+                var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
+                totalForms.value = document.querySelectorAll('.media-form').length;
+            }
+        });
+    </script>
+    
+    
+    
+
 {% endblock content %}

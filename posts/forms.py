@@ -1,5 +1,6 @@
 from django import forms
-from .models import Post
+from .models import Post, PostMedia
+from django.forms import inlineformset_factory
 
 
 class PostForm(forms.ModelForm):
@@ -25,3 +26,13 @@ class PostForm(forms.ModelForm):
             'body': 'Content',
             'video_url': 'YouTube video link'
         }
+
+class PostMediaForm(forms.ModelForm):
+    class Meta:
+        model = PostMedia
+        fields = ['file']
+
+
+PostMediaFormSet = inlineformset_factory(
+    Post, PostMedia, form=PostMediaForm, extra=1, can_delete=True
+)
