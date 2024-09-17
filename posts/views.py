@@ -36,15 +36,20 @@ def create_post(request):
 
 def edit_post(request, pk):
     post = get_object_or_404(Post, id=pk)
+    post_type = post.post_type
     post_form = PostForm(instance=post)
-    media_formset = PostMediaFormSet(instance=post)
+    media_formset = PostMediaFormSet(instance=post) if post_type == 'media' else None
 
     if request.method == 'POST':
-        post_form = PostForm(request.POST, instance=post)
-        media_formset = PostMediaFormSet(request.POST, request.FILES, instance=post)
-        if post_form.is_valid() and media_formset.is_valid():
-            post = post_form.save()
-            media_formset.save()
+        post_form = PostForm(request.POST, instance=post, post_type=post_type)
+        if post_type == 'media':
+            media_formset = PostMediaFormSet(request.POST, request.FILES, instance=post)
+
+        if post_form.is_valid() and (media_formset.is_valid() if media_formset else True):
+            post_form.save()
+            
+            if post_type == 'media':
+                media_formset.save()
 
             return redirect('posts:feed')
         
@@ -52,6 +57,7 @@ def edit_post(request, pk):
         'post_title': post.title,
         'form': post_form,
         'media_formset': media_formset,
+        'post_type': post_type,
     }
 
-    return render(request, 'posts/post_form.html', context)
+    return render(request, 'posts/edit_post.html', context)

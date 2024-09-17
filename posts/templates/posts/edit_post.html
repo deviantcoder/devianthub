@@ -1,0 +1,193 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+
+            <!-- SIDE PANEL -->
+            {% include 'posts/left_side_panel.html' %}
+
+            <!-- FORM -->
+            <div class="column is-8">
+                <div class="content">
+                    <h4>Edit Post</h4>
+
+                    <div class="box mb-3">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="content">
+
+                                    <form method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+
+                                        <!-- Post Title -->
+                                        <div class="field">
+                                            <label class="label">Title</label>
+                                            <div class="control">
+                                                {{ form.title }}
+                                            </div>
+                                        </div>
+
+                                        <h1>Post Type: {{ post_type }}</h1>
+
+                                        {% if post_type == 'text' %}
+                                            <!-- Text Post Form -->
+                                            <div class="field">
+                                                <label class="label">Content</label>
+                                                <div class="control">
+                                                    {{ form.body }}
+                                                </div>
+                                            </div>
+                                        {% elif post_type == 'media' %}
+                                            <!-- Image Post Form -->
+                                            <div id="media-formset" style="display: grid; grid-template-columns: 1fr 200px; gap: 20px;">
+                                                {{ media_formset.management_form }}
+                                                {% for form in media_formset %}
+                                                    <div class="media-form" style="display: flex; align-items: center;">
+                                                        <!-- Сама форма -->
+                                                        <div class="form-fields">
+                                                            {{ form.as_p }}
+                                                        </div>
+
+                                                        <!-- Превью изображения, если файл уже загружен -->
+                                                        {% if form.instance.file %}
+                                                            <div class="image-preview" style="margin-left: 20px;">
+                                                                <img src="{{ form.instance.file.url }}" alt="Image preview" style="max-width: 200px; max-height: auto;">
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <hr style="grid-column: span 2;">
+                                                {% endfor %}
+                                            </div>
+                                            <div id="empty-form" style="display: none;">
+                                                <div class="media-form">
+                                                    {{ media_formset.empty_form.as_p }}
+                                                    <button type="button" class="delete-media delete-button">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                        Remove
+                                                    </button>
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                            <div class="button-container">
+                                                <button type="button" id="add-media" class="add-button">Add Media</button>
+                                            </div>
+                                        {% elif post_type == 'link' %}
+                                            <!-- Link Post Form -->
+                                            <div class="field">
+                                                <label class="label">YouTube video link</label>
+                                                <div class="control">
+                                                    {{ form.video_url }}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                        <!-- Post Buttons -->
+                                        <div class="field is-grouped">
+                                            <div class="control">
+                                                <button type="submit" class="button is-primary">
+                                                    Update Post
+                                                </button>
+                                            </div>
+                                            <div class="control">
+                                                <a href="{{ request.GET.next }}" class="button is-dark">
+                                                    Cancel
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('add-media').addEventListener('click', function() {
+        var formsetDiv = document.getElementById('media-formset');
+        var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
+        var formNum = parseInt(totalForms.value);
+
+        var newForm = document.getElementById('empty-form').innerHTML;
+
+        newForm = newForm.replace(/__prefix__/g, formNum);
+
+        formsetDiv.insertAdjacentHTML('beforeend', newForm);
+
+        totalForms.value = formNum + 1;
+    });
+
+    document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('delete-media')) {
+        var form = event.target.closest('.media-form');
+
+        var deleteField = form.querySelector('input[name$="-DELETE"]');
+        
+        if (deleteField) {
+            deleteField.value = 'on';
+        }
+        
+        form.remove();
+        
+        var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
+        totalForms.value = document.querySelectorAll('.media-form').length;
+    }
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tabs
+        const textTab = document.getElementById('text-tab');
+        const imagesTab = document.getElementById('images-tab');
+        const linkTab = document.getElementById('link-tab');
+
+        // Forms
+        const textForm = document.getElementById('text-form');
+        const imagesForm = document.getElementById('images-form');
+        const linkForm = document.getElementById('link-form');
+
+        // Add click event listeners for tabs
+        textTab.addEventListener('click', function() {
+            setActiveTab(textTab, textForm);
+        });
+        imagesTab.addEventListener('click', function() {
+            setActiveTab(imagesTab, imagesForm);
+        });
+        linkTab.addEventListener('click', function() {
+            setActiveTab(linkTab, linkForm);
+        });
+
+        // Function to switch active tab and display corresponding form
+        function setActiveTab(activeTab, activeForm) {
+            // Remove 'is-active' class from all tabs
+            textTab.classList.remove('is-active');
+            imagesTab.classList.remove('is-active');
+            linkTab.classList.remove('is-active');
+
+            // Hide all forms
+            textForm.classList.add('hidden');
+            imagesForm.classList.add('hidden');
+            linkForm.classList.add('hidden');
+
+            // Add 'is-active' to the clicked tab and show corresponding form
+            activeTab.classList.add('is-active');
+            activeForm.classList.remove('hidden');
+        }
+    });
+</script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+{% endblock content %}

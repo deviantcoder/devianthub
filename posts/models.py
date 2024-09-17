@@ -6,6 +6,12 @@ from django.utils import timezone
 
 
 class Post(models.Model):
+    POST_TYPE = (
+        ('text', 'Text'),
+        ('media', 'Media'),
+        ('link', 'Link')
+    )
+
     # user
     # community
     title = models.CharField(max_length=100)
@@ -14,6 +20,8 @@ class Post(models.Model):
     video_url = models.URLField(null=True, blank=True)
 
     draft = models.BooleanField(default=False, null=True, blank=True)
+
+    post_type = models.CharField(max_length=10, choices=POST_TYPE, default='text', null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
