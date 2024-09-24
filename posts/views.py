@@ -20,7 +20,12 @@ def create_post(request):
         media_formset = PostMediaFormSet(request.POST, request.FILES)
 
         if post_form.is_valid() and media_formset.is_valid():
-            post = post_form.save()
+            post_type = request.POST.get('post_type', 'text')
+
+            post = post_form.save(commit=False)
+            post.post_type = post_type
+            post.save()
+            
             media_formset.instance = post
             media_formset.save()
 

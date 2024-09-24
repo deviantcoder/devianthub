@@ -23,7 +23,7 @@ class PostForm(forms.ModelForm):
         }
         labels = {
             'title': 'Title',
-            'body': 'Content',
+            'body': 'Body',
             'video_url': 'YouTube video link'
         }
 

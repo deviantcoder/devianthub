@@ -20,6 +20,9 @@
 
                                     <form method="POST" enctype="multipart/form-data">
                                         {% csrf_token %}
+                                        
+                                        <!-- post_type hidden -->
+                                        <input type="hidden" name="post_type" id="post-type" value="text">
 
                                         <!-- Post Title -->
                                         <div class="field">
@@ -47,7 +50,7 @@
                                         <!-- Text Post Form -->
                                         <div id="text-form" class="post-type-form">
                                             <div class="field">
-                                                <label class="label">Content</label>
+                                                <label class="label">Body</label>
                                                 <div class="control">
                                                     {{ form.body }}
                                                 </div>
@@ -118,80 +121,6 @@
         </div>
     </div>
 </section>
-
-<script>
-    document.getElementById('add-media').addEventListener('click', function() {
-        var formsetDiv = document.getElementById('media-formset');
-        var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
-        var formNum = parseInt(totalForms.value);
-
-        var newForm = document.getElementById('empty-form').innerHTML;
-
-        newForm = newForm.replace(/__prefix__/g, formNum);
-
-        formsetDiv.insertAdjacentHTML('beforeend', newForm);
-
-        totalForms.value = formNum + 1;
-    });
-
-    document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('delete-media')) {
-        var form = event.target.closest('.media-form');
-
-        var deleteField = form.querySelector('input[name$="-DELETE"]');
-        
-        if (deleteField) {
-            deleteField.value = 'on';
-        }
-        
-        form.remove();
-        
-        var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
-        totalForms.value = document.querySelectorAll('.media-form').length;
-    }
-});
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tabs
-        const textTab = document.getElementById('text-tab');
-        const imagesTab = document.getElementById('images-tab');
-        const linkTab = document.getElementById('link-tab');
-
-        // Forms
-        const textForm = document.getElementById('text-form');
-        const imagesForm = document.getElementById('images-form');
-        const linkForm = document.getElementById('link-form');
-
-        // Add click event listeners for tabs
-        textTab.addEventListener('click', function() {
-            setActiveTab(textTab, textForm);
-        });
-        imagesTab.addEventListener('click', function() {
-            setActiveTab(imagesTab, imagesForm);
-        });
-        linkTab.addEventListener('click', function() {
-            setActiveTab(linkTab, linkForm);
-        });
-
-        // Function to switch active tab and display corresponding form
-        function setActiveTab(activeTab, activeForm) {
-            // Remove 'is-active' class from all tabs
-            textTab.classList.remove('is-active');
-            imagesTab.classList.remove('is-active');
-            linkTab.classList.remove('is-active');
-
-            // Hide all forms
-            textForm.classList.add('hidden');
-            imagesForm.classList.add('hidden');
-            linkForm.classList.add('hidden');
-
-            // Add 'is-active' to the clicked tab and show corresponding form
-            activeTab.classList.add('is-active');
-            activeForm.classList.remove('hidden');
-        }
-    });
-</script>
 
 <style>
     .hidden {
