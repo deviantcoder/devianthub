@@ -72,7 +72,7 @@ class Post(models.Model):
 
 
 def upload_to(instance, filename):
-    return f'{instance.post.title}_{str(instance.post.id)[:10]}/{filename}'
+    return f'{instance.post.title[:10]}_{str(instance.post.id)[:10]}/{filename}'
 
 
 class PostMedia(models.Model):

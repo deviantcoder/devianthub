@@ -66,3 +66,9 @@ def edit_post(request, pk):
     }
 
     return render(request, 'posts/edit_post.html', context)
+
+
+def delete_post(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    post.delete()
+    return redirect('/')
