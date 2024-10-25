@@ -39,7 +39,7 @@
                                             </div>
                                         {% elif post_type == 'media' %}
                                             <!-- Image Post Form -->
-                                            <div id="media-formset" style="display: grid; grid-template-columns: 1fr 200px; gap: 20px;">
+                                            <div id="media-formset">
                                                 {{ media_formset.management_form }}
                                                 {% for form in media_formset %}
                                                     <div class="media-form" style="display: flex; align-items: center;">
@@ -57,6 +57,7 @@
                                                     <hr style="grid-column: span 2;">
                                                 {% endfor %}
                                             </div>
+                                            
                                             <div id="empty-form" style="display: none;">
                                                 <div class="media-form">
                                                     {{ media_formset.empty_form.as_p }}
@@ -64,12 +65,14 @@
                                                         <i class="fas fa-trash-alt"></i>
                                                         Remove
                                                     </button>
-                                                    <hr>
+                                                    <hr style="grid-column: span 2;">
                                                 </div>
                                             </div>
+
                                             <div class="button-container">
                                                 <button type="button" id="add-media" class="add-button">Add Media</button>
                                             </div>
+                                            
                                         {% elif post_type == 'link' %}
                                             <!-- Link Post Form -->
                                             <div class="field">
@@ -108,35 +111,30 @@
 
 <script>
     document.getElementById('add-media').addEventListener('click', function() {
-        var formsetDiv = document.getElementById('media-formset');
-        var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
-        var formNum = parseInt(totalForms.value);
+        const formsetDiv = document.getElementById('media-formset');
+        const totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
+        const formNum = parseInt(totalForms.value);
 
-        var newForm = document.getElementById('empty-form').innerHTML;
-
-        newForm = newForm.replace(/__prefix__/g, formNum);
-
+        const newForm = document.getElementById('empty-form').innerHTML.replace(/__prefix__/g, formNum);
         formsetDiv.insertAdjacentHTML('beforeend', newForm);
 
         totalForms.value = formNum + 1;
     });
-
     document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('delete-media')) {
-        var form = event.target.closest('.media-form');
+        if (event.target.classList.contains('delete-media')) {
+            const form = event.target.closest('.media-form');
+            const deleteField = form.querySelector('input[name$="-DELETE"]');
 
-        var deleteField = form.querySelector('input[name$="-DELETE"]');
-        
-        if (deleteField) {
-            deleteField.value = 'on';
+            if (deleteField) {
+                deleteField.value = 'on';
+            }
+
+            form.remove();
+
+            const totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
+            totalForms.value = document.querySelectorAll('.media-form').length;
         }
-        
-        form.remove();
-        
-        var totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
-        totalForms.value = document.querySelectorAll('.media-form').length;
-    }
-});
+    });
 </script>
 
 <style>
