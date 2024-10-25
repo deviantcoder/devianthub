@@ -43,3 +43,6 @@ Project progress:
 2. users app
 3. comunities
 4. chatroom
+
+fix media form display
+fix media signals
