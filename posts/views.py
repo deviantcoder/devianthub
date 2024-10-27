@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, PostMedia
 from .forms import PostForm, PostMediaFormSet
@@ -70,5 +71,18 @@ def edit_post(request, pk):
 
 def delete_post(request, pk):
     post = get_object_or_404(Post, id=pk)
+
+    media_files = [media.file.path for media in post.postmedia_set.all() if media.file]
+    media_dir = os.path.dirname(media_files[0]) if media_files else None
+
     post.delete()
+
+    if media_files:
+        for file_path in media_files:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+    
+    if media_dir and os.path.exists(media_dir):
+        os.rmdir(media_dir)
+
     return redirect('/')
