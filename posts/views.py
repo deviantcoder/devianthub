@@ -53,7 +53,7 @@ def edit_post(request, pk):
 
         if post_form.is_valid() and (media_formset.is_valid() if media_formset else True):
             post_form.save()
-            
+
             if post_type == 'media':
                 media_formset.save()
 
@@ -75,14 +75,19 @@ def delete_post(request, pk):
     media_files = [media.file.path for media in post.postmedia_set.all() if media.file]
     media_dir = os.path.dirname(media_files[0]) if media_files else None
 
-    post.delete()
+    if request.method == 'POST':
+        post.delete()
 
-    if media_files:
-        for file_path in media_files:
-            if os.path.exists(file_path):
-                os.remove(file_path)
-    
-    if media_dir and os.path.exists(media_dir):
-        os.rmdir(media_dir)
+        if media_files:
+            for file_path in media_files:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+        
+        if media_dir and os.path.exists(media_dir):
+            os.rmdir(media_dir)
 
-    return redirect('/')
+        return redirect('/')
+
+    context = {'object': post.title}
+
+    return render(request, 'posts/delete_confirmation.html', context)

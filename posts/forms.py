@@ -1,6 +1,6 @@
 from django import forms
 from .models import Post, PostMedia
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, BaseFormSet
 
 
 class PostForm(forms.ModelForm):

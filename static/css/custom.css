@@ -971,3 +971,7 @@
     opacity: 0.5;
     pointer-events: none;
 }
+
+.deletion {
+    font-size: large;
+}
