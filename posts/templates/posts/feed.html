@@ -94,50 +94,66 @@
                                     
                                     {% if post.has_media_files != False %}
                                         {% if post.has_media_files == 1 %}
-                                            <div class="post-header">
-                                                <a href="#" class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
-                                                    <img src="{{ post.postmedia_set.all.first.file.url }}" alt="Post" class="post-image">
-                                                </a>
-                                            </div>
-                                    
-                                            <!-- Modal -->
-                                            <div id="modal-single-{{ forloop.counter }}" class="modal">
-                                                <div class="modal-background"></div>
-                                                <div class="modal-content">
-                                                    <img id="modal-image" src="{{ post.postmedia_set.all.first.file.url }}" alt="Full Size Image">
+
+                                            {% if post.postmedia_set.first.file_ext.type == 'image' %}
+                                                <div class="post-header">
+                                                    <a href="#" class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
+                                                        <img src="{{ post.postmedia_set.first.file.url }}" alt="Post" class="post-image">
+                                                    </a>
                                                 </div>
-                                                <button class="modal-close is-large" aria-label="close"></button>
-                                            </div>
-                                        {% else %}
-                                        <section class="carousel">
-                                            <div class="carousel-wrapper">
-                                                
-                                                {% for media in post.postmedia_set.all %}
-                                                    <div class="carousel-slide">
-                                                        <a href="#" class="js-modal-trigger" data-target="modal-{{forloop.counter}}" data-image="{{media.file.url}}">
-                                                            <img src="{{ media.file.url }}" alt="Post" class="post-image">
-                                                        </a>
+                                        
+                                                <!-- Modal -->
+                                                <div id="modal-single-{{ forloop.counter }}" class="modal">
+                                                    <div class="modal-background"></div>
+                                                    <div class="modal-content">
+                                                        <img id="modal-image" src="{{ post.postmedia_set.first.file.url }}" alt="Full Size Image">
                                                     </div>
-                                                {% endfor %}
-                                                
-                                            </div>
-                                            <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
-                                            <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
-                                        
-                                            <!-- Modal -->
-                                            <div id="modal-{{forloop.counter}}" class="modal">
-                                                <div class="modal-background"></div>
-                                                <div class="modal-content">
-                                                    <img id="modal-image" src="" alt="Full Size Image">
+                                                    <button class="modal-close is-large" aria-label="close"></button>
                                                 </div>
-                                                <button class="modal-close is-large" aria-label="close"></button>
-                                            </div>
-                                        
-                                            <!-- Indicators -->
-                                            <div class="carousel-indicators">
-                                                <!-- Dynamically created -->
-                                            </div>
-                                        </section>
+                                            {% else %}
+                                                <div class="post-header">
+                                                    <video controls style="height: 300px; width: auto;">
+                                                        <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                                                    </video>
+                                                </div>
+                                            {% endif %}
+
+                                        {% else %}
+                                            <section class="carousel">
+                                                <div class="carousel-wrapper">
+                                                    
+                                                    {% for media in post.postmedia_set.all %}
+                                                        <div class="carousel-slide">
+                                                            {% if media.file_ext.type == 'image' %}
+                                                                <a href="#" class="js-modal-trigger" data-target="modal-{{forloop.counter}}" data-image="{{media.file.url}}">
+                                                                    <img src="{{ media.file.url }}" alt="Post" class="post-image">
+                                                                </a>
+                                                            {% else %}
+                                                                <video data-target="modal-{{forloop.counter}}" controls style="height: 300px; width: auto;">
+                                                                    <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
+                                                                </video>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                    
+                                                </div>
+                                                <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
+                                                <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
+                                            
+                                                <!-- Modal -->
+                                                <div id="modal-{{forloop.counter}}" class="modal">
+                                                    <div class="modal-background"></div>
+                                                    <div class="modal-content">
+                                                        <img id="modal-image" src="" alt="Full Size Image">
+                                                    </div>
+                                                    <button class="modal-close is-large" aria-label="close"></button>
+                                                </div>
+                                            
+                                                <!-- Indicators -->
+                                                <div class="carousel-indicators">
+                                                    <!-- Dynamically created -->
+                                                </div>
+                                            </section>
                                         {% endif %}
                                     {% endif %}
 

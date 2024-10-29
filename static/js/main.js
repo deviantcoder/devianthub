@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if ([...files].some(fileInput => fileInput.value.trim() !== "")) {
             disableTabs(imagesTab);
         } else {
-            enableTabs(); // Разблокировать вкладки, если нет заполненных форм
+            enableTabs();
         }
     }
 
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    imagesForm.addEventListener('input', checkMediaForms); // Следим за изменениями форм с изображениями
+    imagesForm.addEventListener('input', checkMediaForms);
 
     document.getElementById('add-media').addEventListener('click', function() {
         const formsetDiv = document.getElementById('media-formset');
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formsetDiv.insertAdjacentHTML('beforeend', newForm);
 
         totalForms.value = formNum + 1;
-        checkMediaForms(); // Проверить формы после добавления
+        checkMediaForms();
     });
 
     document.addEventListener('click', function(event) {
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
             totalForms.value = document.querySelectorAll('.media-form').length;
 
-            checkMediaForms(); // Проверить формы после удаления
+            checkMediaForms();
         }
     });
 

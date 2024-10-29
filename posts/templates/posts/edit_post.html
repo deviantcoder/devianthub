@@ -49,9 +49,17 @@
                                                         </div>
 
                                                         {% if form.instance.file %}
-                                                            <div class="image-preview" style="margin-left: 20px;">
-                                                                <img src="{{ form.instance.file.url }}" alt="Image preview" style="max-width: 200px; max-height: auto;">
-                                                            </div>
+                                                            {% if form.instance.file_ext.type == 'image' %}
+                                                                <div class="image-preview" style="margin-left: 20px;">
+                                                                    <img src="{{ form.instance.file.url }}" alt="Image preview" style="max-width: 200px; max-height: auto;">
+                                                                </div>
+                                                            {% else %}
+                                                                <div lass="image-preview" style="margin-left: 20px;">
+                                                                    <video controls style="height: auto; width: 200px;">
+                                                                        <source src="{{ form.instance.file.url }}" type="video/{{ form.instance.file_ext.ext }}">
+                                                                    </video>
+                                                                </div>
+                                                            {% endif %}
                                                         {% endif %}
                                                     </div>
                                                     <hr style="grid-column: span 2;">

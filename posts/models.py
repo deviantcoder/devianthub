@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from uuid import uuid4
 from .validators import validate_file_size
@@ -76,15 +77,29 @@ def upload_to(instance, filename):
 
 
 class PostMedia(models.Model):
+    IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
+    VIDEO_EXTENSIONS = ['mp4', 'mov', 'webm']
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     file = models.FileField(
         upload_to=upload_to,
         validators=[
-            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov']),
+            FileExtensionValidator(allowed_extensions=IMAGE_EXTENSIONS + VIDEO_EXTENSIONS),
             validate_file_size,
         ]
     )
     created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def file_ext(self):
+        _, file_ext = os.path.splitext(self.file.name)
+        if file_ext.strip('.') in PostMedia.IMAGE_EXTENSIONS:
+            return {
+                'type': 'image',
+                'ext': file_ext.strip('.')
+            }
+        return {
+                'type': 'video',
+                'ext': file_ext.strip('.')
+            }
 
     def __str__(self):
         return f'{self.post.title}_{self.file.name}'
