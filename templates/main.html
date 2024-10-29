@@ -17,7 +17,17 @@
 </head>
 <body>
     <!-- NAV BAR -->
-    {% include 'navbar.html' %}  
+    {% include 'navbar.html' %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="notification custom-notification is-{{ message.tags }}">
+                <button class="delete"></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
 
     <!-- PAGE CONTENT -->
     {% block content %}
@@ -25,7 +35,17 @@
 
     <!-- JS -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                const $notification = $delete.parentNode;
 
+                $delete.addEventListener('click', () => {
+                $notification.parentNode.removeChild($notification);
+                });
+            });
+        });
+    </script>
     
 </body>
 </html>

@@ -2,6 +2,7 @@ import os
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, PostMedia
 from .forms import PostForm, PostMediaFormSet
+from django.contrib import messages
 
 
 def feed(request):
@@ -30,7 +31,15 @@ def create_post(request):
             media_formset.instance = post
             media_formset.save()
 
+            messages.success(request, 'Post created successfully!')
+
             return redirect('posts:feed')
+        else:
+            for form in media_formset:
+                if form.errors:
+                    for field, errors in form.errors.items():
+                        for error in errors:
+                            messages.warning(request, f"Error in {field}: {error}")
 
     context = {
         'form': post_form,
