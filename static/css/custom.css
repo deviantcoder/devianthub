@@ -976,12 +976,42 @@
     font-size: large;
 }
 
+@keyframes fadeInSlideDown {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    60% {
+        opacity: 1;
+        transform: translate(-50%, 10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 .custom-notification {
-    position: fixed; /* Фиксированное позиционирование */
-    top: 80px; /* Расположение от верхней части экрана (измените по необходимости) */
-    left: 50%; /* Центрирование по горизонтали */
-    transform: translateX(-50%); /* Сдвигаем на половину своей ширины для точного центрирования */
-    z-index: 9999; /* Устанавливаем высокий z-index, чтобы сообщение отображалось поверх других элементов */
-    width: 300px; /* Фиксированная ширина */
-    text-align: center; /* Выравнивание текста по центру */
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 300px;
+    text-align: center;
+
+    animation: fadeInSlideDown 1s ease-out forwards;
+}
+
+.custom-notification.fade-out {
+    animation: fadeOut 1s ease forwards;
 }

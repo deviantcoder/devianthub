@@ -35,6 +35,11 @@ class Post(models.Model):
                 return 1
             return 2
         return False
+
+    def updated_status(self):
+        if self.updated:
+            return self.updated.strftime('%b. %d, %I:%M %p')
+        return False
     
     def time_since_posted(self):
         time_diff = timezone.now() - self.created
@@ -88,6 +93,7 @@ class PostMedia(models.Model):
         ]
     )
     created = models.DateTimeField(auto_now_add=True, null=True)
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
 
     def file_ext(self):
         _, file_ext = os.path.splitext(self.file.name)
@@ -105,4 +111,4 @@ class PostMedia(models.Model):
         return f'{self.post.title}_{self.file.name}'
     
     class Meta:
-        ordering = ['-post']
+        ordering = ['post', 'created']

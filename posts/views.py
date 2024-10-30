@@ -26,6 +26,14 @@ def create_post(request):
 
             post = post_form.save(commit=False)
             post.post_type = post_type
+            
+            if post_type == 'text':
+                post.body = request.POST.get('body_text', '')
+            elif post_type == 'media':
+                post.body = request.POST.get('body_media', '')
+            else:
+                post.body = request.POST.get('body_link', '')
+
             post.save()
             
             media_formset.instance = post
@@ -39,7 +47,10 @@ def create_post(request):
                 if form.errors:
                     for field, errors in form.errors.items():
                         for error in errors:
-                            messages.warning(request, f"Error in {field}: {error}")
+                            messages.warning(request, f"{error}")
+            
+            if post_form.errors:
+                messages.warning(request, post_form.errors)
 
     context = {
         'form': post_form,
@@ -56,7 +67,7 @@ def edit_post(request, pk):
     media_formset = PostMediaFormSet(instance=post) if post_type == 'media' else None
 
     if request.method == 'POST':
-        post_form = PostForm(request.POST, instance=post, post_type=post_type)
+        post_form = PostForm(request.POST, instance=post)
         if post_type == 'media':
             media_formset = PostMediaFormSet(request.POST, request.FILES, instance=post)
 
@@ -65,6 +76,8 @@ def edit_post(request, pk):
 
             if post_type == 'media':
                 media_formset.save()
+
+            messages.success(request, 'Post updated successfully!')
 
             return redirect('posts:feed')
         
@@ -94,6 +107,8 @@ def delete_post(request, pk):
         
         if media_dir and os.path.exists(media_dir):
             os.rmdir(media_dir)
+
+        messages.info(request, 'Post was deleted')
 
         return redirect('/')
 

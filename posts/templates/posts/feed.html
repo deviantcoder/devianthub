@@ -32,10 +32,13 @@
                                                 </a>
                                                 <span class="is-size-7 ml-1"> • 
                                                     {% if post.time_since_posted.type != 'now' %}
-                                                    {{ post.time_since_posted.num }} 
-                                                    {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+                                                        {{ post.time_since_posted.num }} 
+                                                        {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+                                                        {% if post.updated_status %}
+                                                            <small class="additional-info">(updated on: {{post.updated_status}})</small>    
+                                                        {% endif %}
                                                     {% else %}
-                                                    {{ post.time_since_posted.type }}
+                                                        {{ post.time_since_posted.type }}
                                                     {% endif %}
                                                 </span>
                                             </div>
@@ -51,7 +54,7 @@
                                                     <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                                                         <div class="dropdown-content">
                                                             <div class="dropdown-item">
-                                                                <a href="{% url 'posts:edit_post' post.id %}" class="post-title">
+                                                                <a href="{% url 'posts:edit_post' post.id %}?next={{ request.path }}" class="post-title">
                                                                     <i class="fas fa-edit mr-3" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
                                                                     <strong>Edit</strong>
                                                                 </a>
@@ -172,7 +175,7 @@
                                             <strong><a href="" class="post-title">{{ post.title }}</a></strong>
                                             <br>
                                             <span class="post-text">
-                                                {{ post.body }}
+                                                {{ post.body|linebreaks }}
                                             </span>
                                             <br>
                                             <small class="additional-info">Posted on: {{ post.created }}</small>

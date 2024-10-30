@@ -141,9 +141,8 @@ function toggleDescription(ruleId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Получаем элементы вкладок и формы
     const textTab = document.getElementById('text-tab');
-    const imagesTab = document.getElementById('images-tab');
+    const imagesTab = document.getElementById('media-tab');
     const linkTab = document.getElementById('link-tab');
 
     const textForm = document.getElementById('text-form');

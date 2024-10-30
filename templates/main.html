@@ -21,12 +21,13 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div class="notification custom-notification is-{{ message.tags }}">
-                <button class="delete"></button>
+            <div class="notification custom-notification is-{{ message.tags }}" style="border-radius: 30px;">
+                <button class="delete" onclick="fadeOutNotification(this)"></button>
                 {{ message }}
             </div>
         {% endfor %}
     {% endif %}
+
 
 
     <!-- PAGE CONTENT -->
@@ -35,17 +36,23 @@
 
     <!-- JS -->
     <script src="{% static 'js/main.js' %}"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+            document.querySelectorAll('.notification .delete').forEach(($delete) => {
                 const $notification = $delete.parentNode;
 
                 $delete.addEventListener('click', () => {
-                $notification.parentNode.removeChild($notification);
+                    $notification.classList.add('fade-out');
+
+                    $notification.addEventListener('animationend', () => {
+                        $notification.remove();
+                    });
                 });
             });
         });
+
     </script>
-    
+
 </body>
 </html>

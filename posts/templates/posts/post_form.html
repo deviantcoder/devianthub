@@ -38,8 +38,8 @@
                                                 <li id="text-tab" class="is-active">
                                                     <a class="tab-link">Text</a>
                                                 </li>
-                                                <li id="images-tab">
-                                                    <a class="tab-link">Images</a>
+                                                <li id="media-tab">
+                                                    <a class="tab-link">Media</a>
                                                 </li>
                                                 <li id="link-tab">
                                                     <a class="tab-link">Link</a>
@@ -52,13 +52,19 @@
                                             <div class="field">
                                                 <label class="label">Body</label>
                                                 <div class="control">
-                                                    {{ form.body }}
+                                                    <textarea style="min-height: 50px; max-height: 300px;" name="body_text" class="textarea post-creation-field" placeholder="Write your post here..." rows="4"></textarea>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Image Post Form -->
                                         <div id="images-form" class="post-type-form hidden">
+                                            <div class="field">
+                                                <label class="label">Body</label>
+                                                <div class="control">
+                                                    <textarea style="min-height: 50px; max-height: 300px;" name="body_media" class="textarea post-creation-field" placeholder="Write your post here..." rows="4"></textarea>
+                                                </div>
+                                            </div>
                                             <div id="media-formset">
                                                 {{ media_formset.management_form }}
                                                 {% for form in media_formset %}
@@ -88,6 +94,12 @@
 
                                         <!-- Link Post Form -->
                                         <div id="link-form" class="post-type-form hidden">
+                                            <div class="field">
+                                                <label class="label">Body</label>
+                                                <div class="control">
+                                                    <textarea style="min-height: 50px; max-height: 300px;" name="body_link" class="textarea post-creation-field" placeholder="Write your post here..." rows="4"></textarea>
+                                                </div>
+                                            </div>
                                             <div class="field">
                                                 <label class="label">YouTube video link</label>
                                                 <div class="control">

@@ -10,10 +10,19 @@ class PostMediaInline(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'post_type', 'created']
+    list_display = ['title', 'post_type', 'created', 'updated']
     inlines = [PostMediaInline]
 
 
 @admin.register(PostMedia)
 class PostMediaAdmin(admin.ModelAdmin):
-    list_display = ['file', 'post', 'created']
+    list_display = ['file_name', 'post', 'file_extension', 'created']
+
+    def file_name(self, obj):
+        return obj.file.name[:15]
+
+    def file_extension(self, obj):
+        return obj.file_ext()['ext']
+    
+    file_name.short_description = 'File name'
+    file_extension.short_description = 'File extension'
