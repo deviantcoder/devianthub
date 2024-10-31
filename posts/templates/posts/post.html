@@ -1,0 +1,679 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <!-- PAGE CONTENT -->
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+
+                <!-- SIDE PANEL -->
+                {% include 'posts/left_side_panel.html' %}
+
+                <!-- POST -->
+                <div class="column is-8">
+                    <div class="content">
+                        <div class="box" style="background: linear-gradient(45deg, #0f182d, #0d2823);">
+                            <article class="media">
+                                <div class="media-content">
+                                    <div class="content">
+
+                                        <!-- POST CONTROLS -->
+                                        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="item" style="display: flex; align-items: center;">
+                                                <a href="{{ request.GET.next }}" class="back-link">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-left" style="font-size: 12px;"></i>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            
+                                            {% include 'posts/post_controls.html' %}
+                                            
+                                        </div>
+                                        
+                                        <div class="community-item recent-item">
+                                            <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="item" style="display: flex; align-items: center;">
+                                                    <img src="{% static 'img/profile.jpg' %}" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                                                    <div style="display: flex; flex-direction: column; margin-left: 0;">
+                                                        <a href="" class="recent-post-link" style="text-align: left; margin-bottom: -4px; padding-bottom: 0;">
+                                                            <span class="is-size-7" style="display: block;">c/webdesign</span>
+                                                        </a>
+                                                        <a href="" style="text-align: left; color: rgb(190, 190, 190);">
+                                                            <span class="username-link" style="display: block; margin-top: -2px; font-size: 13px;">DeviantCoder</span>
+                                                        </a>
+                                                    </div>
+                                                    <span class="is-size-7 ml-3"> •
+                                                        {% if post.time_since_posted.type != 'now' %}
+                                                            {{ post.time_since_posted.num }}
+                                                            {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+                                                            {% if post.updated_status %}
+                                                                <small class="additional-info">
+                                                                    {{ post.updated_status }}
+                                                                </small>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {{ post.time_since_posted.type }}
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h3>{{ post.title }}</h3>
+
+                                        {% if post.has_media_files != False %}
+                                            {% if post.has_media_files == 1 %}
+
+                                                {% if post.postmedia_set.first.file_ext.type == 'image' %}
+                                                    <div class="post-header">
+                                                        <a href="#" class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
+                                                            <img src="{{ post.postmedia_set.first.file.url }}" alt="Post" class="post-image">
+                                                        </a>
+                                                    </div>
+
+                                                    <!-- Modal -->
+                                                    <div id="modal-single-{{ forloop.counter }}" class="modal">
+                                                        <div class="modal-background"></div>
+                                                        <div class="modal-content">
+                                                            <img id="modal-image" src="{{ post.postmedia_set.first.file.url }}" alt="Full Size Image">
+                                                        </div>
+                                                        <button class="modal-close is-large" aria-label="close"></button>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="post-header">
+                                                        <video class="glow-effect" controls style="height: 300px; width: auto; border-radius: 20px;">
+                                                            <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                                                        </video>
+                                                    </div>
+                                                {% endif %}
+
+                                            {% else %}
+                                                <section class="carousel">
+                                                    <div class="carousel-wrapper">
+
+                                                        {% for media in post.postmedia_set.all %}
+                                                            <div class="carousel-slide">
+                                                                {% if media.file_ext.type == 'image' %}
+                                                                    <a href="#" class="js-modal-trigger" data-target="modal-{{forloop.counter}}" data-image="{{media.file.url}}">
+                                                                        <img src="{{ media.file.url }}" alt="Post" class="post-image">
+                                                                    </a>
+                                                                {% else %}
+                                                                    <video class="glow-effect" data-target="modal-{{forloop.counter}}" controls style="height: 300px; width: auto; border-radius: 20px;">
+                                                                        <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
+                                                                    </video>
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
+
+                                                    </div>
+                                                    <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
+                                                    <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
+
+                                                    <!-- Modal -->
+                                                    <div id="modal-{{forloop.counter}}" class="modal">
+                                                        <div class="modal-background"></div>
+                                                        <div class="modal-content">
+                                                            <img id="modal-image" src="" alt="Full Size Image">
+                                                        </div>
+                                                        <button class="modal-close is-large" aria-label="close"></button>
+                                                    </div>
+
+                                                    <!-- Indicators -->
+                                                    <div class="carousel-indicators">
+                                                        <!-- Dynamically created -->
+                                                    </div>
+                                                </section>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if post.video_url %}
+                                            <div class="post-header">
+                                                {% if 'youtube' in post.video_url %}
+                                                    {% with post.video_url|slice:"32:" as video_id %}
+                                                        <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+                                                    {% endwith %}
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <div class="post-content">
+                                            <p>
+                                                <span class="post-text">
+                                                    {{ post.body|linebreaks }}
+                                                </span>
+                                                <br>
+                                                <small class="additional-info">Posted on: {{ post.created }}</small>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <nav class="level is-mobile">
+                                        <div class="level-left">
+
+                                            <!-- up/down voting -->
+                                            <div class="vote-group">
+                                                <a class="vote-button" aria-label="upvote">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                                <span class="vote-count">123</span>
+                                                <a class="vote-button" aria-label="downvote">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <!-- commenting -->
+                                            <div class="vote-group">
+                                                <a class="vote-button" aria-label="comments">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-comments" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                                <span class="vote-count">78</span>
+                                            </div>
+                                            <!-- sharing -->
+                                            <div class="vote-group">
+                                                <a class="vote-button" aria-label="comments">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-share" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </article>
+                        </div>
+
+                        <hr>
+
+                        <!-- COMMENTS -->
+
+                        <div class="box">
+                            <h3>Comments</h3>
+                            <article class="media">
+                                <div class="media-content">
+                                <div class="field">
+                                    <p class="control">
+                                        <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                                    </p>
+                                </div>
+                                <nav class="level">
+                                    <div class="level-left">
+                                    <div class="level-item">
+                                        <a class="button is-info">Submit</a>
+                                    </div>
+                                    </div>
+                                </nav>
+                                </div>
+                            </article>
+
+                            <hr>
+
+                            <article class="media">
+                                <figure class="media-left">
+                                    <img src="img/profile.jpg" class="profile-image" />
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p style="font-size: 15px;">
+                                            <strong><a href="" class="comment-username">DeviantCoder</a></strong>
+                                            <span class="is-size-7 ml-1">• 5 hours ago</span>
+                                            <br />
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros
+                                            lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris
+                                            sit amet dolor blandit rutrum. Nunc in tempus turpis.
+                                            <br />
+                                            
+                                        <nav class="level is-mobile btn-group-comment">
+                                            <div class="level-left">
+                                                <!-- up/down voting -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="upvote">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                    <span class="vote-count">123</span>
+                                                    <a class="vote-button-comment" aria-label="downvote">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <!-- reply -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="comments">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-reply" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <!-- sharing -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="comments">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-share" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div class="vote-group-comment dropdown is-hoverable">
+                                                    <div class="dropdown-trigger">
+                                                        <button class="vote-button-comment" aria-label="comments">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-ellipsis-h" style="font-size: 12px;"></i>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                                        <div class="dropdown-content">
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
+                                                                    <strong>Save</strong>
+                                                                </a>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
+                                                                    <strong>Hide</strong>
+                                                                </a>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-flag mr-3" aria-hidden="true"></i>
+                                                                    <strong>Report</strong>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </nav>
+                                    </p>
+                                </div>
+                              
+                                <article class="media">
+                                    <figure class="media-left">
+                                        <img src="img/c7.jpg" class="profile-image" />
+                                    </figure>
+                                    <div class="media-content">
+                                        <div class="content">
+                                            <p style="font-size: 15px;">
+                                                <strong><a href="" class="comment-username">DeviantCoder</a></strong>
+                                                <span class="is-size-7 ml-1">• 5 hours ago</span>
+                                                <br />
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros
+                                                lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris
+                                                sit amet dolor blandit rutrum. Nunc in tempus turpis.
+                                                <br />
+                                                
+                                            <nav class="level is-mobile btn-group-comment">
+                                                <div class="level-left">
+                                                    <!-- up/down voting -->
+                                                    <div class="vote-group-comment">
+                                                        <a class="vote-button-comment" aria-label="upvote">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                            </span>
+                                                        </a>
+                                                        <span class="vote-count">123</span>
+                                                        <a class="vote-button-comment" aria-label="downvote">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                    <!-- reply -->
+                                                    <div class="vote-group-comment">
+                                                        <a class="vote-button-comment" aria-label="comments">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-reply" aria-hidden="true"></i>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                    <!-- sharing -->
+                                                    <div class="vote-group-comment">
+                                                        <a class="vote-button-comment" aria-label="comments">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-share" aria-hidden="true"></i>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="vote-group-comment dropdown is-hoverable">
+                                                        <div class="dropdown-trigger">
+                                                            <button class="vote-button-comment" aria-label="comments">
+                                                                <span class="icon is-small">
+                                                                    <i class="fas fa-ellipsis-h" style="font-size: 12px;"></i>
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                                            <div class="dropdown-content">
+                                                                <div class="dropdown-item">
+                                                                    <a href="" class="post-title">
+                                                                        <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
+                                                                        <strong>Save</strong>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="dropdown-item">
+                                                                    <a href="" class="post-title">
+                                                                        <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
+                                                                        <strong>Hide</strong>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="dropdown-item">
+                                                                    <a href="" class="post-title">
+                                                                        <i class="fas fa-flag mr-3" aria-hidden="true"></i>
+                                                                        <strong>Report</strong>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </nav>
+                                        </p>
+                                    </div>
+
+                                    <article class="media">
+                                        <figure class="media-left">
+                                            <img src="img/c2.jpg" class="profile-image" />
+                                        </figure>
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <p style="font-size: 15px;">
+                                                    <strong><a href="" class="comment-username">DeviantCoder</a></strong>
+                                                    <span class="is-size-7 ml-1">• 5 hours ago</span>
+                                                    <br />
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros
+                                                    lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris
+                                                    sit amet dolor blandit rutrum. Nunc in tempus turpis.
+                                                    <br />
+                                                    
+                                                <nav class="level is-mobile btn-group-comment">
+                                                    <div class="level-left">
+                                                        <!-- up/down voting -->
+                                                        <div class="vote-group-comment">
+                                                            <a class="vote-button-comment" aria-label="upvote">
+                                                                <span class="icon is-small">
+                                                                    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                                </span>
+                                                            </a>
+                                                            <span class="vote-count">123</span>
+                                                            <a class="vote-button-comment" aria-label="downvote">
+                                                                <span class="icon is-small">
+                                                                    <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <!-- reply -->
+                                                        <div class="vote-group-comment">
+                                                            <a class="vote-button-comment" aria-label="comments">
+                                                                <span class="icon is-small">
+                                                                    <i class="fas fa-reply" aria-hidden="true"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <!-- sharing -->
+                                                        <div class="vote-group-comment">
+                                                            <a class="vote-button-comment" aria-label="comments">
+                                                                <span class="icon is-small">
+                                                                    <i class="fas fa-share" aria-hidden="true"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="vote-group-comment dropdown is-hoverable">
+                                                            <div class="dropdown-trigger">
+                                                                <button class="vote-button-comment" aria-label="comments">
+                                                                    <span class="icon is-small">
+                                                                        <i class="fas fa-ellipsis-h" style="font-size: 12px;"></i>
+                                                                    </span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                                                <div class="dropdown-content">
+                                                                    <div class="dropdown-item">
+                                                                        <a href="" class="post-title">
+                                                                            <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
+                                                                            <strong>Save</strong>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="dropdown-item">
+                                                                        <a href="" class="post-title">
+                                                                            <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
+                                                                            <strong>Hide</strong>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="dropdown-item">
+                                                                        <a href="" class="post-title">
+                                                                            <i class="fas fa-flag mr-3" aria-hidden="true"></i>
+                                                                            <strong>Report</strong>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </nav>
+                                            </p>
+                                        </div>
+                                      </article>
+
+                                </article>
+
+
+                                </div>
+                            </article>
+
+                            <article class="media">
+                                <figure class="media-left">
+                                    <img src="img/c6.jpg" class="profile-image" />
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p style="font-size: 15px;">
+                                            <strong><a href="" class="comment-username">DeviantCoder</a></strong>
+                                            <span class="is-size-7 ml-1">• 5 hours ago</span>
+                                            <br />
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros
+                                            lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris
+                                            sit amet dolor blandit rutrum. Nunc in tempus turpis.
+                                            <br />
+                                            
+                                        <nav class="level is-mobile btn-group-comment">
+                                            <div class="level-left">
+                                                <!-- up/down voting -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="upvote">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                    <span class="vote-count">123</span>
+                                                    <a class="vote-button-comment" aria-label="downvote">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <!-- reply -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="comments">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-reply" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <!-- sharing -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="comments">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-share" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div class="vote-group-comment dropdown is-hoverable">
+                                                    <div class="dropdown-trigger">
+                                                        <button class="vote-button-comment" aria-label="comments">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-ellipsis-h" style="font-size: 12px;"></i>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                                        <div class="dropdown-content">
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
+                                                                    <strong>Save</strong>
+                                                                </a>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
+                                                                    <strong>Hide</strong>
+                                                                </a>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-flag mr-3" aria-hidden="true"></i>
+                                                                    <strong>Report</strong>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </nav>
+                                    </p>
+                                </div>
+                              </article>
+
+                            <nav class="pagination" role="navigation" aria-label="pagination">
+                                <a class="pagination-link" href="#" aria-label="Previous page">Prev</a>
+                                <a class="pagination-link" href="#" aria-label="Page 1" aria-current="page">1</a>
+                                <a class="pagination-link" href="#" aria-label="Page 2">2</a>
+                                <a class="pagination-link" href="#" aria-label="Page 3">3</a>
+                                <a class="pagination-link" href="#" aria-label="Next page">Next</a>
+                            </nav>
+                            
+                            
+                            
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+    
+                <!-- SIDE PANEL -->
+                <div class="column is-3">
+                    <aside class="menu">
+                        <ul class="">
+                            <li class="community-item recent-item">
+                                <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="item">
+                                        <strong>
+                                            <a href="" style="font-size: 19px; color: aliceblue;">
+                                                c/django_backend
+                                            </a>
+                                        </strong>
+                                    </div>
+                                    <div class="item">
+                                        <a href="" class="join-link">Join</a>
+                                    </div>
+                                </div>
+                            </li>
+                            
+
+                            <li class="community-item recent-item">
+                                <div class="container">
+                                    <div class="item"><strong style="color: rgb(189, 189, 189);">Django Backend Coding</strong></div>
+                                    <div class="item">
+                                        <span style="font-size: 13px; color: rgb(134, 133, 165);">
+                                            There are many variations of passages of Lorem Ipsum available, 
+                                            but the majority have suffered alteration in some form, by injected 
+                                            humour...
+                                        </span>
+                                    </div>
+                                    <div class="item" style="display: flex; justify-content: center;">
+                                        <a href="" class="show-more" style="font-size: 14px;">Show more</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="community-item recent-item">
+                                <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="item" style="text-align: center;">
+                                        <span>Members</span>
+                                        <div><strong>1.2k</strong></div>
+                                    </div>
+                                    <div class="item" style="text-align: center;">
+                                        <span class="online-label">Online</span>
+                                        <div><strong>12</strong></div>
+                                    </div>
+                                    <div class="item" style="text-align: center;">
+                                        <span>Posts</span>
+                                        <div><strong>291</strong></div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <hr>
+
+                            <p class="menu-label">Mods</p>
+
+                            <li class="community-item recent-item">
+                                <div class="container" style="">
+                                    <div class="item mt-2" style="display: flex; align-items: center;">
+                                        <img src="img/profile.jpg" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                                        <div style="display: flex; flex-direction: column; margin-left: 0;">
+                                            <a href="" class="recent-post-link" style="text-align: left; margin-bottom: -4px; padding-bottom: 0;">
+                                                <span class="is-size-7" style="display: block;">u/deviantcoder</span>
+                                            </a>
+                                            <a href="" style="text-align: left; color: rgb(190, 190, 190);">
+                                                <span class="username-link" style="display: block; margin-top: -2px; font-size: 13px;">DeviantCoder</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="item mt-4" style="display: flex; align-items: center;">
+                                        <img src="img/c1.jpg" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                                        <div style="display: flex; flex-direction: column; margin-left: 0;">
+                                            <a href="" class="recent-post-link" style="text-align: left; margin-bottom: -4px; padding-bottom: 0;">
+                                                <span class="is-size-7" style="display: block;">u/randomuser</span>
+                                            </a>
+                                            <a href="" style="text-align: left; color: rgb(190, 190, 190);">
+                                                <span class="username-link" style="display: block; margin-top: -2px; font-size: 13px;">RandUs</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="item mt-4" style="display: flex; align-items: center;">
+                                        <img src="img/c6.jpg" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                                        <div style="display: flex; flex-direction: column; margin-left: 0;">
+                                            <a href="" class="recent-post-link" style="text-align: left; margin-bottom: -4px; padding-bottom: 0;">
+                                                <span class="is-size-7" style="display: block;">u/grivnaaaa</span>
+                                            </a>
+                                            <a href="" style="text-align: left; color: rgb(190, 190, 190);">
+                                                <span class="username-link" style="display: block; margin-top: -2px; font-size: 13px;">Grivnaaaa</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            
+                        </ul>
+
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

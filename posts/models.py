@@ -38,7 +38,7 @@ class Post(models.Model):
 
     def updated_status(self):
         if self.updated:
-            return self.updated.strftime('%b. %d, %I:%M %p')
+            return f'(updated on: {self.updated.strftime('%b. %d, %I:%M %p')})'
         return False
     
     def time_since_posted(self):

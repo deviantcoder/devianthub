@@ -35,62 +35,15 @@
                                                         {{ post.time_since_posted.num }} 
                                                         {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
                                                         {% if post.updated_status %}
-                                                            <small class="additional-info">(updated on: {{post.updated_status}})</small>    
+                                                            <small class="additional-info">{{post.updated_status}}</small>    
                                                         {% endif %}
                                                     {% else %}
                                                         {{ post.time_since_posted.type }}
                                                     {% endif %}
                                                 </span>
                                             </div>
-                                            <div class="item">
-                                                <div class="dropdown is-hoverable">
-                                                    <div class="dropdown-trigger">
-                                                        <button aria-haspopup="true" aria-controls="dropdown-menu4">
-                                                            <span class="icon is-small">
-                                                                <i class="fas fa-ellipsis-v" style="font-size: 16px;"></i>
-                                                            </span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-                                                        <div class="dropdown-content">
-                                                            <div class="dropdown-item">
-                                                                <a href="{% url 'posts:edit_post' post.id %}?next={{ request.path }}" class="post-title">
-                                                                    <i class="fas fa-edit mr-3" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
-                                                                    <strong>Edit</strong>
-                                                                </a>
-                                                            </div>
 
-                                                            <div class="dropdown-item">
-                                                                <a href="{% url 'posts:delete_post' post.id %}?next={{request.path}}" class="post-title">
-                                                                    <i class="fas fa-trash mr-3" aria-hidden="true" style="color: red;"></i>
-                                                                    <strong>Delete</strong>
-                                                                </a>
-                                                            </div>
-                                                            
-                                                            <div class="dropdown-item">
-                                                                <a href="" class="post-title">
-                                                                    <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
-                                                                    <strong>Save</strong>
-                                                                </a>
-                                                            </div>
-                                            
-                                                            <div class="dropdown-item">
-                                                                <a href="" class="post-title">
-                                                                    <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
-                                                                    <strong>Hide</strong>
-                                                                </a>
-                                                            </div>
-                                                            
-                                                            <div class="dropdown-item">
-                                                                <a href="" class="post-title">
-                                                                    <i class="fas fa-flag mr-3" aria-hidden="true"></i>
-                                                                    <strong>Report</strong>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {% include 'posts/post_controls.html' %}
                                             
                                         </div>
                                     </div>
@@ -115,7 +68,7 @@
                                                 </div>
                                             {% else %}
                                                 <div class="post-header">
-                                                    <video controls style="height: 300px; width: auto;">
+                                                    <video class="glow-effect" controls style="height: 300px; width: auto; border-radius: 20px;">
                                                         <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
                                                     </video>
                                                 </div>
@@ -132,7 +85,7 @@
                                                                     <img src="{{ media.file.url }}" alt="Post" class="post-image">
                                                                 </a>
                                                             {% else %}
-                                                                <video data-target="modal-{{forloop.counter}}" controls style="height: 300px; width: auto;">
+                                                                <video class="glow-effect" data-target="modal-{{forloop.counter}}" controls style="height: 300px; width: auto; border-radius: 20px;">
                                                                     <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
                                                                 </video>
                                                             {% endif %}
@@ -172,7 +125,7 @@
                                     
                                     <div class="post-content">
                                         <p>
-                                            <strong><a href="" class="post-title">{{ post.title }}</a></strong>
+                                            <strong><a href="{% url 'posts:post' post.id %}?next={{ request.path }}" class="post-title">{{ post.title }}</a></strong>
                                             <br>
                                             <span class="post-text">
                                                 {{ post.body|linebreaks }}

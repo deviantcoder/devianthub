@@ -115,3 +115,12 @@ def delete_post(request, pk):
     context = {'object': post.title}
 
     return render(request, 'posts/delete_confirmation.html', context)
+
+def post(request, pk):
+    post = get_object_or_404(Post, id=pk)
+
+    context = {
+        'post': post,
+    }
+
+    return render(request, 'posts/post.html', context)
