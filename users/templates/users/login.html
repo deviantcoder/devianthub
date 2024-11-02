@@ -1,0 +1,77 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <!-- PAGE CONTENT -->
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="column is-4 is-offset-4">
+                    <div class="box">
+                        <h3 class="title">Log In</h3>
+                        <figure>
+                            <img src="{% static 'img/logo.png' %}" class="glow-effect" style="width: 200px; height: auto; border-radius: 20px;">
+                        </figure>
+
+                        <form method="post" class="mt-5">
+                            {% csrf_token %}
+
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input round-corners-medium is-medium" type="text" name="username" placeholder="Username" autofocus="">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input round-corners-medium is-medium" type="password" name="password" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    Remember me
+                                </label>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <button class="button is-info auth-button glow-effect">
+                                    <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>
+                                    Sign in
+                                </button>
+                            </div>
+
+                        </form>
+
+                        <hr>
+
+                        <span>or sign in using</span>
+
+                        <div class="buttons is-centered mt-3">
+                            <a class="button is-rounded" href="#">
+                                <span class="icon" style="font-size: 25px;">
+                                    <i class="fab fa-google"></i>
+                                </span>
+                            </a>
+                            <a class="button is-rounded" href="#">
+                                <span class="icon" style="font-size: 25px;">
+                                    <i class="fab fa-github"></i>
+                                </span>
+                            </a>
+                        </div>
+
+                    </div>
+                    <p class="has-text-grey">
+                        <a href="">Sign Up</a> &nbsp;·&nbsp;
+                        <a href="">Forgot Password</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+{% endblock content %}

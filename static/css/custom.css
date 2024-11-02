@@ -945,7 +945,7 @@
     transition: all 0.2s ease-in-out;
 }
 .add-button:hover {
-    background-color: #a30000;
+    background-color: #00bd7a;
     transform: scale(1.05);
 }
 
@@ -1018,4 +1018,21 @@
 
 .glow-effect {
     box-shadow: 0px 0px 15px rgba(19, 204, 220, 0.2);
+}
+
+.round-corners-medium {
+    border-radius: 30px;
+}
+
+.auth-button {
+    background-color: rgb(0, 200, 210);
+    border-radius: 30px;
+    width: 115px;
+    height: 45px;
+    padding: 7px;
+    transition: all 0.2s ease-in-out;
+}
+.auth-button:hover {
+    background-color: #9000e5;
+    transform: scale(1.1);
 }

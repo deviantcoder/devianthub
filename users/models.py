@@ -14,11 +14,11 @@ class Profile(models.Model):
     username = models.CharField(max_length=100, unique=True, null=True)
     image = models.ImageField(
         upload_to=upload_to,
-        default='../img/profile_default.png'
+        default='default/profile_default.png'
     )
     banner = models.ImageField(
         upload_to=upload_to,
-        default='../img/banner.jpg'
+        default='default/banner.jpg'
     )
     email = models.EmailField(max_length=200, unique=True, null=True)
     bio = models.CharField(max_length=500, null=True, blank=True)

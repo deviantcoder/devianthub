@@ -1,0 +1,109 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<!-- PAGE CONTENT -->
+<section class="container mt-6">
+    <div class="columns is-multiline">
+        <div class="column box is-8 is-offset-2 register">
+            <div class="columns">
+                <div class="column left">
+                    <h1 class="title is-1">DeviantHub</h1>
+                    <h2 class="subtitle is-4"><strong>defy the norm.</strong></h2>
+                    <p>Join DeviantHub, where creativity meets community - share your passions and connect with
+                        like-minded individuals who embrace the extraordinary.</p>
+                </div>
+                <div class="column right has-text-centered">
+                    <h1 class="title is-4">Sign up today</h1>
+                    <p class="description">Let's defy the norm together!</p>
+                    <form method="post" class="mt-5">
+                        {% csrf_token %}
+
+                        <!-- Row for Username and Email -->
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form.username }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="field">
+                            <div class="control">
+                                {{ form.password1 }}
+                            </div>
+                        </div>
+
+                        <!-- repeat password -->
+                        <div class="field">
+                            <div class="control">
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button class="button is-block is-primary is-fullwidth is-medium">Submit</button>
+                        <br/>
+                    </form>
+
+                    <span>or sign up using</span>
+
+                    <div class="buttons is-centered mt-3">
+                        <a class="button is-rounded" href="#">
+                        <span class="icon" style="font-size: 25px;">
+                            <i class="fab fa-google" aria-hidden="true"></i>
+                        </span>
+                        </a>
+                        <a class="button is-rounded" href="#">
+                        <span class="icon" style="font-size: 25px;">
+                            <i class="fab fa-github"></i>
+                        </span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="column is-8 is-offset-2">
+            <br>
+            <nav class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <span class="icon">
+                            <i class="fab fa-google"></i>
+                        </span> &emsp;
+                        <span class="icon">
+                            <i class="fab fa-twitter"></i>
+                        </span> &emsp;
+                        <span class="icon">
+                            <i class="fab fa-facebook"></i>
+                        </span> &emsp;
+                        <span class="icon">
+                            <i class="fab fa-github"></i>
+                        </span> &emsp;
+                        <span class="icon">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <small class="level-item" style="color: var(--textLight)">
+                        &copy;2024 DeviantHub. All Rights Reserved.
+                    </small>
+                </div>
+            </nav>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
