@@ -10,19 +10,21 @@
         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
             <div class="dropdown-content">
                 
+                {% if page != 'feed' %}
                 <div class="dropdown-item">
-                    <a href="{% url 'posts:edit_post' post.id %}?next={{ request.path }}" class="post-title">
+                    <a href="{% url 'posts:edit_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
                         <i class="fas fa-edit mr-3" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
                         <strong>Edit</strong>
                     </a>
                 </div>
 
                 <div class="dropdown-item">
-                    <a href="{% url 'posts:delete_post' post.id %}?next={{ request.path }}" class="post-title">
+                    <a href="{% url 'posts:delete_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
                         <i class="fas fa-trash mr-3" aria-hidden="true" style="color: red;"></i>
                         <strong>Delete</strong>
                     </a>
                 </div>
+                {% endif %}
 
                 <div class="dropdown-item">
                     <a href="" class="post-title">

@@ -6,14 +6,18 @@ from django.contrib import messages
 
 
 def feed(request):
+    page = 'feed'
     posts = Post.objects.filter(draft=False)
     context = {
         'posts': posts,
+        'page': page,
     }
     return render(request, 'posts/feed.html', context)
 
 
 def create_post(request):
+    page = 'create_post'
+
     post_form = PostForm()
     media_formset = PostMediaFormSet()
 

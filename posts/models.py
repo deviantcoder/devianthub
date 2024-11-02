@@ -4,6 +4,10 @@ from uuid import uuid4
 from .validators import validate_file_size
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
+from io import BytesIO
+from PIL import Image
+from django.core.files import File
+from django.utils import timezone
 
 
 class Post(models.Model):
@@ -37,10 +41,11 @@ class Post(models.Model):
         return False
 
     def updated_status(self):
-        if self.updated:
-            return f'(updated on: {self.updated.strftime('%b. %d, %I:%M %p')})'
+        if self.updated and (self.updated.hour != self.created.hour or self.updated.minute != self.created.minute):
+            updated_time = timezone.localtime(self.updated)
+            return f"(updated on: {updated_time.strftime('%b. %d, %I:%M %p')})"
         return False
-    
+
     def time_since_posted(self):
         time_diff = timezone.now() - self.created
         time_diff = time_diff.total_seconds() / 3600
@@ -78,7 +83,15 @@ class Post(models.Model):
 
 
 def upload_to(instance, filename):
-    return f'{instance.post.title[:10]}_{str(instance.post.id)[:10]}/{filename}'
+    return f'posts/{instance.post.title[:10]}_{str(instance.post.id)[:10]}/{filename}'
+
+
+def image_compression(file):
+    with Image.open(file) as img:
+        img_io = BytesIO()
+        img.save(img_io, format='JPEG', quality=50, optimize=True)
+        img_io.seek(0)
+        return File(img_io, name=file.name)
 
 
 class PostMedia(models.Model):
@@ -106,6 +119,13 @@ class PostMedia(models.Model):
                 'type': 'video',
                 'ext': file_ext.strip('.')
             }
+
+    def save(self, *args, **kwargs):
+        if self.file and self.file.name:
+            if os.path.splitext(self.file.name)[1].lstrip('.').lower() in [ext for ext in PostMedia.IMAGE_EXTENSIONS if ext != 'gif']:
+                self.file = image_compression(self.file)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.post.title}_{self.file.name}'

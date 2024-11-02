@@ -6,7 +6,7 @@
     <div class="box">
         <div class="level-left">
             <div class="level-item">
-                <a href="{{ request.GET.next }}" class="button" style="border-radius: 20px;">
+                <a href="{{ request.GET.post }}?feed={{ request.GET.feed }}" class="button" style="border-radius: 20px;">
                     <span class="icon is-small">
                         <i class="fas fa-chevron-left"></i>
                     </span>
@@ -20,7 +20,7 @@
             {% csrf_token %}
             <div class="buttons is-centered mt-3">
                 <button type="submit" class="button is-danger" style="border-radius: 20px;">Delete</button>
-                <a href="{{ request.GET.next }}" class="button" style="border-radius: 20px;">Cancel</a>
+                <a href="{{ request.GET.post }}?feed={{ request.GET.feed }}" class="button" style="border-radius: 20px;">Cancel</a>
             </div>
         </form>
     </div>
