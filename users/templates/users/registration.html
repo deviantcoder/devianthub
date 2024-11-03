@@ -5,9 +5,9 @@
 <!-- PAGE CONTENT -->
 <section class="container mt-6">
     <div class="columns is-multiline">
-        <div class="column box is-8 is-offset-2 register">
+        <div class="column box is-10 is-offset-1 register" style="background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89));">
             <div class="columns">
-                <div class="column left">
+                <div class="column is-5 left">
                     <h1 class="title is-1">DeviantHub</h1>
                     <h2 class="subtitle is-4"><strong>defy the norm.</strong></h2>
                     <p>Join DeviantHub, where creativity meets community - share your passions and connect with
@@ -24,14 +24,24 @@
                             <div class="column">
                                 <div class="field">
                                     <div class="control">
-                                        {{ form.username }}
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.username }}
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-user"></i>
+                                            </span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="column">
                                 <div class="field">
                                     <div class="control">
-                                        {{ form.email }}
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.email }}
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-envelope"></i>
+                                            </span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -40,19 +50,32 @@
                         <!-- Password -->
                         <div class="field">
                             <div class="control">
-                                {{ form.password1 }}
+                                <p class="control has-icons-left has-icons-right">
+                                    {{ form.password1 }}
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </p>
                             </div>
                         </div>
 
                         <!-- repeat password -->
                         <div class="field">
                             <div class="control">
-                                {{ form.password2 }}
+                                <p class="control has-icons-left has-icons-right">
+                                    {{ form.password2 }}
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </p>
                             </div>
                         </div>
 
                         <!-- Submit Button -->
-                        <button class="button is-block is-primary is-fullwidth is-medium">Submit</button>
+                        <button class="button is-block is-primary is-fullwidth is-medium round-corners-medium">
+                            <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>
+                            Sign up
+                        </button>
                         <br/>
                     </form>
 
@@ -74,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="column is-8 is-offset-2">
+        <div class="column is-10 is-offset-1">
             <br>
             <nav class="level">
                 <div class="level-left">

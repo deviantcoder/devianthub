@@ -1,6 +1,7 @@
 .profile-image {
     width: 40px;
     height: 40px;
+    object-fit: cover;
     border-radius: 50%;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
@@ -791,7 +792,7 @@
     padding: 20px;
     border-radius: 50%;
     margin-right: 10px;
-    background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89)); /* Градиент от белого к чёрному */
+    background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89));
 }
 
 .commuity-page-image {
@@ -1035,4 +1036,8 @@
 .auth-button:hover {
     background-color: #9000e5;
     transform: scale(1.1);
+}
+
+.input::placeholder {
+    color: #cccccc;
 }
