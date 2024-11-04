@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -46,3 +46,8 @@ def register_user(request):
     }
 
     return render(request, 'users/registration.html', context)
+
+
+def edit_profile(request, pk):
+    user = get_object_or_404(id=pk)
+    

@@ -6,7 +6,7 @@ from uuid import uuid4
 
 def upload_to(instance, filename):
     seq = ''.join(map(str, random.sample(range(10), 10)))
-    return f'profiles/{instance.username}/{filename[:10]}_{seq}'
+    return f'profiles/{instance.username}/{seq}_{filename[-10:]}'
 
 
 class Profile(models.Model):
@@ -20,7 +20,7 @@ class Profile(models.Model):
         upload_to=upload_to,
         default='default/banner.jpg'
     )
-    email = models.EmailField(max_length=200, unique=True, null=True)
+    email = models.EmailField(max_length=200, null=True)
     bio = models.CharField(max_length=500, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
