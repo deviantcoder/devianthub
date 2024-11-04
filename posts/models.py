@@ -1,12 +1,8 @@
 import os
 from django.db import models
 from uuid import uuid4
-from .validators import validate_file_size
+from utils.file_utils import image_compression, validate_file_size, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS
 from django.core.validators import FileExtensionValidator
-from django.utils import timezone
-from io import BytesIO
-from PIL import Image
-from django.core.files import File
 from django.utils import timezone
 
 
@@ -21,11 +17,9 @@ class Post(models.Model):
     # community
     title = models.CharField(max_length=100)
     body = models.TextField(null=True, blank=True)
-
     video_url = models.URLField(null=True, blank=True)
 
     draft = models.BooleanField(default=False, null=True, blank=True)
-
     post_type = models.CharField(max_length=10, choices=POST_TYPE, default='text', null=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -86,17 +80,7 @@ def upload_to(instance, filename):
     return f'posts/{instance.post.title[:10]}_{str(instance.post.id)[:10]}/{filename}'
 
 
-def image_compression(file):
-    with Image.open(file) as img:
-        img_io = BytesIO()
-        img.save(img_io, format='JPEG', quality=50, optimize=True)
-        img_io.seek(0)
-        return File(img_io, name=file.name)
-
-
 class PostMedia(models.Model):
-    IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
-    VIDEO_EXTENSIONS = ['mp4', 'mov', 'webm']
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     file = models.FileField(
         upload_to=upload_to,
@@ -105,24 +89,26 @@ class PostMedia(models.Model):
             validate_file_size,
         ]
     )
+
     created = models.DateTimeField(auto_now_add=True, null=True)
     id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
 
     def file_ext(self):
         _, file_ext = os.path.splitext(self.file.name)
-        if file_ext.strip('.') in PostMedia.IMAGE_EXTENSIONS:
+        if file_ext.strip('.') in IMAGE_EXTENSIONS:
             return {
                 'type': 'image',
-                'ext': file_ext.strip('.')
+                'ext': file_ext.lstrip('.')
             }
         return {
                 'type': 'video',
-                'ext': file_ext.strip('.')
-            }
+                'ext': file_ext.lstrip('.')
+        }
 
     def save(self, *args, **kwargs):
         if self.file and self.file.name:
-            if os.path.splitext(self.file.name)[1].lstrip('.').lower() in [ext for ext in PostMedia.IMAGE_EXTENSIONS if ext != 'gif']:
+            extension = self.file_ext()['ext']
+            if extension in [ext for ext in IMAGE_EXTENSIONS if ext != 'gif']:
                 self.file = image_compression(self.file)
 
         super().save(*args, **kwargs)

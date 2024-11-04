@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
+from django.core.exceptions import ValidationError
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -19,7 +20,9 @@ class CustomUserCreationForm(UserCreationForm):
 
         self.fields['username'].widget.attrs.update({
             'class': 'input round-corners-medium is-medium',
-            'placeholder': 'Username'
+            'placeholder': 'Username',
+            'name': 'username',
+            'id': 'username'
         })
         self.fields['email'].widget.attrs.update({
             'class': 'input round-corners-medium is-medium',
@@ -36,6 +39,10 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
+
+        if username and User.objects.filter(username=username).exists():
+            raise ValidationError('Username already taken.')
+
         return username.lower() if username else username
 
 
@@ -43,7 +50,27 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
+            'username',
+            'bio',
             'image',
             'banner',
-            'bio',
         ]
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'input round-corners-small is-medium',
+                'placeholder': 'Username',
+            }),
+            'bio': forms.Textarea(attrs={
+                'class': 'input round-corners-small is-medium',
+                'placeholder': 'Bio',
+                'style': 'resize: vertical; min-height: 135px; max-height: 135px;'
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'input is-small',
+                'placeholder': 'Image',
+            }),
+            'banner': forms.FileInput(attrs={
+                'class': 'input is-small',
+                'placeholder': 'Banner',
+            })
+        }

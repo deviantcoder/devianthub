@@ -7,7 +7,8 @@
                 <img src="{% static 'img/logo.png' %}" alt="DeviantHub" class="navbar-logo mt-2">
             </a>
 
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+               data-target="navbarBasicExample">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -23,7 +24,7 @@
                     <input class="input is-rounded" type="text" placeholder="Search DeviantHub">
                     <span class="icon is-left">
                         <i class="fas fa-search"></i>
-                    </span> 
+                    </span>
                 </div>
             </div>
 
@@ -44,10 +45,46 @@
                     </span>
                 </a>
                 <div class="buttons">
+
                     {% if request.user.is_authenticated %}
-                        <a>
-                            <img class="profile-image mt-2 mr-2 ml-5" src="{{ request.user.profile.image.url }}" alt="Profile">
-                        </a>
+
+                        <div class="dropdown" id="dropdown-navbar">
+                            <div class="dropdown-trigger">
+                                <button aria-haspopup="true" aria-controls="dropdown-menu5" onclick="toggleDropdownNav()">
+                                    <img class="profile-image mt-2 mr-2 ml-5" src="{{ request.user.profile.image.url }}" alt="Profile">
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu5" role="menu">
+                                <div class="dropdown-content" style="background-color: #2e3853">
+                                    <div class="dropdown-item">
+                                        <a href="" class="post-title">
+                                            <i class="fas fa-user-circle mr-3" aria-hidden="true"></i>
+                                            <strong>View Profile</strong>
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <a href="{% url 'users:edit_profile' %}" class="post-title">
+                                            <i class="fas fa-user-edit mr-3" aria-hidden="true"></i>
+                                            <strong>Edit Profile</strong>
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <a href="{% url 'users:logout' %}" class="post-title">
+                                            <i class="fas fa-sign-out-alt mr-3" aria-hidden="true"></i>
+                                            <strong>Log Out</strong>
+                                        </a>
+                                    </div>
+                                    <hr>
+                                    <div class="dropdown-item">
+                                        <a href="" class="post-title">
+                                            <i class="fas fa-cog mr-3" aria-hidden="true"></i>
+                                            <strong>Settings</strong>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     {% else %}
                         <a class="button" href="{% url 'users:login' %}">
                             Log in
@@ -57,4 +94,19 @@
             </div>
         </div>
     </div>
-</nav>  
+</nav>
+
+<script>
+    function toggleDropdownNav() {
+        document.getElementById("dropdown-navbar").classList.toggle("is-active");
+    }
+
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById("dropdown-navbar");
+        const trigger = document.querySelector('.dropdown-trigger button');
+
+        if (dropdown.classList.contains('is-active') && !dropdown.contains(event.target) && !trigger.contains(event.target)) {
+            dropdown.classList.remove('is-active');
+        }
+    });
+</script>

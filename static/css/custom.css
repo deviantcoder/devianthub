@@ -789,19 +789,19 @@
 
 .community-page-image-container {
     display: inline-block;
-    padding: 20px;
+    padding: 15px;
     border-radius: 50%;
     margin-right: 10px;
     background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89));
 }
 
-.commuity-page-image {
+.community-page-image {
     display: block;
     width: 70px;
     height: 70px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid #7fb6d1;
+    border: 2px solid #7fb6d1;
 }
 
 .community-header-buttons {
@@ -1025,6 +1025,10 @@
     border-radius: 30px;
 }
 
+.round-corners-small {
+    border-radius: 15px;
+}
+
 .auth-button {
     background-color: rgb(0, 200, 210);
     border-radius: 30px;
@@ -1040,4 +1044,13 @@
 
 .input::placeholder {
     color: #cccccc;
+}
+
+.edit-profile-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
 }

@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import re
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
+from django.http import JsonResponse
 
 
 def login_user(request):
@@ -30,16 +33,29 @@ def login_user(request):
     return render(request, 'users/login.html')
 
 
+def logout_user(request):
+    logout(request)
+    messages.error(request, 'You have been logged out.')
+    return redirect('posts:feed')
+
+
 def register_user(request):
+    if request.user.is_authenticated:
+        return redirect('posts:feed')
+
     form = CustomUserCreationForm()
 
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             messages.success(request, 'Account created.')
-            return redirect('users:login')
-        messages.warning(request, form.errors)
+
+            return redirect('users:edit_profile')
+
+        errors = '\n'.join([error for field_errors in form.errors.values() for error in field_errors])
+        messages.warning(request, errors)
 
     context = {
         'form': form,
@@ -48,6 +64,37 @@ def register_user(request):
     return render(request, 'users/registration.html', context)
 
 
-def edit_profile(request, pk):
-    user = get_object_or_404(id=pk)
-    
+@login_required(login_url='users:login')
+def edit_profile(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('posts:feed')
+
+        messages.warning(request, form.errors)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'users/profile_form.html', context)
+
+
+def check_username(request):
+    LOWER_LIMIT = 5
+    UPPER_LIMIT = 17
+
+    username = request.GET.get('username', None)
+
+    if username and not re.match(r'^[a-zA-Z0-9]+$', username):
+        return JsonResponse({'available': False})
+
+    if username and ((len(username) < LOWER_LIMIT or len(username) > UPPER_LIMIT) or User.objects.filter(username=username).exists()):
+        return JsonResponse({'available': False})
+
+    return JsonResponse({'available': True})

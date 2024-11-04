@@ -1,4 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // USERNAME CHECKER
+    const usernameInput = document.querySelector('input[name="username"]');
+    const feedbackSpan = document.getElementById('username-feedback');
+
+    if (usernameInput && feedbackSpan) {
+        usernameInput.addEventListener('input', function () {
+            const username = usernameInput.value;
+            const isValidUsername = /^[a-zA-Z0-9]+$/.test(username);
+
+            if (!isValidUsername) {
+                feedbackSpan.innerHTML = '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i></span>';
+                return;
+            }
+
+            if (username) {
+                fetch(`/users/check-username/?username=${username}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        feedbackSpan.innerHTML = '';
+                        if (data.available) {
+                            feedbackSpan.innerHTML = '<span class="icon is-small has-text-success"><i class="fas fa-check"></i></span>';
+                        } else {
+                            feedbackSpan.innerHTML = '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i></span>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        feedbackSpan.innerHTML = '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i> Error fetching data</span>';
+                    });
+            } else {
+                feedbackSpan.innerHTML = '';
+            }
+        });
+    }
+
     // Navbar
     const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
     if (burgers.length > 0) {

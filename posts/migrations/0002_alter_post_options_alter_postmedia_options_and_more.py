@@ -2,7 +2,7 @@
 
 import django.core.validators
 import posts.models
-import posts.validators
+import utils.file_utils
 from django.db import migrations, models
 
 
@@ -29,6 +29,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='postmedia',
             name='file',
-            field=models.FileField(upload_to=posts.models.upload_to, validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov']), posts.validators.validate_file_size]),
+            field=models.FileField(upload_to=posts.models.upload_to, validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov']), utils.file_utils.validate_file_size]),
         ),
     ]
