@@ -1,7 +1,6 @@
-import os
+import utils.file_utils as utils
 from django.db import models
 from uuid import uuid4
-from utils.file_utils import image_compression, validate_file_size, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 
@@ -85,8 +84,8 @@ class PostMedia(models.Model):
     file = models.FileField(
         upload_to=upload_to,
         validators=[
-            FileExtensionValidator(allowed_extensions=IMAGE_EXTENSIONS + VIDEO_EXTENSIONS),
-            validate_file_size,
+            FileExtensionValidator(allowed_extensions=utils.IMAGE_EXTENSIONS + utils.VIDEO_EXTENSIONS),
+            utils.validate_file_size,
         ]
     )
 
@@ -94,22 +93,13 @@ class PostMedia(models.Model):
     id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
 
     def file_ext(self):
-        _, file_ext = os.path.splitext(self.file.name)
-        if file_ext.strip('.') in IMAGE_EXTENSIONS:
-            return {
-                'type': 'image',
-                'ext': file_ext.lstrip('.')
-            }
-        return {
-                'type': 'video',
-                'ext': file_ext.lstrip('.')
-        }
+        return utils.get_file_extension(self.file, file_type=True)
 
     def save(self, *args, **kwargs):
         if self.file and self.file.name:
-            extension = self.file_ext()['ext']
-            if extension in [ext for ext in IMAGE_EXTENSIONS if ext != 'gif']:
-                self.file = image_compression(self.file)
+            # extension = self.file_ext()['ext']
+            # if extension in [ext for ext in utils.IMAGE_EXTENSIONS if ext != 'gif']:
+            self.file = utils.image_compression(self.file)
 
         super().save(*args, **kwargs)
 

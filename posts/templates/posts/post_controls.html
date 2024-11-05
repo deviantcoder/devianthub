@@ -1,27 +1,27 @@
 <div class="item">
-    <div class="dropdown" id="dropdown">
+    <div class="dropdown">
         <div class="dropdown-trigger">
-            <button aria-haspopup="true" aria-controls="dropdown-menu4" onclick="toggleDropdown()">
+            <button aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleDropdown(this)">
                 <span class="icon is-small">
                     <i class="fas fa-ellipsis-v" style="font-size: 16px;"></i>
                 </span>
             </button>
         </div>
-        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+        <div class="dropdown-menu" role="menu">
             <div class="dropdown-content">
                 {% if page != 'feed' %}
-                <div class="dropdown-item">
-                    <a href="{% url 'posts:edit_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
-                        <i class="fas fa-edit mr-3" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
-                        <strong>Edit</strong>
-                    </a>
-                </div>
-                <div class="dropdown-item">
-                    <a href="{% url 'posts:delete_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
-                        <i class="fas fa-trash mr-3" aria-hidden="true" style="color: red;"></i>
-                        <strong>Delete</strong>
-                    </a>
-                </div>
+                    <div class="dropdown-item">
+                        <a href="{% url 'posts:edit_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
+                            <i class="fas fa-edit mr-3" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
+                            <strong>Edit</strong>
+                        </a>
+                    </div>
+                    <div class="dropdown-item">
+                        <a href="{% url 'posts:delete_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
+                            <i class="fas fa-trash mr-3" aria-hidden="true" style="color: red;"></i>
+                            <strong>Delete</strong>
+                        </a>
+                    </div>
                 {% endif %}
                 <div class="dropdown-item">
                     <a href="" class="post-title">
@@ -47,17 +47,16 @@
 </div>
 
 <script>
-    function toggleDropdown() {
-        document.getElementById("dropdown").classList.toggle("is-active");
+    function toggleDropdown(button) {
+        const dropdown = button.closest('.dropdown');
+        dropdown.classList.toggle('is-active');
     }
 
     document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById("dropdown");
-        const trigger = document.querySelector('.dropdown-trigger button');
-
-        if (dropdown.classList.contains('is-active') && !dropdown.contains(event.target) && !trigger.contains(event.target)) {
-            dropdown.classList.remove('is-active');
-        }
+        document.querySelectorAll('.dropdown.is-active').forEach(dropdown => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('is-active');
+            }
+        });
     });
 </script>
-

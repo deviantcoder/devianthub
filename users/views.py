@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomUserCreationForm, ProfileForm
 from django.http import JsonResponse
+from .models import Profile
+from copy import deepcopy
 
 
 def login_user(request):
@@ -40,8 +42,8 @@ def logout_user(request):
 
 
 def register_user(request):
-    if request.user.is_authenticated:
-        return redirect('posts:feed')
+    # if request.user.is_authenticated:
+    #     return redirect('posts:feed')
 
     form = CustomUserCreationForm()
 
@@ -67,13 +69,15 @@ def register_user(request):
 @login_required(login_url='users:login')
 def edit_profile(request):
     profile = request.user.profile
+    profile_copy = deepcopy(profile)
     form = ProfileForm(instance=profile)
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated.')
+            if form.has_changed():
+                form.save()
+                messages.success(request, 'Your profile has been updated.')
             return redirect('posts:feed')
 
         messages.warning(request, form.errors)
@@ -91,10 +95,16 @@ def check_username(request):
 
     username = request.GET.get('username', None)
 
-    if username and not re.match(r'^[a-zA-Z0-9]+$', username):
-        return JsonResponse({'available': False})
+    if username:
+        if not (LOWER_LIMIT <= len(username) <= UPPER_LIMIT):
+            return JsonResponse({'available': False})
 
-    if username and ((len(username) < LOWER_LIMIT or len(username) > UPPER_LIMIT) or User.objects.filter(username=username).exists()):
-        return JsonResponse({'available': False})
+        if not re.match(r'^[a-zA-Z0-9]+$', username):
+            return JsonResponse({'available': False})
+
+        current_user = request.user
+
+        if Profile.objects.filter(username=username).exclude(user=current_user).exists():
+            return JsonResponse({'available': False})
 
     return JsonResponse({'available': True})

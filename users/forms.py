@@ -22,7 +22,8 @@ class CustomUserCreationForm(UserCreationForm):
             'class': 'input round-corners-medium is-medium',
             'placeholder': 'Username',
             'name': 'username',
-            'id': 'username'
+            'id': 'username',
+            'maxlength': '15',
         })
         self.fields['email'].widget.attrs.update({
             'class': 'input round-corners-medium is-medium',
@@ -59,18 +60,22 @@ class ProfileForm(forms.ModelForm):
             'username': forms.TextInput(attrs={
                 'class': 'input round-corners-small is-medium',
                 'placeholder': 'Username',
+                'name': 'username',
+                'id': 'username',
             }),
             'bio': forms.Textarea(attrs={
                 'class': 'input round-corners-small is-medium',
                 'placeholder': 'Bio',
-                'style': 'resize: vertical; min-height: 135px; max-height: 135px;'
+                'style': 'resize: vertical; min-height: 180px; max-height: 200px;'
             }),
             'image': forms.FileInput(attrs={
                 'class': 'input is-small',
                 'placeholder': 'Image',
+                'name': 'image',
             }),
             'banner': forms.FileInput(attrs={
                 'class': 'input is-small',
                 'placeholder': 'Banner',
+                'name': 'banner',
             })
         }

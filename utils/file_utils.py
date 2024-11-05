@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 from PIL import Image
 from django.core.files import File
@@ -24,3 +25,18 @@ def image_compression(file):
         img.save(img_io, format='JPEG', quality=50, optimize=True)
         img_io.seek(0)
         return File(img_io, name=file.name)
+
+def get_file_extension(file, file_type=False):
+    _, file_ext = os.path.splitext(file.name)
+    if file_type:
+        if file_ext.strip('.') in IMAGE_EXTENSIONS:
+            return {
+                'type': 'image',
+                'ext': file_ext.lstrip('.')
+            }
+        return {
+            'type': 'video',
+            'ext': file_ext.lstrip('.')
+        }
+
+    return file_ext.strip('.')

@@ -4,96 +4,121 @@
 
 {% block content %}
 
-    <section class="container" style="margin-top: 100px">
-        <div class="columns is-multiline">
-            <div class="column box is-10 is-offset-1 register"
-                 style="background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89));">
-                <div class="columns">
-                    <div class="column is-5 left box has-text-centered" style="margin: 5px; background-color: #1b1f28">
-                        <strong style="color: #3e4d75">Preview</strong>
-                        <hr>
-                        <div class="container profile-background" style="background-image: url('{{ request.user.profile.banner.url }}');">
-                            <div class="item ml-5" style="display: flex; align-items: center;">
-                                <div class="community-page-image-container">
-                                    <img src="{{ request.user.profile.image.url }}" alt="Logo" class="community-page-image">
+<section class="container" style="margin-top: 100px">
+    <div class="columns is-multiline">
+        <div class="column box is-10 is-offset-1 register"
+             style="background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89));">
+            <div class="columns">
+                <div class="column is-5 left box has-text-centered" style="margin: 5px; background-color: #1b1f28">
+                    <strong style="color: #3e4d75">Preview</strong>
+                    <hr>
+                    <div class="container profile-preview profile-background" id="profile-banner-preview" style="background-image: url('{{ request.user.profile.banner.url }}');">
+                        <div class="item ml-5" style="display: flex; align-items: center;">
+                            <div class="community-page-image-container">
+                                <img id="profile-image-preview" src="{{ request.user.profile.image.url }}" alt="Logo" class="community-page-image">
+                            </div>
+                            <div style="display: flex; flex-direction: column; margin-left: 0;">
+                                <span class="profile-page-name" style="text-align: left; margin-bottom: -2px; padding-bottom: 0; font-size: 35px;">
+                                    <strong id="username-preview">u/{{ request.user.profile.username }}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column right has-text-centered">
+                    <h1 class="title is-4">Edit profile</h1>
+                    <p class="description">Match your geek</p>
+
+                    <form method="post" class="mt-5" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field">
+                                    <div class="control">
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.username }}
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-user"></i>
+                                            </span>
+                                            <span id="username-feedback" class="icon is-small is-right">
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <span style="font-size: 12px">· Username must be unique and at least 5 characters long.</span>
                                 </div>
-                                <div style="display: flex; flex-direction: column; margin-left: 0;">
-                                    <span class="profile-page-name" style="text-align: left; margin-bottom: -2px; padding-bottom: 0; font-size: 35px;">
-                                        <strong>
-                                            u/{{ request.user.profile.username }}
-                                        </strong>
-                                    </span>
+                                <div class="field">
+                                    <div class="control">
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.image }}
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-camera"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.banner }}
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-image"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <div class="control">
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.bio }}
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-book-open"></i>
+                                            </span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                    </div>
-                    <div class="column right has-text-centered">
-                        <h1 class="title is-4">Edit profile</h1>
-                        <p class="description">Match your geek</p>
+                        <div class="buttons is-centered mt-3">
+                            <button type="submit" class="button is-success" style="border-radius: 20px;">Save</button>
+                            <a href="{% url 'posts:feed' %}" class="button" style="border-radius: 20px;">Cancel</a>
+                        </div>
 
-                        <form method="post" class="mt-5" enctype="multipart/form-data">
-                            {% csrf_token %}
+                    </form>
 
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="field">
-                                        <div class="control">
-                                            <p class="control has-icons-left has-icons-right">
-                                                {{ form.username }}
-                                                <span class="icon is-small is-left">
-                                                <i class="fas fa-user"></i>
-                                            </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="control">
-                                            <p class="control has-icons-left has-icons-right">
-                                                {{ form.image }}
-                                                <span class="icon is-small is-left">
-                                                <i class="fas fa-camera"></i>
-                                            </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="control">
-                                            <p class="control has-icons-left has-icons-right">
-                                                {{ form.banner }}
-                                                <span class="icon is-small is-left">
-                                                <i class="fas fa-image"></i>
-                                            </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="field">
-                                        <div class="control">
-                                            <p class="control has-icons-left has-icons-right">
-                                                {{ form.bio }}
-                                                <span class="icon is-small is-left">
-                                                <i class="fas fa-book-open"></i>
-                                            </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button class="button is-block is-primary is-fullwidth is-medium round-corners-medium">
-                                <span class="icon is-small mr-1"><i class="fas fa-check"></i></span>
-                                Confirm
-                            </button>
-                            <br/>
-                        </form>
-
-                    </div>
                 </div>
             </div>
-
         </div>
-    </section>
+    </div>
+</section>
+
+<script>
+    // Обновление имени пользователя
+    document.querySelector('input[name="username"]').addEventListener('input', function() {
+        document.getElementById('username-preview').textContent = 'u/' + this.value;
+    });
+
+    // Обновление изображения профиля
+    document.querySelector('input[name="image"]').addEventListener('change', function(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profile-image-preview').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
+    // Обновление баннера профиля
+    document.querySelector('input[name="banner"]').addEventListener('change', function(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profile-banner-preview').style.backgroundImage = `url(${reader.result})`;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>
+
 
 {% endblock content %}
