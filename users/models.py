@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from uuid import uuid4
 from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
 
 
 def upload_to(instance, filename):
@@ -27,7 +27,7 @@ class Profile(models.Model):
         upload_to=upload_to,
         default='default/banner.jpg'
     )
-    email = models.EmailField(max_length=200, null=True)
+    email = models.EmailField(max_length=100, null=True)
     bio = models.TextField(max_length=300, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -41,10 +41,27 @@ class Profile(models.Model):
         }
 
     def save(self, *args, **kwargs):
+        old_image = None
+        old_banner = None
+
+        if self.id:
+            profile = Profile.objects.get(id=self.id)
+            old_image = profile.image.path if profile.image else None
+            old_banner = profile.banner.path if profile.banner else None
+
         if self.image and self.image.name:
             self.image = utils.image_compression(self.image)
 
         super().save(*args, **kwargs)
+
+        if old_image and old_image != self.image.path:
+            if default_storage.exists(old_image):
+                default_storage.delete(old_image)
+
+        if old_banner and old_banner != self.banner.path:
+            if default_storage.exists(old_banner):
+                default_storage.delete(old_banner)
+
 
     def __str__(self):
         return self.username

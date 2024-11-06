@@ -1054,3 +1054,8 @@
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
 }
+
+.icon-width {
+    width: 15px;
+    margin-right: 10px;
+}

@@ -113,7 +113,6 @@ def delete_post(request, pk):
             os.rmdir(media_dir)
 
         messages.info(request, 'Post was deleted')
-
         return redirect('/')
 
     context = {'object': post.title}

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Error:', error);
                     feedbackSpan.innerHTML = '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i> Error fetching data</span>';
                     if (saveButton) {
-                        saveButton.disabled = true; // Деактивируем кнопку в случае ошибки, если она существует
+                        saveButton.disabled = true;
                     }
                 });
         });

@@ -97,8 +97,6 @@ class PostMedia(models.Model):
 
     def save(self, *args, **kwargs):
         if self.file and self.file.name:
-            # extension = self.file_ext()['ext']
-            # if extension in [ext for ext in utils.IMAGE_EXTENSIONS if ext != 'gif']:
             self.file = utils.image_compression(self.file)
 
         super().save(*args, **kwargs)
@@ -108,3 +106,23 @@ class PostMedia(models.Model):
     
     class Meta:
         ordering = ['post', 'created']
+
+
+class PostStats(models.Model):
+    post = models.OneToOneField(Post, on_delete=models.CASCADE)
+    upvotes = models.PositiveIntegerField(default=0, blank=True)
+    downvotes = models.PositiveIntegerField(default=0, blank=True)
+    comments = models.PositiveIntegerField(default=0, blank=True)
+    reposts = models.PositiveIntegerField(default=0, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    def __str__(self):
+        return self.post.title
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = 'Post statistics'
+        verbose_name_plural = 'Post stats'

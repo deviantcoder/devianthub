@@ -102,7 +102,7 @@ def check_username(request):
         if not re.match(r'^[a-zA-Z0-9]+$', username):
             return JsonResponse({'available': False})
 
-        current_user = request.user
+        current_user = request.user if request.user.is_authenticated else None
 
         if Profile.objects.filter(username=username).exclude(user=current_user).exists():
             return JsonResponse({'available': False})

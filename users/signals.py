@@ -23,3 +23,13 @@ def delete_user(sender, instance, **kwargs):
         user.delete()
     except User.DoesNotExist():
         pass
+
+
+@receiver(post_save, sender=Profile)
+def update_user(sender, instance, created, *args, **kwargs):
+    if not created:
+        profile = instance
+        user = profile.user
+
+        user.username = profile.username
+        user.save()
