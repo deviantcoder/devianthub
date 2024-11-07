@@ -41,26 +41,52 @@ class Profile(models.Model):
         }
 
     def save(self, *args, **kwargs):
-        old_image = None
-        old_banner = None
+        # old_image = None
+        # old_banner = None
+        #
+        # # print(f'\t\t>>>>> {} <<<<<')
+        #
+        # if self.id:
+        #     profile = Profile.objects.get(id=self.id)
+        #     old_image = profile.image.path if profile.image else None
+        #     old_banner = profile.banner.path if profile.banner else None
+        #
+        # if self.image and self.image.name:
+        #     self.image = utils.image_compression(self.image)
+        #
+        # if self.banner and self.banner.name:
+        #     self.banner = utils.image_compression(self.banner)
+        #
+        # super().save(*args, **kwargs)
+        #
+        # if old_image and old_image != self.image.path:
+        #     if default_storage.exists(old_image):
+        #         default_storage.delete(old_image)
+        #
+        # if old_banner and old_banner != self.banner.path:
+        #     if default_storage.exists(old_banner):
+        #         default_storage.delete(old_banner)
+
+        old_files = {'image': None, 'banner': None}
 
         if self.id:
             profile = Profile.objects.get(id=self.id)
-            old_image = profile.image.path if profile.image else None
-            old_banner = profile.banner.path if profile.banner else None
+            old_files['image'] = profile.image.path if profile.image else None
+            old_files['banner'] = profile.banner.path if profile.banner else None
 
-        if self.image and self.image.name:
-            self.image = utils.image_compression(self.image)
+        for field in ['image', 'banner']:
+            file = getattr(self, field)
+            if file and file.name:
+                compressed_file = utils.image_compression(file)
+                setattr(self, field, compressed_file)
 
         super().save(*args, **kwargs)
 
-        if old_image and old_image != self.image.path:
-            if default_storage.exists(old_image):
-                default_storage.delete(old_image)
-
-        if old_banner and old_banner != self.banner.path:
-            if default_storage.exists(old_banner):
-                default_storage.delete(old_banner)
+        for field, old_path in old_files.items():
+            new_file = getattr(self, field)
+            if old_path and old_path != new_file.path:
+                if default_storage.exists(old_path):
+                    default_storage.delete(old_path)
 
 
     def __str__(self):

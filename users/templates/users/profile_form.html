@@ -95,30 +95,5 @@
     </div>
 </section>
 
-<script>
-    // Обновление имени пользователя
-    document.querySelector('input[name="username"]').addEventListener('input', function() {
-        document.getElementById('username-preview').textContent = 'u/' + this.value;
-    });
-
-    // Обновление изображения профиля
-    document.querySelector('input[name="image"]').addEventListener('change', function(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('profile-image-preview').src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-
-    // Обновление баннера профиля
-    document.querySelector('input[name="banner"]').addEventListener('change', function(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('profile-banner-preview').style.backgroundImage = `url(${reader.result})`;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-</script>
-
 
 {% endblock content %}

@@ -21,6 +21,9 @@ def validate_file_size(file):
 
 def image_compression(file):
     with Image.open(file) as img:
+        if img.mode in ('P', 'RGBA'):
+            img = img.convert('RGB')
+
         img_io = BytesIO()
         img.save(img_io, format='JPEG', quality=50, optimize=True)
         img_io.seek(0)

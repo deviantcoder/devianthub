@@ -96,7 +96,7 @@ class PostMedia(models.Model):
         return utils.get_file_extension(self.file, file_type=True)
 
     def save(self, *args, **kwargs):
-        if self.file and self.file.name:
+        if self.file and self.file_ext()['ext'] not in utils.VIDEO_EXTENSIONS:
             self.file = utils.image_compression(self.file)
 
         super().save(*args, **kwargs)
