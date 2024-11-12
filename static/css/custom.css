@@ -1059,3 +1059,14 @@
     width: 15px;
     margin-right: 10px;
 }
+
+.feedback-message {
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.feedback-message.has-text-error {
+    color: red;
+}
+.feedback-message.has-text-success {
+    color: green;
+}

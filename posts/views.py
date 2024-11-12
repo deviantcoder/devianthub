@@ -1,8 +1,9 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, PostMedia
+from .models import Post
 from .forms import PostForm, PostMediaFormSet
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def feed(request):
@@ -15,6 +16,7 @@ def feed(request):
     return render(request, 'posts/feed.html', context)
 
 
+@login_required(login_url='users:login')
 def create_post(request):
     page = 'create_post'
 
@@ -30,6 +32,8 @@ def create_post(request):
 
             post = post_form.save(commit=False)
             post.post_type = post_type
+
+            post.user = request.user.profile
             
             if post_type == 'text':
                 post.body = request.POST.get('body_text', '')

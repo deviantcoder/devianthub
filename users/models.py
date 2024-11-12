@@ -15,6 +15,8 @@ def upload_to(instance, filename):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     username = models.CharField(max_length=15, unique=True, null=True)
+    display_name = models.CharField(max_length=15, null=True, blank=True)
+
     image = models.ImageField(
         upload_to=upload_to,
         default='default/profile_default.png',
@@ -25,7 +27,11 @@ class Profile(models.Model):
     )
     banner = models.ImageField(
         upload_to=upload_to,
-        default='default/banner.jpg'
+        default='default/banner.jpg',
+        validators=[
+            FileExtensionValidator(allowed_extensions=tuple(ext for ext in utils.IMAGE_EXTENSIONS if ext != 'gif')),
+            utils.validate_file_size,
+        ]
     )
     email = models.EmailField(max_length=100, null=True)
     bio = models.TextField(max_length=300, null=True, blank=True)
@@ -40,36 +46,13 @@ class Profile(models.Model):
             'banner': utils.get_file_extension(self.banner),
         }
 
-    def save(self, *args, **kwargs):
-        # old_image = None
-        # old_banner = None
-        #
-        # # print(f'\t\t>>>>> {} <<<<<')
-        #
-        # if self.id:
-        #     profile = Profile.objects.get(id=self.id)
-        #     old_image = profile.image.path if profile.image else None
-        #     old_banner = profile.banner.path if profile.banner else None
-        #
-        # if self.image and self.image.name:
-        #     self.image = utils.image_compression(self.image)
-        #
-        # if self.banner and self.banner.name:
-        #     self.banner = utils.image_compression(self.banner)
-        #
-        # super().save(*args, **kwargs)
-        #
-        # if old_image and old_image != self.image.path:
-        #     if default_storage.exists(old_image):
-        #         default_storage.delete(old_image)
-        #
-        # if old_banner and old_banner != self.banner.path:
-        #     if default_storage.exists(old_banner):
-        #         default_storage.delete(old_banner)
+    def get_username(self):
+        return self.display_name if self.display_name else self.username
 
+    def save(self, *args, **kwargs):
         old_files = {'image': None, 'banner': None}
 
-        if self.id:
+        if Profile.objects.filter(id=self.id).exists():
             profile = Profile.objects.get(id=self.id)
             old_files['image'] = profile.image.path if profile.image else None
             old_files['banner'] = profile.banner.path if profile.banner else None
@@ -87,7 +70,6 @@ class Profile(models.Model):
             if old_path and old_path != new_file.path:
                 if default_storage.exists(old_path):
                     default_storage.delete(old_path)
-
 
     def __str__(self):
         return self.username

@@ -11,7 +11,7 @@ class PostMediaInline(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'post_type', 'created', 'updated']
+    list_display = ['title', 'user', 'post_type', 'created', 'updated']
     inlines = [PostMediaInline]
 
 

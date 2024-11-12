@@ -6,12 +6,12 @@ from .models import Profile
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
-    print('\t\t >>>>> SIGNAL STARTED')
     if created:
         user = instance
         profile = Profile.objects.create(
             user=user,
             username=user.username,
+            display_name=user.username,
             email=user.email if user.email else ''
         )
 
@@ -21,7 +21,7 @@ def delete_user(sender, instance, **kwargs):
     try:
         user = instance.user
         user.delete()
-    except User.DoesNotExist():
+    except User.DoesNotExist:
         pass
 
 
@@ -30,6 +30,5 @@ def update_user(sender, instance, created, *args, **kwargs):
     if not created:
         profile = instance
         user = profile.user
-
         user.username = profile.username
         user.save()

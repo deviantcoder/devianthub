@@ -50,10 +50,21 @@
                                 <div class="field">
                                     <div class="control">
                                         <p class="control has-icons-left has-icons-right">
-                                            {{ form.image }}
+                                            {{ form.display_name }}
                                             <span class="icon is-small is-left">
+                                                <i class="fas fa-user"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <p class="control has-icons-left has-icons-right">
+                                            {{ form.image }}
+                                            <span class="icon is-small is-left profile-image-error">
                                                 <i class="fas fa-camera"></i>
                                             </span>
+                                            <span id="profile-image-error" class="icon is-small is-right"></span>
                                         </p>
                                     </div>
                                 </div>
@@ -63,6 +74,8 @@
                                             {{ form.banner }}
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-image"></i>
+                                            </span>
+                                            <span id="profile-banner-error" class="icon is-small is-right">
                                             </span>
                                         </p>
                                     </div>

@@ -42,8 +42,8 @@ def logout_user(request):
 
 
 def register_user(request):
-    # if request.user.is_authenticated:
-    #     return redirect('posts:feed')
+    if request.user.is_authenticated:
+        return redirect('posts:feed')
 
     form = CustomUserCreationForm()
 
@@ -76,6 +76,8 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             if form.has_changed():
+                if 'display_name' in form.changed_data and not form.cleaned_data.get('display_name'):
+                    profile.display_name = form.cleaned_data['username']
                 form.save()
                 messages.success(request, 'Your profile has been updated.')
             return redirect('posts:feed')

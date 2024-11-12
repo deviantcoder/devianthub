@@ -68,26 +68,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const bannerImageInput = document.querySelector('input[name="banner"]');
     const profileImagePreview = document.getElementById('profile-image-preview');
     const profileBannerPreview = document.getElementById('profile-banner-preview');
+    const profileImageError = document.getElementById('profile-image-error');
+    const profileBannerError = document.getElementById('profile-banner-error');
+
+    function updateIcon(element, isValid) {
+        element.innerHTML = isValid
+            ? '<span class="icon is-small has-text-success"><i class="fas fa-check"></i></span>'
+            : '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i></span>';
+    }
+
+    function isImage(file) {
+        return file && file.type.startsWith('image/') && file.type !== 'image/gif';
+    }
 
     if (profileImageInput && profileImagePreview) {
         profileImageInput.addEventListener('change', function (event) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                profileImagePreview.src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
+            const file = event.target.files[0];
+            profileImageError.innerHTML = ''; // Очистить предыдущее сообщение
+
+            if (isImage(file)) {
+                updateIcon(profileImageError, true);
+
+                const reader = new FileReader();
+                reader.onload = function () {
+                    profileImagePreview.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                updateIcon(profileImageError, false);
+                profileImageInput.value = ''; // Сбросить выбранный файл
+            }
         });
     }
 
     if (bannerImageInput && profileBannerPreview) {
         bannerImageInput.addEventListener('change', function (event) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                profileBannerPreview.style.backgroundImage = `url(${reader.result})`;
-            };
-            reader.readAsDataURL(event.target.files[0]);
+            const file = event.target.files[0];
+            profileBannerError.innerHTML = ''; // Очистить предыдущее сообщение
+
+            if (isImage(file)) {
+                updateIcon(profileBannerError, true);
+
+                const reader = new FileReader();
+                reader.onload = function () {
+                    profileBannerPreview.style.backgroundImage = `url(${reader.result})`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                updateIcon(profileBannerError, false);
+                bannerImageInput.value = ''; // Сбросить выбранный файл
+            }
         });
     }
+
 
     // Navbar
     const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);

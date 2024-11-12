@@ -52,6 +52,7 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = [
             'username',
+            'display_name',
             'bio',
             'image',
             'banner',
@@ -63,10 +64,16 @@ class ProfileForm(forms.ModelForm):
                 'name': 'username',
                 'id': 'username',
             }),
+            'display_name': forms.TextInput(attrs={
+                'class': 'input round-corners-small is-medium',
+                'placeholder': 'Display Name',
+                'name': 'display_name',
+                'id': 'display_name',
+            }),
             'bio': forms.Textarea(attrs={
                 'class': 'input round-corners-small is-medium',
                 'placeholder': 'Bio',
-                'style': 'resize: vertical; min-height: 180px; max-height: 200px;'
+                'style': 'resize: vertical; min-height: 180px; max-height: 200px; font-size: 17px',
             }),
             'image': forms.FileInput(attrs={
                 'class': 'input is-small',

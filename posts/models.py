@@ -3,6 +3,7 @@ from django.db import models
 from uuid import uuid4
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
+from users.models import Profile
 
 
 class Post(models.Model):
@@ -12,7 +13,7 @@ class Post(models.Model):
         ('link', 'Link')
     )
 
-    # user
+    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     # community
     title = models.CharField(max_length=100)
     body = models.TextField(null=True, blank=True)
