@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Post, PostMedia, PostStats
+from .models import Post, PostMedia, PostStats, Comment
 from django.utils.html import format_html
+from mptt.admin import MPTTModelAdmin
 
 
 class PostMediaInline(admin.StackedInline):
@@ -39,3 +40,6 @@ class PostMediaAdmin(admin.ModelAdmin):
 @admin.register(PostStats)
 class PostStatsAdmin(admin.ModelAdmin):
     list_display = ['post', 'upvotes', 'downvotes', 'comments', 'reposts']
+
+
+admin.site.register(Comment, MPTTModelAdmin)

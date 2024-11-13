@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
+
+    'mptt',
 ]
 
 MIDDLEWARE = [

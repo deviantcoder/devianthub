@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #646464;
+    background-color: #182C33;
     border-radius: 70%;
     width: 30px;
     height: 30px;
@@ -54,17 +54,17 @@
 }
 
 .vote-button:hover {
-    background-color: #a0a0a0;
-    transform: scale(1.2);
+    background-color: #204b59;
+    transform: scale(1.08);
 }
 
 .vote-button .icon.is-small {
-    color: #333;
+    color: white;
 }
 
 .vote-count {
     font-size: 0.8rem;
-    color: #8b8b8b;
+    color: #e5e5e5; /* #8b8b8b */
 }
 
 .community-image {
@@ -216,27 +216,30 @@
 .vote-group-comment {
     display: flex;
     align-items: center;
-    background-color: #3c3e3f;
-    border-radius: 20px;
+    font-size: 14px;
+    /*background-color: #3c3e3f;*/
+    /*border-radius: 20px;*/
 }
 
-.btn-group-comment {
-    margin-top: -13px;
-}
+/*.btn-group-comment {*/
+/*    margin-top: -13px;*/
+/*}*/
 
 .vote-button-comment {
     display: flex;
     color: #f7f7f7;
+    background-color: #182c33;
+    border-radius: 20px;
     align-items: center;
     justify-content: center;
-    width: 30px;
+    min-width: 30px;
     height: 30px;
     margin: 0 5px;
     transition: transform 0.2s ease-in-out;
 }
 
 .vote-button-comment:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .comment-username {
@@ -1069,4 +1072,12 @@
 }
 .feedback-message.has-text-success {
     color: green;
+}
+
+.children form {
+    margin-left: -48px;
+}
+
+.children .children form {
+    margin-left: -96px;
 }

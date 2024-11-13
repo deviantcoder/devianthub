@@ -1,7 +1,7 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
-from .forms import PostForm, PostMediaFormSet
+from .forms import PostForm, PostMediaFormSet, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -125,9 +125,23 @@ def delete_post(request, pk):
 
 def post(request, pk):
     post = get_object_or_404(Post, id=pk)
+    form = CommentForm()
+    comments = post.comments.all()
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user.profile
+            comment.save()
+            messages.success(request, 'Comment was created!')
+            return redirect('posts:post', post.id)
 
     context = {
         'post': post,
+        'form': form,
+        'comments': comments,
     }
 
     return render(request, 'posts/post.html', context)

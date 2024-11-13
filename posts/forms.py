@@ -1,6 +1,7 @@
 from django import forms
-from .models import Post, PostMedia
-from django.forms import inlineformset_factory, BaseFormSet
+from .models import Post, PostMedia, Comment
+from django.forms import inlineformset_factory
+from mptt.forms import TreeNodeChoiceField
 
 
 class PostForm(forms.ModelForm):
@@ -27,14 +28,6 @@ class PostForm(forms.ModelForm):
             'video_url': 'YouTube video link'
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     post_type = kwargs.pop('post_type', None)
-    #     super().__init__(*args, **kwargs)
-
-    #     if post_type == 'text':
-    #         self.fields['video_url'].widget = forms.HiddenInput()
-    #     elif post_type == 'media':
-    #         self.fields['video_url'].widget = forms.HiddenInput()
 
 class PostMediaForm(forms.ModelForm):
     class Meta:
@@ -51,3 +44,24 @@ class PostMediaForm(forms.ModelForm):
 PostMediaFormSet = inlineformset_factory(
     Post, PostMedia, form=PostMediaForm, extra=0, can_delete=True
 )
+
+
+class CommentForm(forms.ModelForm):
+    parent = TreeNodeChoiceField(queryset=Comment.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['parent'].widget.attrs.update({'class': 'is-hidden'})
+        self.fields['parent'].label = ''
+        self.fields['parent'].required = False
+
+    class Meta:
+        model = Comment
+        fields = ['parent', 'body']
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'class': 'textarea', 'placeholder': 'Write your comment here...', 'name': 'body', 'rows': 4,
+                'style': 'resize: vertical; height: 50px; min-height: 50px; max-height: 200px; border-radius: 20px;'
+            })
+        }

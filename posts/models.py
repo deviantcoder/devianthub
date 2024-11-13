@@ -4,6 +4,8 @@ from uuid import uuid4
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 from users.models import Profile
+from mptt.models import MPTTModel, TreeForeignKey
+from utils.content_utils import time_since_obj_posted
 
 
 class Post(models.Model):
@@ -41,33 +43,7 @@ class Post(models.Model):
         return False
 
     def time_since_posted(self):
-        time_diff = timezone.now() - self.created
-        time_diff = time_diff.total_seconds() / 3600
-
-        week_hours = 24 * 7
-        month_hours = 24 * 30
-
-        data = {'type': '', 'num': 0}
-
-        if time_diff < 1 / 60:
-            data['type'] = 'now'
-        elif time_diff < 1:
-            data['type'] = 'minute'
-            data['num'] = int(time_diff * 60)             # minutes
-        elif time_diff < 24:
-            data['type'] = 'hour'
-            data['num'] = int(time_diff)                  # hours
-        elif 24 <= time_diff < week_hours:
-            data['type'] = 'day'
-            data['num'] = int(time_diff // 24)            # days
-        elif week_hours <= time_diff < month_hours:
-            data['type'] = 'week'
-            data['num'] = int(time_diff / 24 / 7)         # weeks
-        elif time_diff >= month_hours:
-            data['type'] = 'month'
-            data['num'] = int(time_diff / 24 / 30)        # months 
-
-        return data
+        return time_since_obj_posted(self)
 
     def __str__(self):
         return self.title
@@ -127,3 +103,25 @@ class PostStats(models.Model):
         ordering = ['-created']
         verbose_name = 'Post statistics'
         verbose_name_plural = 'Post stats'
+
+
+class Comment(MPTTModel):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+
+    body = models.TextField(blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    def time_since_posted(self):
+        return time_since_obj_posted(self)
+
+    class MPTTMeta:
+        order_insertion_by = ['created']
+
+    def __str__(self):
+        return self.user.username

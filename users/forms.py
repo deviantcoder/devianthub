@@ -73,7 +73,7 @@ class ProfileForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={
                 'class': 'input round-corners-small is-medium',
                 'placeholder': 'Bio',
-                'style': 'resize: vertical; min-height: 180px; max-height: 200px; font-size: 17px',
+                'style': 'resize: vertical; min-height: 243px; max-height: 243px; font-size: 17px;',
             }),
             'image': forms.FileInput(attrs={
                 'class': 'input is-small',

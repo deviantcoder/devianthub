@@ -5,7 +5,7 @@ from django.core.files import File
 from django.core.exceptions import ValidationError
 
 
-IMAGE_EXTENSIONS = ('jpg', 'jpeg', 'png', 'gif')
+IMAGE_EXTENSIONS = ('jpg', 'jpeg', 'png', 'gif', 'webp')
 VIDEO_EXTENSIONS = ('mp4', 'mov', 'avi')
 LIMIT_SIZE_LIMIT = 15
 VIDEO_SIZE_LIMIT = 100
