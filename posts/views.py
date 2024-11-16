@@ -1,9 +1,12 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, VotePost, PostStats
+from .models import Post, VotePost, PostStats, Comment
 from .forms import PostForm, PostMediaFormSet, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 def feed(request):
@@ -126,17 +129,8 @@ def delete_post(request, pk):
 def post(request, pk):
     post = get_object_or_404(Post, id=pk)
     form = CommentForm()
-    comments = post.comments.all()
-
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.user = request.user.profile
-            comment.save()
-            messages.success(request, 'Comment was created!')
-            return redirect('posts:post', post.id)
+    
+    comments = post.comments.filter(status=True)
 
     context = {
         'post': post,
@@ -147,9 +141,96 @@ def post(request, pk):
     return render(request, 'posts/post.html', context)
 
 
-# def vote_post(request, pk):
-#     post = get_object_or_404(Post)
-#     user
-#     post_stats
-#     vote_type
+def comment_post(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    post_stats, _ = PostStats.objects.get_or_create(post=post)
+    user = request.user.profile
 
+    form = CommentForm(request.POST)
+
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.user = user
+
+        post_stats.comments = F('comments') + 1
+
+        comment.save()
+        post_stats.save()
+
+        messages.success(request, 'Comment was created!')
+
+    return redirect('posts:post', pk)
+
+
+# def load_comments(request):
+#     post_id = request.GET.get('post_id')
+#     offset = int(request.GET.get('offset', 3))
+#     limit = 5
+
+#     post = get_object_or_404(Post, id=post_id)
+#     comments = Comment.objects.filter(parent=None, status=True)[offset:offset + limit]
+
+#     html = render_to_string('posts/comments_list.html')
+
+
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, id=pk)
+    post_stats = get_object_or_404(PostStats, post=comment.post)
+
+    try:
+        comment.delete()
+        
+        if post_stats.comments != 0:
+            post_stats.comments = F('comments') - 1
+            post_stats.save()
+
+        messages.success(request, 'Comment was deleted!')
+    except:
+        messages.error(request, 'error occured')
+
+    return redirect('posts:post', comment.post.id)
+
+
+def vote_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=pk)
+        user = request.user.profile
+        post_stats, _ = PostStats.objects.get_or_create(post=post)
+        
+        vote_type = request.POST.get('vote_type')
+
+        vote, created = VotePost.objects.get_or_create(post=post, user=user)
+
+        if created:
+            vote.vote_type = vote_type
+            vote.save()
+
+            if vote_type == 'upvote':
+                post_stats.upvotes = F('upvotes') + 1
+            else:
+                post_stats.downvotes = F('downvotes') + 1
+        else:
+            if vote.vote_type == vote_type:
+                vote.delete()
+                if vote.vote_type == 'upvote':
+                    post_stats.upvotes = F('upvotes') - 1
+                else:
+                    post_stats.downvotes = F('downvotes') - 1
+            else:
+                if vote.vote_type == 'upvote':
+                    post_stats.upvotes = F('upvotes') - 1
+                else:
+                    post_stats.downvotes = F('downvotes') - 1
+
+                vote.vote_type = vote_type
+                vote.save()
+
+                if vote_type == 'upvote':
+                    post_stats.upvotes = F('upvotes') + 1
+                else:
+                    post_stats.downvotes = F('downvotes') + 1
+        
+        post_stats.save()
+
+    return redirect('posts:feed')

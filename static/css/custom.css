@@ -49,12 +49,17 @@
     width: 30px;
     height: 30px;
     margin: 0 5px;
-    border: 1px solid #ddd;
+    border: 1px solid #3d5964;
     transition: transform 0.2s ease-in-out;
 }
 
 .vote-button:hover {
     background-color: #204b59;
+    transform: scale(1.08);
+}
+
+.vote-button.upvote:hover {
+    background-color: #7a0056;
     transform: scale(1.08);
 }
 
@@ -276,6 +281,10 @@
 .pagination-link {
     background-color:#2A3236;
     border: none;
+}
+
+.pagination-link.number {
+    border-radius: 20px;
 }
 
 .join-link {

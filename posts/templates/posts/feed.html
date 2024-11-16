@@ -140,20 +140,28 @@
 
                                         <!-- up/down voting -->
                                         <div>
+
                                             <form method="post" action="{% url 'posts:vote_post' post.id %}" class="vote-group">
-                                            {% csrf_token %}
-                                            <button type="submit" name="vote_type" value="upvote" class="vote-button" aria-label="upvote">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                                                </span>
-                                            </button>
-                                            <span class="vote-count"><strong>{{ post.poststats.upvotes }}</strong></span>
-                                            <button type="submit" class="vote-button" aria-label="downvote">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                                                </span>
-                                            </button>
+                                                {% csrf_token %}
+
+                                                <button type="submit" name="vote_type" value="upvote" class="vote-button upvote" aria-label="upvote">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                    </span>
+                                                </button>
+
+                                                <span class="vote-count"><strong>
+                                                    {{ post.poststats.votes }}
+                                                </strong></span>
+
+                                                <button type="submit" name="vote_type" value="downvote" class="vote-button" aria-label="downvote">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </button>
+
                                             </form>
+
                                         </div>
                                         <!-- commenting -->
                                         <div class="vote-group">

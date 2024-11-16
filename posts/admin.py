@@ -50,4 +50,8 @@ class VotePostAdmin(admin.ModelAdmin):
         return obj.post.id
 
 
-admin.site.register(Comment, MPTTModelAdmin)
+# admin.site.register(Comment, MPTTModelAdmin)
+
+@admin.register(Comment)
+class CommentAdmin(MPTTModelAdmin):
+    list_display = ['user', 'post', 'created']

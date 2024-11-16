@@ -202,22 +202,25 @@
                         <div class="box">
 {#                            <h3>Comments</h3>#}
 
-                            <form class="box" method="post">
+                            <form class="box" method="post" action="{% url 'posts:comment_post' post.id %}">
                                 {% csrf_token %}
                                 <h6>Add a comment:</h6>
                                 {{ form.body }}
                                 <button type="submit" class="button mt-2" style="border-radius: 20px;">Comment</button>
                             </form>
-
-                            <hr>
-
-                            <div class="mb-5">
-                                <span>
-                                    {% with comments.count as total_comments %}
-                                        <strong style="font-size: 13px; color: #939393;">{{ total_comments }} comment{{ total_comments|pluralize }}</strong>
-                                    {% endwith %}
-                                </span>
-                            </div>
+                            
+                            {% with comments.count as total_comments %}
+                                {% if total_comments %}
+                                    <hr>
+                                    <div class="mb-5">
+                                        <span>
+                                            <strong style="font-size: 13px; color: #939393;">
+                                                {{ total_comments }} comment{{ total_comments|pluralize }}
+                                            </strong>
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
 
                             {% recursetree comments %}
 
@@ -292,6 +295,14 @@
                                                                     <strong>Save</strong>
                                                                 </a>
                                                             </div>
+
+                                                            <div class="dropdown-item">
+                                                                <a href="{% url 'posts:delete_comment' node.id %}" class="post-title">
+                                                                    <i class="fas fa-trash mr-3" style="color: red;" aria-hidden="true"></i>
+                                                                    <strong>Delete</strong>
+                                                                </a>
+                                                            </div>
+
                                                             <div class="dropdown-item">
                                                                 <a href="" class="post-title">
                                                                     <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
@@ -321,13 +332,32 @@
                                 {% endif %}
                             {% endrecursetree %}
 
-                            <nav class="pagination" role="navigation" aria-label="pagination">
-                                <a class="pagination-link" href="#" aria-label="Previous page">Prev</a>
-                                <a class="pagination-link" href="#" aria-label="Page 1" aria-current="page">1</a>
-                                <a class="pagination-link" href="#" aria-label="Page 2">2</a>
-                                <a class="pagination-link" href="#" aria-label="Page 3">3</a>
-                                <a class="pagination-link" href="#" aria-label="Next page">Next</a>
-                            </nav>
+                            <!-- {% if comments.has_other_pages %}
+                                <nav class="pagination" role="navigation" aria-label="pagination">
+                                    <a class="pagination-link" href="?page=1" aria-label="Previous page">&#10094;&#10094;</a>
+                                    {% if comments.has_previous %}
+                                        <a class="pagination-link" href="?page={{ comments.previous_page_number }}" aria-label="Previous page">&#10094;</a>
+                                    {% else %}
+                                        <a class="pagination-link is-disabled" aria-label="Previous page">&#10094;</a>
+                                    {% endif %}
+
+                                    {% for page in custom_range %}
+                                        {% if page == comments.number %}
+                                            <a class="pagination-link number" href="?page={{ page }}" aria-label="Page 1" aria-current="page">{{ page }}</a>
+                                        {% else %}
+                                            <a class="pagination-link number" href="?page={{ page }}" aria-label="Page 1">{{ page }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if comments.has_next %}
+                                        <a class="pagination-link" href="?page={{ comments.next_page_number }}" aria-label="Next page">&#10095;</a>
+                                    {% else %}
+                                        <a class="pagination-link is-disabled" aria-label="Next page">&#10095;</a>
+                                    {% endif %}
+                                    <a class="pagination-link" href="?page={{ paginator.num_pages }}" aria-label="Next page">&#10095;&#10095;</a>
+                                </nav>
+                            {% endif %} -->
+
 
                         </div>
                     
@@ -348,7 +378,7 @@
 
             var comment = document.getElementById(id);
             comment.insertAdjacentHTML('afterend',
-                '<form id="newForm" method="post" class="box"> \
+                '<form id="newForm" method="post" class="box" action="{% url "posts:comment_post" post.id %}"> \
                         {% csrf_token %} \
                         <select name="parent" class="is-hidden" id="id_parentt"> \
                             <option value="' + id + '" selected="' + id + '"></option> \

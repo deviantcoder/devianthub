@@ -98,9 +98,14 @@ class PostStats(models.Model):
 
     def __str__(self):
         return self.post.title
+    
+    @property
+    def votes(self):
+        votes_ratio = self.upvotes - self.downvotes
+        return votes_ratio if votes_ratio else 0
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['post']
         verbose_name = 'Post statistics'
         verbose_name_plural = 'Post stats'
 
@@ -146,7 +151,7 @@ class Comment(MPTTModel):
         return time_since_obj_posted(self)
 
     class MPTTMeta:
-        order_insertion_by = ['created']
+        order_insertion_by = ['post']
 
     def __str__(self):
         return self.user.username
