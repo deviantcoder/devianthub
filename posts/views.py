@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, VotePost, PostStats
 from .forms import PostForm, PostMediaFormSet, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -145,3 +145,11 @@ def post(request, pk):
     }
 
     return render(request, 'posts/post.html', context)
+
+
+# def vote_post(request, pk):
+#     post = get_object_or_404(Post)
+#     user
+#     post_stats
+#     vote_type
+

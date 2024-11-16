@@ -105,6 +105,31 @@ class PostStats(models.Model):
         verbose_name_plural = 'Post stats'
 
 
+class VotePost(models.Model):
+    VOTES_TYPES = (
+        ('upvote', 'Upvote'),
+        ('downvote', 'Downvote'),
+    )
+
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    vote_type = models.CharField(max_length=10, choices=VOTES_TYPES, null=True)
+    
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    class Meta:
+        unique_together = ('post', 'user')
+        verbose_name = 'Vote'
+        verbose_name_plural = 'Votes'
+        ordering = ['post', 'vote_type', 'created']
+    
+    def __str__(self):
+        return f'Upvote: {self.post.id}'
+
+
 class Comment(MPTTModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')

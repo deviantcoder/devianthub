@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, PostMedia, PostStats, Comment
+from .models import Post, PostMedia, PostStats, Comment, VotePost
 from django.utils.html import format_html
 from mptt.admin import MPTTModelAdmin
 
@@ -40,6 +40,14 @@ class PostMediaAdmin(admin.ModelAdmin):
 @admin.register(PostStats)
 class PostStatsAdmin(admin.ModelAdmin):
     list_display = ['post', 'upvotes', 'downvotes', 'comments', 'reposts']
+
+
+@admin.register(VotePost)
+class VotePostAdmin(admin.ModelAdmin):
+    list_display = ['post_id', 'vote_type', 'user', 'created']
+
+    def post_id(self, obj):
+        return obj.post.id
 
 
 admin.site.register(Comment, MPTTModelAdmin)

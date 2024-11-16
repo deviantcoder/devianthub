@@ -1,7 +1,15 @@
 import os
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
-from .models import PostMedia
+from .models import PostMedia, Post, PostStats
+
+
+@receiver(post_save, sender=Post)
+def create_poststats(sender, instance, created, **kwargs):
+    if created:
+        post_stats = PostStats.objects.create(
+            post=instance
+        )
 
 
 @receiver(pre_delete, sender=PostMedia)

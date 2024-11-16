@@ -238,7 +238,7 @@
                                                 {% endif %}
                                             </span>
                                             <br />
-                                            {{ node.body }}
+                                            {{ node.body|linebreaks }}
 
                                         <nav class="btn-group-comment mt-1">
                                             <div class="level-left">
@@ -257,6 +257,7 @@
                                                     </a>
                                                 </div>
                                                 <!-- reply -->
+                                                {% if node.level < 5 %}
                                                 <div class="vote-group-comment">
                                                     <button class="vote-button-comment" style="width: 75px;" onclick="commentReply('{{ node.id }}')" aria-label="comments">
                                                         <span class="icon">
@@ -265,6 +266,7 @@
                                                         </span>
                                                     </button>
                                                 </div>
+                                                {% endif %}
                                                 <!-- sharing -->
                                                 <div class="vote-group-comment">
                                                     <a class="vote-button-comment" style="width: 75px;" aria-label="comments">
