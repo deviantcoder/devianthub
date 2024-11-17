@@ -1,0 +1,175 @@
+{% load static %}
+
+{% for post in posts %}
+
+                    <div class="box">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    
+                                    <div class="community-item recent-item">
+                                        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="item" style="display: flex; align-items: center;">
+                                                <a href="" class="recent-post-link" style="display: flex; align-items: center;">
+                                                    <img src="{% static 'img/profile.jpg' %}" alt="Logo" class="community-image-small" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                                                    <span class="is-size-7">c/webdesign</span>
+                                                </a>
+                                                <span class="is-size-7 ml-1"> • 
+                                                    {% if post.time_since_posted.type != 'now' %}
+                                                        {{ post.time_since_posted.num }} 
+                                                        {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+                                                        {% if post.updated_status %}
+                                                            <small class="additional-info">{{post.updated_status}}</small>    
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {{ post.time_since_posted.type }}
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+
+                                            {% include 'posts/post_controls.html' %}
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    {% if post.has_media_files != False %}
+                                        {% if post.has_media_files == 1 %}
+
+                                            {% if post.postmedia_set.first.file_ext.type == 'image' %}
+                                                <div class="post-header">
+                                                    <a href="#" class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
+                                                        <img src="{{ post.postmedia_set.first.file.url }}" alt="Post" class="post-image">
+                                                    </a>
+                                                </div>
+                                        
+                                                <!-- Modal -->
+                                                <div id="modal-single-{{ forloop.counter }}" class="modal">
+                                                    <div class="modal-background"></div>
+                                                    <div class="modal-content">
+                                                        <img id="modal-image" src="{{ post.postmedia_set.first.file.url }}" alt="Full Size Image">
+                                                    </div>
+                                                    <button class="modal-close is-large" aria-label="close"></button>
+                                                </div>
+                                            {% else %}
+                                                <div class="post-header">
+                                                    <video class="glow-effect" controls style="height: 300px; width: auto; border-radius: 20px;">
+                                                        <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                                                    </video>
+                                                </div>
+                                            {% endif %}
+
+                                        {% else %}
+                                            <section class="carousel">
+                                                <div class="carousel-wrapper">
+                                                    
+                                                    {% for media in post.postmedia_set.all %}
+                                                        <div class="carousel-slide">
+                                                            {% if media.file_ext.type == 'image' %}
+                                                                <a href="#" class="js-modal-trigger" data-target="modal-{{forloop.counter}}" data-image="{{media.file.url}}">
+                                                                    <img src="{{ media.file.url }}" alt="Post" class="post-image">
+                                                                </a>
+                                                            {% else %}
+                                                                <video class="glow-effect" data-target="modal-{{forloop.counter}}" controls style="height: 300px; width: auto; border-radius: 20px;">
+                                                                    <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
+                                                                </video>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                    
+                                                </div>
+                                                <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
+                                                <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
+                                            
+                                                <!-- Modal -->
+                                                <div id="modal-{{forloop.counter}}" class="modal">
+                                                    <div class="modal-background"></div>
+                                                    <div class="modal-content">
+                                                        <img id="modal-image" src="" alt="Full Size Image">
+                                                    </div>
+                                                    <button class="modal-close is-large" aria-label="close"></button>
+                                                </div>
+                                            
+                                                <!-- Indicators -->
+                                                <div class="carousel-indicators">
+                                                    <!-- Dynamically created -->
+                                                </div>
+                                            </section>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if post.video_url %}
+                                        <div class="post-header">
+                                            {% if 'youtube' in post.video_url %}
+                                                {% with post.video_url|slice:"32:" as video_id %}
+                                                    <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+                                                {% endwith %}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="post-content">
+                                        <p>
+                                            <strong><a href="{% url 'posts:post' post.id %}?feed={{ request.path }}" class="post-title">{{ post.title }}</a></strong>
+                                            <br>
+                                            <span class="post-text">
+                                                {{ post.body|linebreaks }}
+                                            </span>
+                                            <br>
+                                            <small class="additional-info">Posted on: {{ post.created }}</small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <nav class="level is-mobile">
+                                    <div class="level-left">
+
+                                        <!-- up/down voting -->
+                                        <div>
+
+                                            <form method="post" action="{% url 'posts:vote_post' post.id %}" class="vote-group">
+                                                {% csrf_token %}
+
+                                                <button type="submit" name="vote_type" value="upvote" class="vote-button upvote" aria-label="upvote">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                    </span>
+                                                </button>
+
+                                                <span class="vote-count"><strong>
+                                                    {{ post.poststats.votes }}
+                                                </strong></span>
+
+                                                <button type="submit" name="vote_type" value="downvote" class="vote-button" aria-label="downvote">
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+                                        <!-- commenting -->
+                                        <div class="vote-group">
+                                            <a href="{% url 'posts:post' post.id %}" class="vote-button" aria-label="comments">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-comments" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                            <span class="vote-count"><strong class="mr-1">{{ post.comments.count }}</strong></span>
+                                        </div>
+                                        <!-- sharing -->
+                                        <div class="vote-group">
+                                            <a class="vote-button" aria-label="comments">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-share" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </article>
+                    </div>
+
+                    <hr>
+
+                    {% endfor %}

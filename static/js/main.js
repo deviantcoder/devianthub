@@ -1,4 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const postsBox = document.getElementById('posts-box');
+    const spinnerBox = document.getElementById('spinner-box');
+    const loadBtn = document.getElementById('load-btn');
+    const loadBox = document.getElementById('loading-box');
+
+    let visible = 3;
+
+    function handleGetData() {
+        $.ajax({
+            type: 'GET',
+            url: `/posts-json/${visible}/`,
+            success: function(response) {
+                loadBox.classList.add('not-visible')
+
+                const maxSize = response.max;
+                const postsHtml = response.data;
+
+                spinnerBox.classList.remove('not-visible');
+
+                setTimeout(() => {
+                    spinnerBox.classList.add('not-visible');
+
+                    postsBox.innerHTML += postsHtml;
+                    loadBox.classList.remove('not-visible')
+
+                    if (maxSize) {
+                        loadBox.classList.add('not-visible');
+                        postsBox.innerHTML += "<div class='has-text-centered'><strong>No more posts to load</strong></div>";
+                    }
+                }, 1000);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    };
+
+    handleGetData();
+
+    loadBtn.addEventListener('click', () => {
+        visible += 3;
+        handleGetData();
+    });
+
+
+
 
     // USERNAME CHECKER и PREVIEW
     const usernameInput = document.querySelector('input[name="username"]');

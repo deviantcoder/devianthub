@@ -11,12 +11,24 @@ from django.template.loader import render_to_string
 
 def feed(request):
     page = 'feed'
-    posts = Post.objects.filter(draft=False)
     context = {
-        'posts': posts,
         'page': page,
     }
     return render(request, 'posts/feed.html', context)
+
+
+def posts_json(request, **kwargs):
+    upper_index = kwargs.get('num_posts')
+    lower_index = upper_index - 3
+
+    posts = Post.objects.filter(draft=False).distinct().order_by('-created')[lower_index:upper_index]
+    posts_num = Post.objects.filter(draft=False).count()
+
+    size = True if upper_index >= posts_num else False
+
+    posts_html = render_to_string('posts/post_partial.html', {'posts': posts}, request=request)
+
+    return JsonResponse({'data': posts_html, 'max': size,})
 
 
 @login_required(login_url='users:login')
@@ -161,17 +173,6 @@ def comment_post(request, pk):
         messages.success(request, 'Comment was created!')
 
     return redirect('posts:post', pk)
-
-
-# def load_comments(request):
-#     post_id = request.GET.get('post_id')
-#     offset = int(request.GET.get('offset', 3))
-#     limit = 5
-
-#     post = get_object_or_404(Post, id=post_id)
-#     comments = Comment.objects.filter(parent=None, status=True)[offset:offset + limit]
-
-#     html = render_to_string('posts/comments_list.html')
 
 
 def delete_comment(request, pk):
