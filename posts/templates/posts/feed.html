@@ -16,21 +16,16 @@
                 <div class="content">
                     <h1 class="title">Recent Posts</h1>
 
-                
-                    <!-- HERE WAS FOR CYCLE -->
-                    
                     <div id="posts-box"></div>
+
                     <div id="spinner-box" class="not-visible" style="text-align: center;">
                         <span class="mt-6 loader"></span>
                     </div>
-                    <div id="loading-box" class="not-visible" style="text-align: center;">
-                        <button class="button mt-3" id="load-btn" style="border-radius: 20px;">
-                            Load more
-                        </button>
-                    </div>
 
-                    <!-- END OF FOR CYCLE -->
-                    
+                    <div id="loading-box" style="text-align: center; height: 250px;">
+                        <!-- <span class="mt-3 loader"></span> -->
+                    </div>
+  
                 </div>
             </div>
 
@@ -42,7 +37,6 @@
 </section>
 
 <!-- JS -->
-<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
 <!-- <script src="{% static 'js/main.js' %}"></script> -->
 
 {% endblock content %}

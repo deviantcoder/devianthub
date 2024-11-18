@@ -37,7 +37,7 @@
 
                                             {% if post.postmedia_set.first.file_ext.type == 'image' %}
                                                 <div class="post-header">
-                                                    <a href="#" class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
+                                                    <a class="js-modal-trigger" data-target="modal-single-{{ forloop.counter }}" data-image="{{ post.postmedia_set.all.first.file.url }}">
                                                         <img src="{{ post.postmedia_set.first.file.url }}" alt="Post" class="post-image">
                                                     </a>
                                                 </div>

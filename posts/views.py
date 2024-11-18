@@ -11,8 +11,10 @@ from django.template.loader import render_to_string
 
 def feed(request):
     page = 'feed'
+    posts = Post.objects.all()
     context = {
         'page': page,
+        'posts': posts,
     }
     return render(request, 'posts/feed.html', context)
 
