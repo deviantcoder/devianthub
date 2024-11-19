@@ -1,0 +1,112 @@
+{% load mptt_tags %}
+
+{% recursetree comments %}
+
+                            <article class="media">
+                                <figure class="media-left">
+                                    <img src="{{ node.user.image.url }}" class="profile-image" alt="" />
+                                </figure>
+                                <div class="media-content">
+                                    <div id="{{ node.id }}" class="content">
+                                        <p style="font-size: 15px;">
+                                            <strong><a href="" class="comment-username">{{ node.user.get_username }}</a></strong>
+                                            <span class="is-size-7 ml-1">• 
+                                                {% if node.time_since_posted.type != 'now' %}
+                                                    {{ node.time_since_posted.num }}
+                                                    {{ node.time_since_posted.type }}{{ node.time_since_posted.num|pluralize }} ago
+                                                {% else %}
+                                                    {{ node.time_since_posted.type }}
+                                                {% endif %}
+                                            </span>
+                                            <br />
+                                            {{ node.body|linebreaks }}
+
+                                        <nav class="btn-group-comment mt-1">
+                                            <div class="level-left">
+                                                <!-- up/down voting -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" aria-label="upvote">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                    <span class="vote-count">123</span>
+                                                    <a class="vote-button-comment" aria-label="downvote">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <!-- reply -->
+                                                {% if node.level < 5 %}
+                                                <div class="vote-group-comment">
+                                                    <button class="vote-button-comment" style="width: 75px;" onclick="commentReply('{{ node.id }}')" aria-label="comments">
+                                                        <span class="icon">
+                                                            <i class="fas fa-reply mr-1" aria-hidden="true"></i>
+                                                            Reply
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                {% endif %}
+                                                <!-- sharing -->
+                                                <div class="vote-group-comment">
+                                                    <a class="vote-button-comment" style="width: 75px;" aria-label="comments">
+                                                        <span class="icon is-small">
+                                                            <i class="fas fa-share mr-1" aria-hidden="true"></i>
+                                                            Share
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div class="vote-group-comment dropdown is-hoverable">
+                                                    <div class="dropdown-trigger">
+                                                        <button class="vote-button-comment" aria-label="comments">
+                                                            <span class="icon is-small">
+                                                                <i class="fas fa-ellipsis-h" style="font-size: 12px;"></i>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                                        <div class="dropdown-content">
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-bookmark mr-3" aria-hidden="true"></i>
+                                                                    <strong>Save</strong>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="dropdown-item">
+                                                                <a href="{% url 'posts:delete_comment' node.id %}" class="post-title">
+                                                                    <i class="fas fa-trash mr-3" style="color: red;" aria-hidden="true"></i>
+                                                                    <strong>Delete</strong>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-eye-slash mr-3" aria-hidden="true"></i>
+                                                                    <strong>Hide</strong>
+                                                                </a>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <a href="" class="post-title">
+                                                                    <i class="fas fa-flag mr-3" aria-hidden="true"></i>
+                                                                    <strong>Report</strong>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </nav>
+
+                                    </p>
+                                </div>
+                            </article>
+                            <hr>
+                                {% if not node.is_leaf_node %}
+                                    <div class="children ml-6">
+                                        {{ children }}
+                                    </div>
+                                {% endif %}
+                                
+                            {% endrecursetree %}

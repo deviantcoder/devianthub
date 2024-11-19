@@ -28,9 +28,20 @@ def posts_json(request, **kwargs):
 
     size = True if upper_index >= posts_num else False
 
-    posts_html = render_to_string('posts/post_partial.html', {'posts': posts}, request=request)
+    posts_html = render_to_string('posts/posts_loading.html', {'posts': posts, 'page': 'feed'}, request=request)
 
     return JsonResponse({'data': posts_html, 'max': size,})
+
+
+def comments_json(request, **kwargs):
+    post_id = kwargs.get('post_id', 'Post ID was not found')
+    
+    post = get_object_or_404(Post, id=post_id)
+
+    comments = post.comments.filter(status=True)
+    comments_html = render_to_string('posts/comments_loading.html', {'comments': comments, 'post': post}, request=request)
+
+    return JsonResponse({'data': comments_html})
 
 
 @login_required(login_url='users:login')

@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Comments Loading
+
+    const postId = document.getElementById('post-id').value
+    
+    function commentsLoading() {
+        $.ajax({
+        type: 'GET',
+        url: `/comments-json/${postId}/`,
+        success: function (response) {
+            console.log(postId)
+            console.log(response.data)
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+    }
+
+    commentsLoading()
     
     // Posts Loading
 
@@ -142,10 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 1
     });
 
-    observer.observe(loadBox);
-
-    handleGetData();
-
+    if (loadBox) {
+        observer.observe(loadBox);
+        handleGetData();
+    }
 
 
 
@@ -470,23 +490,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    textForm.addEventListener('input', function() {
-        if (textForm.querySelector('textarea').value.trim() !== "") {
-            disableTabs(textTab);
-        } else {
-            enableTabs();
-        }
-    });
+    if (textForm){
+        textForm.addEventListener('input', function() {
+            if (textForm.querySelector('textarea').value.trim() !== "") {
+                disableTabs(textTab);
+            } else {
+                enableTabs();
+            }
+        });
+    }
+    
 
-    linkForm.addEventListener('input', function() {
-        if (linkForm.querySelector('input').value.trim() !== "") {
-            disableTabs(linkTab);
-        } else {
-            enableTabs();
-        }
-    });
+    if (linkForm) {
+        linkForm.addEventListener('input', function() {
+            if (linkForm.querySelector('input').value.trim() !== "") {
+                disableTabs(linkTab);
+            } else {
+                enableTabs();
+            }
+        });
+    }
 
-    imagesForm.addEventListener('input', checkMediaForms);
+    if (imagesForm) {
+        imagesForm.addEventListener('input', checkMediaForms);
+    }
 
     document.getElementById('add-media').addEventListener('click', function() {
         const formsetDiv = document.getElementById('media-formset');
