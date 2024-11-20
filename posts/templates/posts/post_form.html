@@ -1,5 +1,7 @@
 {% extends 'main.html' %}
 
+{% load static %}
+
 {% block content %}
 <section class="section">
     <div class="container">
@@ -139,5 +141,7 @@
         display: none;
     }
 </style>
+
+<script src="{% static 'js/tabs.js' %}"></script>
 
 {% endblock content %}

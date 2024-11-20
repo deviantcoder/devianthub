@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        /* Скрытие панелей на мобильных устройствах */
+        .sidebar {
+            display: block;
+        }
+
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .is-active .sidebar {
+                display: block;
+            }
+        }
+
+        .feed {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .post {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin: 1rem 0;
+            width: 48%;
+        }
+
+        /* Панели */
+        .sidebar .menu {
+            margin-top: 2rem;
+        }
+
+        .menu-item {
+            padding: 0.5rem 0;
+        }
+
+        .burger-menu {
+            display: block;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Основной контент */
+        .content {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .right-panel {
+            width: 25%;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Навигация -->
+    <nav class="navbar is-fixed-top has-shadow">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img src="логотип.png" alt="Логотип" style="max-height: 3rem;">
+            </a>
+
+            <a role="button" class="navbar-burger burger-menu" aria-label="menu" aria-expanded="false" data-target="navbarMenu" onclick="toggleMenu()">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Основной контейнер -->
+    <div class="container" style="margin-top: 4rem;">
+        <div class="columns">
+            <!-- Левая панель (категории, недавние посты) -->
+            <div class="column is-2 sidebar">
+                <div class="menu">
+                    <p class="menu-label">Категории</p>
+                    <ul class="menu-list">
+                        <li class="menu-item"><a href="#">Категория 1</a></li>
+                        <li class="menu-item"><a href="#">Категория 2</a></li>
+                        <li class="menu-item"><a href="#">Категория 3</a></li>
+                    </ul>
+
+                    <p class="menu-label">Недавние посты</p>
+                    <ul class="menu-list">
+                        <li class="menu-item"><a href="#">Пост 1</a></li>
+                        <li class="menu-item"><a href="#">Пост 2</a></li>
+                        <li class="menu-item"><a href="#">Пост 3</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Основной контент (фид) -->
+            <div class="column is-8 content">
+                <div class="feed">
+                    <div class="post">
+                        <h3>Пост 1</h3>
+                        <p>Содержание поста 1...</p>
+                    </div>
+                    <div class="post">
+                        <h3>Пост 2</h3>
+                        <p>Содержание поста 2...</p>
+                    </div>
+                    <div class="post">
+                        <h3>Пост 3</h3>
+                        <p>Содержание поста 3...</p>
+                    </div>
+                    <div class="post">
+                        <h3>Пост 4</h3>
+                        <p>Содержание поста 4...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая панель (темы, рекомендации и т. д.) -->
+            <div class="column is-2 right-panel sidebar">
+                <div class="menu">
+                    <p class="menu-label">Темы</p>
+                    <ul class="menu-list">
+                        <li class="menu-item"><a href="#">Тема 1</a></li>
+                        <li class="menu-item"><a href="#">Тема 2</a></li>
+                        <li class="menu-item"><a href="#">Тема 3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функция для открытия/закрытия бокового меню
+        function toggleMenu() {
+            const menu = document.querySelector('.navbar-burger');
+            const sidebar = document.querySelector('.container');
+            menu.classList.toggle('is-active');
+            sidebar.classList.toggle('is-active');
+        }
+
+        // Закрытие бокового меню при клике вне меню
+        document.addEventListener('click', function (event) {
+            const sidebar = document.querySelector('.container');
+            const burger = document.querySelector('.navbar-burger');
+            if (!sidebar.contains(event.target) && !burger.contains(event.target)) {
+                sidebar.classList.remove('is-active');
+                burger.classList.remove('is-active');
+            }
+        });
+    </script>
+</body>
+
+</html>

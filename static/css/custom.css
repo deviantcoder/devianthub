@@ -123,11 +123,13 @@
     width: auto;
 }
 
-.navbar-menu {
+/* .navbar-menu {
     align-items: center;
     justify-content:center;
     width: 85%;
-}
+} */
+
+
 
 .search-wrapper {
     display: flex;

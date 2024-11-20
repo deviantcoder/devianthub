@@ -1,8 +1,8 @@
 {% load static %}
 
-<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+<!-- <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="container">
-        <div class="navbar-brand">
+        <div class="navbar-brand is-align-center">
             <a href="/" class="">
                 <img src="{% static 'img/logo.png' %}" alt="DeviantHub" class="navbar-logo mt-2">
             </a>
@@ -94,19 +94,166 @@
             </div>
         </div>
     </div>
+</nav> -->
+
+
+
+
+<nav class="navbar is-fixed-top has-shadow">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" style="max-height: 3rem;">
+        </a>
+
+        <!-- Кнопка для мобильного меню -->
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-start">
+            <!-- Поле поиска -->
+            <div class="navbar-item is-fullwidth search-container">
+                <div class="control has-icons-left is-expanded">
+                    <input class="input is-rounded" type="text" placeholder="Search...">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <!-- Ссылки -->
+            <a class="navbar-item" href="/messages">
+                <span class="icon">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <span class="is-hidden-desktop">Messages</span>
+            </a>
+            <a class="navbar-item" href="/create-post">
+                <span class="icon">
+                    <i class="fas fa-plus"></i>
+                </span>
+                <span class="is-hidden-desktop">Create Post</span>
+            </a>
+            <a class="navbar-item" href="/notifications">
+                <span class="icon">
+                    <i class="fas fa-bell"></i>
+                </span>
+                <span class="is-hidden-desktop">Notifications</span>
+            </a>
+
+            <!-- Дропдаун -->
+            <div class="dropdown is-right" id="dropdown-navbar">
+                <div class="dropdown-trigger">
+                    <button aria-haspopup="true" aria-controls="dropdown-menu5" onclick="toggleDropdown(this)">
+                        <img class="profile-image mt-2 mr-2 ml-4" src="{{ request.user.profile.image.url }}" alt="Profile">
+                    </button>
+                </div>
+                <div class="dropdown-menu" role="menu">
+                    <div class="dropdown-content" style="background-color: #2e3853">
+                        <div class="dropdown-item">
+                            <a href="" class="post-title">
+                                <i class="fas fa-user-circle icon-width" aria-hidden="true"></i>
+                                <strong>View Profile</strong>
+                            </a>
+                        </div>
+                        <div class="dropdown-item">
+                            <a href="{% url 'users:edit_profile' %}" class="post-title">
+                                <i class="fas fa-user-edit icon-width" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
+                                <strong>Edit Profile</strong>
+                            </a>
+                        </div>
+                        <div class="dropdown-item">
+                            <a href="{% url 'users:logout' %}" class="post-title">
+                                <i class="fas fa-sign-out-alt icon-width" aria-hidden="true" style="color: red;"></i>
+                                <strong>Log Out</strong>
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="dropdown-item">
+                            <a href="" class="post-title">
+                                <i class="fas fa-cog icon-width" aria-hidden="true" style="color: #bebebe"></i>
+                                <strong>Settings</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </nav>
 
-<script>
-    function toggleDropdownNav() {
-        document.getElementById("dropdown-navbar").classList.toggle("is-active");
+<style>
+    /* Убираем ограничения ширины для мобильных экранов */
+    .navbar {
+        max-width: 100%; /* На мобильных всегда 100% */
+        margin: 0; /* Убираем отступы */
+        position: relative;
     }
 
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById("dropdown-navbar");
-        const trigger = document.querySelector('.dropdown-trigger button');
-
-        if (dropdown.classList.contains('is-active') && !dropdown.contains(event.target) && !trigger.contains(event.target)) {
-            dropdown.classList.remove('is-active');
+    @media screen and (min-width: 780px) {
+        .navbar {
+            max-width: 90%; /* Только на десктопе ограничиваем ширину */
+            margin: 0 auto; /* Центрируем */
         }
+    }
+
+    /* Поиск на мобильных устройствах */
+    .search-container {
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .dropdown-menu {
+        width: max-content;
+        padding: 0.5rem;
+        border-radius: 8px;
+    }
+
+    /* Для мобильных: меню растягивается */
+    @media screen and (max-width: 780px) {
+        .dropdown-menu {
+            position: static; /* Убираем абсолютное позиционирование */
+            width: 100%; /* Растягиваем на всю ширину */
+            margin-top: 0.5rem;
+            margin: 10px; /* Отступ сверху */
+        }
+
+        .dropdown.is-active .dropdown-menu {
+            display: block;
+        }
+    }
+
+    .dropdown.is-active .dropdown-menu {
+        display: block;
+    }
+
+    .profile-image {
+        cursor: pointer;
+    }
+
+</style>
+
+<script>
+    // Открытие/закрытие дропдауна
+    function toggleDropdown(button) {
+        const dropdown = button.closest('.dropdown');
+        dropdown.classList.toggle('is-active');
+    }
+
+    // Закрытие дропдауна при клике вне
+    document.addEventListener('click', function(event) {
+        document.querySelectorAll('.dropdown.is-active').forEach(dropdown => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('is-active');
+            }
+        });
     });
 </script>
+
