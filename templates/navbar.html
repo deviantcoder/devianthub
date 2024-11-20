@@ -105,8 +105,7 @@
             <img src="{% static 'img/logo.png' %}" alt="Logo" style="max-height: 3rem;">
         </a>
 
-        <!-- Кнопка для мобильного меню -->
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+        <a role="button" class="navbar-burger mb-5" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -128,28 +127,26 @@
         </div>
 
         <div class="navbar-end">
-            <!-- Ссылки -->
-            <a class="navbar-item" href="/messages">
+            <a class="navbar-item a-button" href="/messages">
                 <span class="icon">
-                    <i class="fas fa-envelope"></i>
+                    <i class="fas fas fa-comment-dots"></i>
                 </span>
                 <span class="is-hidden-desktop">Messages</span>
             </a>
-            <a class="navbar-item" href="/create-post">
+            <a class="navbar-item a-button" href="/create-post">
                 <span class="icon">
-                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-plus-circle"></i>
                 </span>
                 <span class="is-hidden-desktop">Create Post</span>
             </a>
-            <a class="navbar-item" href="/notifications">
+            <a class="navbar-item a-button" href="/notifications">
                 <span class="icon">
                     <i class="fas fa-bell"></i>
                 </span>
                 <span class="is-hidden-desktop">Notifications</span>
             </a>
 
-            <!-- Дропдаун -->
-            <div class="dropdown is-right" id="dropdown-navbar">
+            <div class="dropdown" id="dropdown-navbar">
                 <div class="dropdown-trigger">
                     <button aria-haspopup="true" aria-controls="dropdown-menu5" onclick="toggleDropdown(this)">
                         <img class="profile-image mt-2 mr-2 ml-4" src="{{ request.user.profile.image.url }}" alt="Profile">
@@ -185,69 +182,105 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </nav>
 
 <style>
-    /* Убираем ограничения ширины для мобильных экранов */
+
+
+.navbar {
+    max-width: 100%; /* На мобильных всегда 100% */
+    margin: 0; /* Убираем отступы */
+    position: relative;
+    z-index: 0; /* По умолчанию navbar будет ниже, чем бургер */
+}
+
+@media screen and (min-width: 1200px) {
     .navbar {
-        max-width: 100%; /* На мобильных всегда 100% */
-        margin: 0; /* Убираем отступы */
-        position: relative;
+        max-width: 90%; /* Только на десктопе ограничиваем ширину */
+        margin: 0 auto; /* Центрируем */
     }
+}
 
-    @media screen and (min-width: 780px) {
-        .navbar {
-            max-width: 90%; /* Только на десктопе ограничиваем ширину */
-            margin: 0 auto; /* Центрируем */
-        }
-    }
+.search-container {
+    width: 100%;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 5; /* Уменьшаем z-index для поля поиска */
+}
 
-    /* Поиск на мобильных устройствах */
+@media screen and (max-width: 780px) {
     .search-container {
-        width: 100%;
-        padding: 0 1rem;
+        margin-top: 70px;
+        margin-bottom: 20px;
+    }
+    /* Бургер всегда видим */
+    .navbar-burger {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: block; /* Убедитесь, что бургер всегда виден */
+        z-index: 1000; /* Делаем бургер самой верхней кнопкой */
     }
 
+    /* Меню, которое появляется справа */
+    .navbar-menu {
+        position: fixed;
+        border-bottom-left-radius: 20px;
+        border-top-left-radius: 20px;
+        
+        top: 0;
+        right: 0;
+        width: 250px; /* Ширина меню */
+        height: 100vh; /* 100% высоты экрана */
+        box-shadow: 0 0 5px 1px rgba(81, 106, 114, 0.6);
+        transform: translateX(100%); /* Скрытие меню справа */
+        transition: transform 1s ease-in-out;
+        z-index: 999; /* Меню будет на фоне кнопки бургер */
+        border-left: 1px solid #566972;
+        border-bottom: 1px solid #566972;
+    }
+
+    .navbar-menu.is-active {
+        transform: translateX(0); /* Показываем меню */
+    }
+
+    /* Убедитесь, что dropdown-меню тоже будет ниже */
     .dropdown-menu {
         width: max-content;
         padding: 0.5rem;
         border-radius: 8px;
-    }
-
-    /* Для мобильных: меню растягивается */
-    @media screen and (max-width: 780px) {
-        .dropdown-menu {
-            position: static; /* Убираем абсолютное позиционирование */
-            width: 100%; /* Растягиваем на всю ширину */
-            margin-top: 0.5rem;
-            margin: 10px; /* Отступ сверху */
-        }
-
-        .dropdown.is-active .dropdown-menu {
-            display: block;
-        }
+        z-index: 1;
     }
 
     .dropdown.is-active .dropdown-menu {
         display: block;
     }
+}
 
-    .profile-image {
-        cursor: pointer;
-    }
+.profile-image {
+    cursor: pointer;
+}
+
+.dropdown-content {
+    /* margin-right: 200px; */
+    width: 200px;
+}
+
+
+
+
 
 </style>
 
 <script>
-    // Открытие/закрытие дропдауна
     function toggleDropdown(button) {
         const dropdown = button.closest('.dropdown');
         dropdown.classList.toggle('is-active');
     }
 
-    // Закрытие дропдауна при клике вне
     document.addEventListener('click', function(event) {
         document.querySelectorAll('.dropdown.is-active').forEach(dropdown => {
             if (!dropdown.contains(event.target)) {
@@ -255,5 +288,41 @@
             }
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const burger = document.querySelector('.navbar-burger');
+    const menu = document.querySelector('#navbarMenu');
+
+    // Открытие/закрытие меню по клику на бургер
+    burger.addEventListener('click', function () {
+        menu.classList.toggle('is-active');
+        burger.classList.toggle('is-active');
+    });
+
+    // Закрытие меню по клику вне меню
+    document.addEventListener('click', function (event) {
+        // Проверка, чтобы не закрывать меню сразу после его открытия
+        if (!menu.contains(event.target) && !burger.contains(event.target) && menu.classList.contains('is-active')) {
+            menu.classList.remove('is-active');
+            burger.classList.remove('is-active');
+        }
+    });
+});
+
+function adjustDropdown() {
+    const dropdown = document.getElementById('dropdown-navbar');
+    if (window.innerWidth >= 1024) {
+        dropdown.classList.add('is-right');
+    } else {
+        dropdown.classList.remove('is-right');
+    }
+}
+
+// Вызываем функцию при загрузке страницы
+adjustDropdown();
+
+// Добавляем слушатель для изменения размера окна
+window.addEventListener('resize', adjustDropdown);
+
 </script>
 

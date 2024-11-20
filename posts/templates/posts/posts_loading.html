@@ -1,5 +1,261 @@
 {% load static %}
 
+
+<style>
+    
+    .post-title-custom {
+        font-size: 20px;
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .post-title-custom:hover {
+        color: #0EBBE3;
+    }
+
+    .post-description {
+        font-size: 16px;
+        color: #868686;
+        margin-bottom: 16px;
+        margin-top: 16px;
+    }
+
+    .post-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .votes-group {
+        height: 35px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #303030;
+        padding: 4px 8px;
+        border-radius: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .vote-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 18px;
+        width: 24px;
+        height: 24px;
+        transition: color 0.2s ease;
+    }
+
+    .vote-button:hover {
+        color: #007bff;
+    }
+
+    .vote-count {
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .comment-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #ffffff;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .comment-button i {
+        font-size: 18px;
+    }
+
+    .comment-button:hover {
+        color: #08a4ff;
+    }
+
+    .share-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #ffffff;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .share-button:hover {
+        color: #08a4ff;
+    }
+
+
+    /* Информация о сообществе */
+    .community-info {
+        display: flex;
+        align-items: center;
+        /* justify-content: space-between; */
+        margin-bottom: 16px;
+        flex-wrap: wrap; /* Позволяет перенос, если экран слишком мал */
+    }
+
+    /* Ссылка на сообщество */
+    .community-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #007bff;
+        gap: 10px;
+        white-space: nowrap; /* Предотвращает перенос внутри ссылки */
+    }
+
+    .community-link:hover {
+        color: #0056b3;
+    }
+
+    /* Аватар сообщества */
+    .community-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* Название сообщества */
+    .community-name {
+        font-size: 12px;
+        font-weight: bold;
+        color: rgb(156, 156, 156);
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .community-name:hover {
+        color: #ffffff;
+    }
+
+    /* Метка времени поста */
+    .post-timestamp {
+        font-size: 12px;
+        white-space: nowrap; /* Предотвращает перенос внутри текста */
+        margin-left: 10px;
+        flex-shrink: 0; /* Защищает от сжатия */
+    }
+
+    @media screen and (max-width: 768px) {
+        .community-info {
+            flex-direction: column; /* Элементы переходят в колонку на малых экранах */
+            align-items: flex-start;
+        }
+
+        .community-link {
+            margin-bottom: 5px; /* Разделение с временной меткой */
+        }
+
+        .post-timestamp {
+            margin-left: 0; /* Убираем отступ для мобильных */
+        }
+    }
+
+    /* Контейнер для видео */
+    .youtube-container {
+        position: relative;
+        padding-top: 56.25%; /* Соотношение сторон 16:9 */
+        margin: 1rem auto;  /* Центрирование и отступы сверху и снизу */
+        overflow: hidden;
+        border-radius: 20px;
+        max-width: 800px;  /* Уменьшенная максимальная ширина для десктопов */
+    }
+
+    /* Встроенное видео */
+    .youtube-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .more-options {
+        font-size: 18px;
+        cursor: pointer;
+        margin-left: auto; /* Оставляет иконку справа */
+    }
+
+</style>
+
+
+
+<div class="box">
+    <!-- Информация о сообществе -->
+    <div class="community-info">
+        <a href="#community-link" class="community-link">
+            <img src="https://via.placeholder.com/20" alt="Community Logo" class="community-avatar">
+            <span class="community-name">c/webdesign</span>
+        </a>
+        <span class="post-timestamp"> • 7 hours ago (updated on 20.11.2024)</span>
+        <div class="more-options">
+            <!-- <i class="fas fa-ellipsis-h"></i> -->
+            {% include 'posts/post_controls.html' %}
+        </div>
+    </div>
+    <!-- Контент поста -->
+    <div class="content">
+
+        <!-- YouTube Embed -->
+        <div class="youtube-container">
+            <iframe
+                src="https://www.youtube.com/embed/VIDEO_ID"
+                title="YouTube video"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="post-content-container">
+                <p>
+                    <strong class="mb-3">
+                        <a href="" class="post-title-custom">Amazing Web Design Tips</a>
+                    </strong>
+                </p>
+                <p>
+                <span class="post-description">
+                    Check out this tutorial on modern web design techniques!
+                </span>
+                </p>   
+        </div>
+    </div>
+
+    <!-- Панель кнопок -->
+    <div class="post-actions">
+        <!-- Группа upvote/downvote -->
+        <div class="votes-group">
+            <a href="#" class="vote-button upvote">
+                <i class="fas fa-arrow-up"></i>
+            </a>
+            <span class="vote-count">12</span>
+            <a href="#" class="vote-button downvote">
+                <i class="fas fa-arrow-down"></i>
+            </a>
+        </div>
+
+        <!-- Кнопка для комментариев -->
+        <div class="votes-group">
+            <a href="#" class="share-button">
+                <i class="fas fa-share"></i>
+                <span>Share</span>
+            </a> |
+            <a href="#comments" class="comment-button">
+                <i class="fas fa-comments"></i>
+                <span>Comments</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
 {% for post in posts %}
 
                     <div class="box">
