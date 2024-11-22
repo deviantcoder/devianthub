@@ -1,104 +1,5 @@
 {% load static %}
 
-<!-- <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand is-align-center">
-            <a href="/" class="">
-                <img src="{% static 'img/logo.png' %}" alt="DeviantHub" class="navbar-logo mt-2">
-            </a>
-
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-               data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start"></div>
-
-            <div class="navbar-center">
-                <div class="control has-icons-left">
-                    <input class="input is-rounded" type="text" placeholder="Search DeviantHub">
-                    <span class="icon is-left">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
-            </div>
-
-            <div class="navbar-end">
-                <a class="navbar-item a-button">
-                    <span class="icon is-left">
-                        <i class="fas fa-comment-dots" aria-hidden="true"></i>
-                    </span>
-                </a>
-                <a class="navbar-item a-button" href="{% url 'posts:create_post' %}">
-                    <span class="icon is-left">
-                        <i class="fas fa-plus-circle" aria-hidden="true"></i>
-                    </span>
-                </a>
-                <a class="navbar-item a-button">
-                    <span class="icon is-left">
-                        <i class="fas fa-bell" aria-hidden="true"></i>
-                    </span>
-                </a>
-                <div class="buttons">
-
-                    {% if request.user.is_authenticated %}
-
-                        <div class="dropdown" id="dropdown-navbar">
-                            <div class="dropdown-trigger">
-                                <button aria-haspopup="true" aria-controls="dropdown-menu5" onclick="toggleDropdownNav()">
-                                    <img class="profile-image mt-2 mr-2 ml-5" src="{{ request.user.profile.image.url }}" alt="Profile">
-                                </button>
-                            </div>
-                            <div class="dropdown-menu" id="dropdown-menu5" role="menu">
-                                <div class="dropdown-content" style="background-color: #2e3853">
-                                    <div class="dropdown-item">
-                                        <a href="" class="post-title">
-                                            <i class="fas fa-user-circle icon-width" aria-hidden="true"></i>
-                                            <strong>View Profile</strong>
-                                        </a>
-                                    </div>
-                                    <div class="dropdown-item">
-                                        <a href="{% url 'users:edit_profile' %}" class="post-title">
-                                            <i class="fas fa-user-edit icon-width" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
-                                            <strong>Edit Profile</strong>
-                                        </a>
-                                    </div>
-                                    <div class="dropdown-item">
-                                        <a href="{% url 'users:logout' %}" class="post-title">
-                                            <i class="fas fa-sign-out-alt icon-width" aria-hidden="true" style="color: red;"></i>
-                                            <strong>Log Out</strong>
-                                        </a>
-                                    </div>
-                                    <hr>
-                                    <div class="dropdown-item">
-                                        <a href="" class="post-title">
-                                            <i class="fas fa-cog icon-width" aria-hidden="true" style="color: #bebebe"></i>
-                                            <strong>Settings</strong>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    {% else %}
-                        <a class="button" href="{% url 'users:login' %}">
-                            Log in
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</nav> -->
-
-
-
-
 <nav class="navbar is-fixed-top has-shadow">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
@@ -115,7 +16,7 @@
 
     <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-start">
-            <!-- Поле поиска -->
+
             <div class="navbar-item is-fullwidth search-container">
                 <div class="control has-icons-left is-expanded">
                     <input class="input is-rounded" type="text" placeholder="Search...">
@@ -124,28 +25,30 @@
                     </span>
                 </div>
             </div>
+
         </div>
 
         <div class="navbar-end">
-            <a class="navbar-item a-button" href="/messages">
+            <a class="navbar-item a-button" href="">
                 <span class="icon">
                     <i class="fas fas fa-comment-dots"></i>
                 </span>
                 <span class="is-hidden-desktop">Messages</span>
             </a>
-            <a class="navbar-item a-button" href="/create-post">
+            <a class="navbar-item a-button" href="{% url 'posts:create_post' %}">
                 <span class="icon">
                     <i class="fas fa-plus-circle"></i>
                 </span>
                 <span class="is-hidden-desktop">Create Post</span>
             </a>
-            <a class="navbar-item a-button" href="/notifications">
+            <a class="navbar-item a-button" href="">
                 <span class="icon">
                     <i class="fas fa-bell"></i>
                 </span>
                 <span class="is-hidden-desktop">Notifications</span>
             </a>
 
+            {% if request.user.is_authenticated %}
             <div class="dropdown" id="dropdown-navbar">
                 <div class="dropdown-trigger">
                     <button aria-haspopup="true" aria-controls="dropdown-menu5" onclick="toggleDropdown(this)">
@@ -182,25 +85,33 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+
+                <a class="navbar-item button" href="{% url 'users:login' %}" style="border-radius: 15px;">
+                    <span class="icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </span>
+                    <span>Log In</span>
+                </a>
+
+            {% endif %}
 
         </div>
     </div>
 </nav>
 
 <style>
-
-
 .navbar {
-    max-width: 100%; /* На мобильных всегда 100% */
-    margin: 0; /* Убираем отступы */
+    max-width: 100%;
+    margin: 0;
     position: relative;
-    z-index: 0; /* По умолчанию navbar будет ниже, чем бургер */
+    z-index: 0;
 }
 
 @media screen and (min-width: 1200px) {
     .navbar {
-        max-width: 90%; /* Только на десктопе ограничиваем ширину */
-        margin: 0 auto; /* Центрируем */
+        max-width: 90%;
+        margin: 0 auto;
     }
 }
 
@@ -208,7 +119,7 @@
     width: 100%;
     padding: 0 1rem;
     position: relative;
-    z-index: 5; /* Уменьшаем z-index для поля поиска */
+    z-index: 5;
 }
 
 @media screen and (max-width: 780px) {
@@ -216,16 +127,15 @@
         margin-top: 70px;
         margin-bottom: 20px;
     }
-    /* Бургер всегда видим */
+
     .navbar-burger {
         position: absolute;
         top: 15px;
         right: 15px;
-        display: block; /* Убедитесь, что бургер всегда виден */
-        z-index: 1000; /* Делаем бургер самой верхней кнопкой */
+        display: block;
+        z-index: 1000;
     }
 
-    /* Меню, которое появляется справа */
     .navbar-menu {
         position: fixed;
         border-bottom-left-radius: 20px;
@@ -233,21 +143,20 @@
         
         top: 0;
         right: 0;
-        width: 250px; /* Ширина меню */
-        height: 100vh; /* 100% высоты экрана */
+        width: 250px;
+        height: 100vh;
         box-shadow: 0 0 5px 1px rgba(81, 106, 114, 0.6);
-        transform: translateX(100%); /* Скрытие меню справа */
+        transform: translateX(100%);
         transition: transform 1s ease-in-out;
-        z-index: 999; /* Меню будет на фоне кнопки бургер */
+        z-index: 999;
         border-left: 1px solid #566972;
         border-bottom: 1px solid #566972;
     }
 
     .navbar-menu.is-active {
-        transform: translateX(0); /* Показываем меню */
+        transform: translateX(0);
     }
 
-    /* Убедитесь, что dropdown-меню тоже будет ниже */
     .dropdown-menu {
         width: max-content;
         padding: 0.5rem;
@@ -260,19 +169,14 @@
     }
 }
 
-.profile-image {
-    cursor: pointer;
-}
+    .profile-image {
+        cursor: pointer;
+    }
 
-.dropdown-content {
-    /* margin-right: 200px; */
-    width: 200px;
-}
-
-
-
-
-
+    .dropdown-content {
+        /* margin-right: 200px; */
+        width: 200px;
+    }
 </style>
 
 <script>
@@ -290,39 +194,33 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-    const burger = document.querySelector('.navbar-burger');
-    const menu = document.querySelector('#navbarMenu');
+        const burger = document.querySelector('.navbar-burger');
+        const menu = document.querySelector('#navbarMenu');
 
-    // Открытие/закрытие меню по клику на бургер
-    burger.addEventListener('click', function () {
-        menu.classList.toggle('is-active');
-        burger.classList.toggle('is-active');
+        burger.addEventListener('click', function () {
+            menu.classList.toggle('is-active');
+            burger.classList.toggle('is-active');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!menu.contains(event.target) && !burger.contains(event.target) && menu.classList.contains('is-active')) {
+                menu.classList.remove('is-active');
+                burger.classList.remove('is-active');
+            }
+        });
     });
 
-    // Закрытие меню по клику вне меню
-    document.addEventListener('click', function (event) {
-        // Проверка, чтобы не закрывать меню сразу после его открытия
-        if (!menu.contains(event.target) && !burger.contains(event.target) && menu.classList.contains('is-active')) {
-            menu.classList.remove('is-active');
-            burger.classList.remove('is-active');
+    function adjustDropdown() {
+        const dropdown = document.getElementById('dropdown-navbar');
+        if (window.innerWidth >= 1024) {
+            dropdown.classList.add('is-right');
+        } else {
+            dropdown.classList.remove('is-right');
         }
-    });
-});
-
-function adjustDropdown() {
-    const dropdown = document.getElementById('dropdown-navbar');
-    if (window.innerWidth >= 1024) {
-        dropdown.classList.add('is-right');
-    } else {
-        dropdown.classList.remove('is-right');
     }
-}
 
-// Вызываем функцию при загрузке страницы
-adjustDropdown();
+    adjustDropdown();
 
-// Добавляем слушатель для изменения размера окна
-window.addEventListener('resize', adjustDropdown);
-
+    window.addEventListener('resize', adjustDropdown);
 </script>
 

@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
                     isLoading = false;
                     initializeDynamicComponents();
-                }, 1000);
+                }, ); // 1000
             },
             error: function (error) {
                 console.error(error);

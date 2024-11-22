@@ -7,11 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 
 def feed(request):
     page = 'feed'
-    posts = Post.objects.all()
+    posts = Post.objects.filter(draft=False)
     context = {
         'page': page,
         'posts': posts,
@@ -28,20 +29,39 @@ def posts_json(request, **kwargs):
 
     size = True if upper_index >= posts_num else False
 
-    posts_html = render_to_string('posts/posts_loading.html', {'posts': posts, 'page': 'feed'}, request=request)
+    context = {
+        'posts': posts,
+        'page': 'feed'
+    }
+
+    posts_html = render_to_string('posts/posts_loading.html', context, request=request)
 
     return JsonResponse({'data': posts_html, 'max': size,})
 
 
 def comments_json(request, **kwargs):
     post_id = kwargs.get('post_id', 'Post ID was not found')
-    
+
+    upper_index = kwargs.get('visible')
+    lower_index = upper_index - 3
+
     post = get_object_or_404(Post, id=post_id)
 
-    comments = post.comments.filter(status=True)
-    comments_html = render_to_string('posts/comments_loading.html', {'comments': comments, 'post': post}, request=request)
+    parent_comments = Comment.objects.filter(post=post, parent__isnull=True)[lower_index:upper_index]
 
-    return JsonResponse({'data': comments_html})
+    comments_num = Comment.objects.filter(post=post, parent__isnull=True).count()
+
+    all_comments = Comment.objects.filter(
+        tree_id__in=parent_comments.values_list('tree_id', flat=True)
+    ).order_by('tree_id', 'lft')
+
+    comments_html = render_to_string('posts/comments_loading.html', {'comments': all_comments}, request=request)
+
+    size = True if upper_index >= comments_num else False
+
+    return JsonResponse({'data': comments_html, 'max': size,})
+
+
 
 
 @login_required(login_url='users:login')
@@ -151,6 +171,7 @@ def delete_post(request, pk):
 
     return render(request, 'posts/delete_confirmation.html', context)
 
+
 def post(request, pk):
     post = get_object_or_404(Post, id=pk)
     form = CommentForm()
@@ -160,7 +181,7 @@ def post(request, pk):
     context = {
         'post': post,
         'form': form,
-        'comments': comments,
+        'all_comments': comments,
     }
 
     return render(request, 'posts/post.html', context)

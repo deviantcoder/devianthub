@@ -155,3 +155,26 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return self.user.username
+
+
+class CommentStats(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    upvotes = models.PositiveIntegerField(default=0, blank=True)
+    downvotes = models.PositiveIntegerField(default=0, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    def __str__(self):
+        return self.comment.user.username
+
+    @property
+    def votes(self):
+        votes_ratio = self.upvotes - self.downvotes
+        return votes_ratio if votes_ratio else 0
+
+    class Meta:
+        ordering = ['comment']
+        verbose_name = 'Comment statistics'
+        verbose_name_plural = 'Comment stats'

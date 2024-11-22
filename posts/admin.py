@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, PostMedia, PostStats, Comment, VotePost
+from .models import Post, PostMedia, PostStats, Comment, VotePost, CommentStats
 from django.utils.html import format_html
 from mptt.admin import MPTTModelAdmin
 
@@ -12,7 +12,7 @@ class PostMediaInline(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'user', 'post_type', 'created', 'updated']
+    list_display = ['title', 'user', 'post_type', 'draft', 'created', 'updated']
     inlines = [PostMediaInline]
 
 
@@ -55,3 +55,6 @@ class VotePostAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(MPTTModelAdmin):
     list_display = ['user', 'post', 'created']
+
+
+admin.site.register(CommentStats)
