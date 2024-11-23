@@ -17,11 +17,19 @@
                 <!-- POST -->
                 <div class="column is-8">
                     <div class="content">
-                        
 
                         <div class="box" style="background: linear-gradient(#0f182d, #0d2823);">
                             <!-- Post Info -->
                             <div class="community-info">
+
+                                <div style="display: flex; align-items: center;">
+                                    <a href="{{ request.GET.feed }}" class="back">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-arrow-left" style="font-size: 12px;"></i>
+                                        </span>
+                                    </a>
+                                </div>
+
                                 <a href="#community-link" class="community-link">
                                     <img src="{% static 'img/c7.jpg' %}" alt="Community Logo" class="community-avatar">
                                     <span class="community-name">c/webdesign</span>

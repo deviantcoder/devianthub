@@ -23,7 +23,7 @@
         {% for message in messages %}
             <div class="notification custom-notification is-{{ message.tags }}" style="border-radius: 30px;">
                 <button class="delete"></button>
-                {{ message }}
+                <span class="notification-text mt-2">{{ message }}</span>
             </div>
         {% endfor %}
     {% endif %}

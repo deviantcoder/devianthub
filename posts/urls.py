@@ -16,4 +16,6 @@ urlpatterns = [
     path('posts-json/<int:num_posts>/', views.posts_json, name='posts_json'),
 
     path('comments-json/<str:post_id>/<int:visible>/', views.comments_json, name='comments_json'),
+
+    path('vote-comment/<str:pk>/', views.vote_comment, name='vote_comment'),
 ]

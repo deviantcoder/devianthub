@@ -990,10 +990,16 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
-    width: 300px;
+    width: auto;
+    max-width: 300px;
+    height: auto;
     text-align: center;
 
     animation: fadeInSlideDown 1s ease-out forwards;
+}
+
+.notification-text {
+    padding-right: 20px;
 }
 
 .custom-notification.fade-out {
@@ -1057,13 +1063,13 @@
     color: green;
 }
 
-.children form {
+/*.children form {
     margin-left: -48px;
 }
 
 .children .children form {
     margin-left: -96px;
-}
+}*/
 
 .not-visible {
     display: none;
@@ -1445,4 +1451,23 @@
 
 .reply-button:hover {
     background-color: #0056b3;
+}
+
+
+.back {
+    background-color: #26354d;
+    border-radius: 20px;
+    margin-right: 10px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 70%;
+    width: 30px;
+    height: 30px;
+}
+
+.back:hover {
+    transform: scale(1.2);
 }

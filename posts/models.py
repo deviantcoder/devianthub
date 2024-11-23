@@ -118,7 +118,7 @@ class VotePost(models.Model):
 
 
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
 
     vote_type = models.CharField(max_length=10, choices=VOTES_TYPES, null=True)
     
@@ -127,12 +127,12 @@ class VotePost(models.Model):
 
     class Meta:
         unique_together = ('post', 'user')
-        verbose_name = 'Vote'
-        verbose_name_plural = 'Votes'
+        verbose_name = 'Post Vote'
+        verbose_name_plural = 'Post Votes'
         ordering = ['post', 'vote_type', 'created']
     
     def __str__(self):
-        return f'Upvote: {self.post.id}'
+        return f'{self.vote_type}: {self.post.id}'
 
 
 class Comment(MPTTModel):
@@ -158,7 +158,7 @@ class Comment(MPTTModel):
 
 
 class CommentStats(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    comment = models.OneToOneField(Comment, on_delete=models.CASCADE)
     upvotes = models.PositiveIntegerField(default=0, blank=True)
     downvotes = models.PositiveIntegerField(default=0, blank=True)
 
@@ -178,3 +178,28 @@ class CommentStats(models.Model):
         ordering = ['comment']
         verbose_name = 'Comment statistics'
         verbose_name_plural = 'Comment stats'
+
+
+class VoteComment(models.Model):
+    VOTES_TYPES = (
+        ('upvote', 'Upvote'),
+        ('downvote', 'Downvote'),
+    )
+
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+
+    vote_type = models.CharField(max_length=10, choices=VOTES_TYPES)
+
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    class Meta:
+        unique_together = ('comment', 'user')
+        verbose_name = 'Comment Vote'
+        verbose_name_plural = 'Comment Votes'
+        ordering = ['comment', 'vote_type', 'created']
+
+
+    def __str__(self):
+        return f'{self.vote_type}: {self.comment.id}'

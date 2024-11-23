@@ -21,9 +21,18 @@
                 <p>{{ node.body|linebreaks }}</p>
                 <div class="comment-actions">
                     <div class="comment-votes-group mr-2">
-                        <button class="vote-button"><i class="fas fa-arrow-up"></i></button>
-                        <span class="vote-count">{{ node.upvotes|default:"0" }}</span>
-                        <button class="vote-button"><i class="fas fa-arrow-down"></i></button>
+                        <form method="post", action="{% url 'posts:vote_comment' node.id %}">
+                            {% csrf_token %}
+                            <button type="submit" name="vote_type" value="upvote" aria-label="upvote" class="vote-button">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+
+                            <span class="vote-count">{{ node.commentstats.votes }}</span>
+                            
+                            <button type="submit" name="vote_type" value="downvote" aria-label="downvote" class="vote-button">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </form>
                     </div>
                     <div>
                         <button class="reply-button" onclick="commentReply('{{ node.id }}')" aria-label="comments">

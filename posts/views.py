@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, VotePost, PostStats, Comment
+from .models import Post, VotePost, PostStats, Comment, CommentStats, VoteComment
 from .forms import PostForm, PostMediaFormSet, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -269,3 +269,47 @@ def vote_post(request, pk):
         post_stats.save()
 
     return redirect('posts:feed')
+
+
+def vote_comment(request, pk):
+    if request.method == 'POST':
+        comment = get_object_or_404(Comment, id=pk)
+        user = request.user.profile
+        comment_stats, _ = CommentStats.objects.get_or_create(comment=comment)
+
+        vote_type = request.POST.get('vote_type')
+
+        vote, created = VoteComment.objects.get_or_create(comment=comment, user=user)
+
+        if created:
+            vote.vote_type = vote_type
+            vote.save()
+
+            if vote_type == 'upvote':
+                comment_stats.upvotes = F('upvotes') + 1
+            else:
+                comment_stats.downvotes = F('downvotes') + 1
+        else:
+            if vote.vote_type == vote_type:
+                vote.delete()
+                if vote.vote_type == 'upvote':
+                    comment_stats.upvotes = F('upvotes') - 1
+                else:
+                    comment_stats.downvotes = F('downvotes') - 1
+            else:
+                if vote.vote_type == 'upvote':
+                    comment_stats.upvotes = F('upvotes') - 1
+                else:
+                    comment_stats.downvotes = F('downvotes') - 1
+
+                vote.vote_type = vote_type
+                vote.save()
+
+                if vote.vote_type.vote_type == 'upvote':
+                    comment_stats.upvotes = F('upvotes') + 1
+                else:
+                    comment_stats.downvotes = F('downvotes') + 1
+
+        comment_stats.save()
+
+    return redirect('posts:post', comment.post.id)
