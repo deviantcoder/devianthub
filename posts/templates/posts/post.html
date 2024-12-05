@@ -5,249 +5,242 @@
 {% block content %}
 
     <!-- PAGE CONTENT -->
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
+    <div class="container-fluid">
+        <div class="row">
 
-                <!-- SIDE PANEL -->
-                {% include 'posts/left_side_panel.html' %}
+            <!-- LEFT PANEL -->
+            {% include 'posts/left_side_panel.html' %}
 
-                <input type="hidden" id="post-id" value="{{ post.id }}">
+            <!-- POST -->
+            <div class="col main-content" style="background: linear-gradient(45deg,#353535, #2e0c2c);">
+                
+                <h4>Post</h4>
 
-                <!-- POST -->
-                <div class="column is-8">
-                    <div class="content">
-
-                        <div class="box" style="background: linear-gradient(#0f182d, #0d2823);">
-                            <!-- Post Info -->
-                            <div class="community-info">
-
-                                <div style="display: flex; align-items: center;">
-                                    <a href="{{ request.GET.feed }}" class="back">
-                                        <span class="icon is-small">
-                                            <i class="fas fa-arrow-left" style="font-size: 12px;"></i>
-                                        </span>
-                                    </a>
-                                </div>
-
-                                <a href="#community-link" class="community-link">
-                                    <img src="{% static 'img/c7.jpg' %}" alt="Community Logo" class="community-avatar">
-                                    <span class="community-name">c/webdesign</span>
-                                </a>
-                                <span class="post-timestamp"> • 
-                                    {% if post.time_since_posted.type != 'now' %}
-                                        {{ post.time_since_posted.num }}
-                                        {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
-
-                                        {% if post.updated_status %}
-                                            <small class="additional-info">{{post.updated_status}}</small>
-                                        {% endif %}
-                                    {% else %}
-                                        {{ post.time_since_posted.type }}
-                                    {% endif %}
-                                </span>
-                                <div class="more-options">
-                                    <!-- <i class="fas fa-ellipsis-h"></i> -->
-                                    {% include 'posts/post_controls.html' %}
-                                </div>
+                <div class="post">
+                    <div class="post-header d-flex align-items-center">
+                        <img src="{% static 'img/profile2.jpg' %}" alt="Community Logo" class="community-logo me-2">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex align-items-center">
+                                <span class="post-community me-2">c/dedsec</span>
+                                <span class="pub-date"> • 2 hours ago</span>
                             </div>
-
-                            <!-- Post Content -->
-                            <div class="content">
-
-                                <div class="post-content-container mb-3">
-                                    <p>
-                                        <strong class="mb-3">
-                                            <span href="{% url 'posts:post' post.id %}" class="post-title-custom">{{ post.title}}</span>
-                                        </strong>
-                                    </p>
-
-                                    {% if post.body %}
-                                        <p>
-                                            <span class="post-description">
-                                                {{ post.body|slice:300 }}...
-                                            </span>
-                                        </p>
-                                    {% endif %}
-                                </div>
-
-                                {% if post.has_media_files %}
-                                    {% if post.has_media_files == 1 %}
-                                    
-                                        {% if post.postmedia_set.first.file_ext.type == 'image' %}
-                                            {% with post.postmedia_set.first.file.url as image %}
-
-                                                <div class="post-header">
-                                                    <a 
-                                                        class="js-modal-trigger" 
-                                                        data-target="modal-single-{{ forloop.counter }}" 
-                                                        data-image="{{ image }}
-                                                    ">
-                                                        <img src="{{ image }}" alt="Post" class="post-image">
-                                                    </a>
-                                                </div>
-
-                                                <!-- Modal -->
-                                                <div id="modal-single-{{ forloop.counter }}" class="modal">
-                                                    <div class="modal-background"></div>
-                                                    <div class="modal-content">
-                                                        <img id="modal-image" src="{{ image }}" alt="Full Size Image">
-                                                    </div>
-                                                    <button class="modal-close is-large" aria-label="close"></button>
-                                                </div>
-
-                                            {% endwith %}
-                                        {% else %}
-                                            <div class="post-header">
-                                                <video class="glow-effect" controls style="height: 300px; width: auto; border-radius: 20px;">
-                                                    <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
-                                                </video>
-                                            </div>
-                                        {% endif %}
-                                    {% else %}
-                                        <section class="carousel">
-                                            <div class="carousel-wrapper">
-                                                                        
-                                            {% for media in post.postmedia_set.all %}
-                                                <div class="carousel-slide">
-                                                    {% if media.file_ext.type == 'image' %}
-                                                        <a href="#" class="js-modal-trigger" data-target="modal" data-image="{{media.file.url}}">
-                                                            <img src="{{ media.file.url }}" alt="Post" class="post-image">
-                                                        </a>
-                                                    {% else %}
-                                                        <video class="glow-effect" data-target="modal" controls style="height: 300px; width: auto; border-radius: 20px;">
-                                                            <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
-                                                        </video>
-                                                    {% endif %}
-                                                </div>
-                                            {% endfor %}
-                                                                        
-                                            </div>
-
-                                            <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
-                                            <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
-                                                                
-                                            <!-- Modal -->
-                                            <div id="modal" class="modal">
-                                                <div class="modal-background"></div>
-                                                <div class="modal-content">
-                                                    <img id="modal-image" src="" alt="Full Size Image">
-                                                </div>
-                                                <button class="modal-close is-large" aria-label="close"></button>
-                                            </div>
-                                                                
-                                                <!-- Indicators -->
-                                                <div class="carousel-indicators">
-                                                    <!-- Dynamically created -->
-                                                </div>
-                                        </section>
-                                    {% endif %}
-                                {% endif %}
-
-                                {% if post.video_url %}
-                                    <div class="youtube-container">
-                                        {% if 'youtube' in post.video_url %}
-                                            {% with post.video_url|slice:"32:" as video_id %}
-                                                <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
-                                            {% endwith %}
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
-
-                                
-                            </div>
-
-                            <!-- Buttons -->
-                            <div class="post-actions">
-
-                                <!-- Upvote/Downvote -->
-                                <div class="votes-group">
-                                    <form method="post" action="{% url 'posts:vote_post' post.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="vote-button upvote" name="vote_type" value="upvote" aria-label="upvote">
-                                            <i class="fas fa-arrow-up"></i>
-                                        </button>
-
-                                        <span class="vote-count">{{ post.poststats.votes }}</span>
-                                        
-                                        <button type="submit" class="vote-button downvote" name="vote_type" value="downvote" aria-label="downvote">
-                                            <i class="fas fa-arrow-down"></i>
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <!-- Share/Comments -->
-                                <div class="votes-group">
-                                    <a href="#" class="share-button">
-                                        <i class="fas fa-share"></i>
-                                        <span>Share</span>
-                                    </a> |
-                                    <a href="{% url 'posts:post' post.id %}" class="comment-button">
-                                        <i class="fas fa-comments"></i>
-                                        <span>Comments</span>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>                
-
-                        <hr>
-
-
-                        <hr>
-
-                        <!-- COMMENTS -->
-
-                        <div>
-                            <h3>Comments</h3>
-
-                            <form class="box" method="post" action="{% url 'posts:comment_post' post.id %}">
-                                {% csrf_token %}
-                                <h6>Add a comment:</h6>
-                                {{ form.body }}
-                                <button type="submit" class="button mt-2" style="border-radius: 20px;">Comment</button>
-                            </form>
-                            
-                            {% with comments.count as total_comments %}
-                                {% if total_comments %}
-                                    <hr>
-                                    <div class="mb-5">
-                                        <span>
-                                            <strong style="font-size: 13px; color: #939393;">
-                                                {{ total_comments }} comment{{ total_comments|pluralize }}
-                                            </strong>
-                                        </span>
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-
-                            <div id="comments-box"></div>
-
-                            <div id="comments-spinner-box" class="not-visible" style="text-align: center;">
-                                <span class="mt-6 loader"></span>
-                            </div>
-
-                            <div id="comments-loading-box" style="text-align: center; height: 250px;">
-                                <!-- <span class="mt-3 loader"></span> -->
-                            </div>
-
+                            <span class="post-username">{{ post.user.get_username }}</span>
                         </div>
+                        
+                        <div class="dropdown ms-auto">
+                            <button class="btn btn-secondary dropdown-toggle post-dropdown" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-flag me-2"></i>Report</a></li>
+                            </ul>                            
+                        </div>
+                    </div>
                     
+                    
+                
+                    <div class="post-title">
+                        <h5 class="post-title mt-2">{{ post.title }}</h5>
+                    </div>
+                
+                    <div class="post-description mt-3">
+                        <p>{{ post.body }}</p>
+                    </div>
+                    
+                    {% if post.has_media_files %}
+
+                        {% if post.has_media_files == 1 %}
+
+                            {% if post.postmedia_set.first.file_ext.type == 'image' %}
+                                
+                                {% with post.postmedia_set.first.file.url as image %}
+                                    <div class="post-image text-center mt-3">
+                                        <a href="">
+                                            <img src="{{ image }}" alt="Post Image" class="img-fluid" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                        </a>
+                                    </div>
+                                {% endwith %}
+                            
+                            {% else %}
+
+                            <div class="post-image text-center mt-3">
+                                <video controls class="img-fluid d-block mx-auto">
+                                    <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+
+                            {% endif %}
+                        
+                        {% else %}
+                            
+                        <div id="postCarousel" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-ride="false">
+                            <div class="carousel-indicators">
+                                {% for media in post.postmedia_set.all %}
+                                    <button type="button" data-bs-target="#postCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="carousel-indicators-round {% if forloop.counter == 1 %}active{% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for media in post.postmedia_set.all %}
+                                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                                        {% if media.file_ext.type == 'image' %}
+                                            <a>
+                                                <img src="{{ media.file.url }}" alt="Post Image" class="img-fluid d-block mx-auto" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                            </a>
+                                        {% else %}
+                                            <video controls class="img-fluid d-block mx-auto">
+                                                <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#postCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>            
+
+                        {% endif %}
+                        
+                    {% endif %}
+
+                    {% if post.video_url %}
+                        <div class="post-youtube text-center mt-3">
+                            <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/KdoaiGTIBY4?si=wgmLc9jzzm5ZmmfY" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+                    
+                
+                    <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+                        <div class="vote-group d-flex align-items-center">
+                            <button class="btn btn-outline-primary btn-sm me-2">
+                                <i class="bi bi-caret-up-fill"></i>
+                            </button>
+                            <span class="vote-count me-2">10</span>
+                            <button class="btn btn-outline-danger btn-sm me-2">
+                                <i class="bi bi-caret-down-fill"></i>
+                            </button>
+                        </div>
+                        <div class="action-group d-flex align-items-center">
+                            <button class="btn btn-outline-secondary btn-sm me-2">
+                                <i class="bi bi-chat-dots-fill"></i> Comments
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-share-fill"></i> Share
+                            </button>
+                        </div>
                     </div>
                 </div>
-    
-            {% include 'posts/post_right_side_panel.html' %}    
+
+                <!-- comments -->
+                <div class="comments-section mt-4">
+                    <h5 class="text-white">Comments</h5>
             
+                    <!-- Comment Form -->
+                    <div class="comment-form mb-3">
+                        <textarea class="form-control no-radius" placeholder="Add a comment..." rows="3"></textarea>
+                        <button class="btn btn-dark btn-sm mt-2 no-radius">Comment</button>
+                    </div>
+            
+                    <!-- Comments List -->
+                    <div class="comment-list">
+
+                        <div class="comment mb-2">  
+                            <div class="comment-header align-items-center ms-2 mt-2 mb-1">
+                                <a href="" class="mb-0">
+                                    <img src="img/img1.jpg" alt="Community Logo" class="community-logo-sm">
+                                    <span class="title-sm">u/CodeExplorer</span>
+                                </a>
+                                <span class="pub-date">• 30 minutes ago</span>
+                            </div>
+    
+                            <div class="comment-text ms-2">
+                                <p>This is a comment on the post. I really like the content! This is a comment on the post. I really like the content!</p>
+                            </div>
+
+                            <div class="comment-actions ms-2 mb-1">
+                                <div class="vote-group d-flex align-items-center">
+                                    <button class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="bi bi-caret-up-fill"></i>
+                                    </button>
+                                    <span class="vote-count me-2">10</span>
+                                    <button class="btn btn-outline-danger btn-sm me-2">
+                                        <i class="bi bi-caret-down-fill"></i>
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm me-2">
+                                        <span>reply</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment nested-comment mb-2">
+                            <div class="comment-header align-items-center ms-2 mt-2 mb-1">
+                                <a href="" class="mb-0">
+                                    <img src="img/img1.jpg" alt="Community Logo" class="community-logo-sm">
+                                    <span class="title-sm">u/CodeExplorer</span>
+                                </a>
+                                <span class="pub-date">• 30 minutes ago</span>
+                            </div>
+    
+                            <div class="comment-text ms-2">
+                                <p>This is a comment on the post. I really like the content! This is a comment on the post. I really like the content!</p>
+                            </div>
+
+                            <div class="comment-actions ms-2 mb-1">
+                                <div class="vote-group d-flex align-items-center">
+                                    <button class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="bi bi-caret-up-fill"></i>
+                                    </button>
+                                    <span class="vote-count me-2">10</span>
+                                    <button class="btn btn-outline-danger btn-sm me-2">
+                                        <i class="bi bi-caret-down-fill"></i>
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm me-2">
+                                        <span>reply</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> 
+
             </div>
+
+            <!-- modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <img src="" alt="Zoomed Image" id="modalImage" class="img-fluid">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST RIGHT PANEL -->
+            {% include 'posts/post_right_side_panel.html' %}
+
         </div>
-    </section>
+    </div>
 
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
-    <script src="{% static 'js/comments.js' %}"></script>
-    <script src="{% static 'js/post_modal.js' %}"></script>
+    <!-- <script src="{% static 'js/comments.js' %}"></script>
+    <script src="{% static 'js/post_modal.js' %}"></script> -->
 
-    <script>
+    <!-- <script>
         function commentReply(id) {
             if (document.contains(document.getElementById("newForm"))) {
                 document.getElementById("newForm").remove();
@@ -280,6 +273,6 @@
                 form.remove();
             }
         }
-    </script>
+    </script> -->
 
 {% endblock content %}

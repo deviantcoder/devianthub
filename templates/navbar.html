@@ -1,226 +1,41 @@
 {% load static %}
 
-<nav class="navbar is-fixed-top has-shadow">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img src="{% static 'img/logo.png' %}" alt="Logo" style="max-height: 3rem;">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        
+        <a class="navbar-brand text-white" href="#">
+            <img src="{% static 'img/logo_no_text2.png' %}" alt="Logo" class="logo-img">
         </a>
 
-        <a role="button" class="navbar-burger mb-5" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="navbarMenu" class="navbar-menu">
-        <div class="navbar-start">
-
-            <div class="navbar-item is-fullwidth search-container">
-                <div class="control has-icons-left is-expanded">
-                    <input class="input is-rounded" type="text" placeholder="Search...">
-                    <span class="icon is-left">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="navbar-end">
-            <a class="navbar-item a-button" href="">
-                <span class="icon">
-                    <i class="fas fas fa-comment-dots"></i>
-                </span>
-                <span class="is-hidden-desktop">Messages</span>
-            </a>
-            <a class="navbar-item a-button" href="{% url 'posts:create_post' %}">
-                <span class="icon">
-                    <i class="fas fa-plus-circle"></i>
-                </span>
-                <span class="is-hidden-desktop">Create Post</span>
-            </a>
-            <a class="navbar-item a-button" href="">
-                <span class="icon">
-                    <i class="fas fa-bell"></i>
-                </span>
-                <span class="is-hidden-desktop">Notifications</span>
-            </a>
-
-            {% if request.user.is_authenticated %}
-            <div class="dropdown" id="dropdown-navbar">
-                <div class="dropdown-trigger">
-                    <button aria-haspopup="true" aria-controls="dropdown-menu5" onclick="toggleDropdown(this)">
-                        <img class="profile-image mt-2 mr-2 ml-4" src="{{ request.user.profile.image.url }}" alt="Profile">
-                    </button>
-                </div>
-                <div class="dropdown-menu" role="menu">
-                    <div class="dropdown-content" style="background-color: #2e3853">
-                        <div class="dropdown-item">
-                            <a href="" class="post-title">
-                                <i class="fas fa-user-circle icon-width" aria-hidden="true"></i>
-                                <strong>View Profile</strong>
-                            </a>
-                        </div>
-                        <div class="dropdown-item">
-                            <a href="{% url 'users:edit_profile' %}" class="post-title">
-                                <i class="fas fa-user-edit icon-width" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
-                                <strong>Edit Profile</strong>
-                            </a>
-                        </div>
-                        <div class="dropdown-item">
-                            <a href="{% url 'users:logout' %}" class="post-title">
-                                <i class="fas fa-sign-out-alt icon-width" aria-hidden="true" style="color: red;"></i>
-                                <strong>Log Out</strong>
-                            </a>
-                        </div>
-                        <hr>
-                        <div class="dropdown-item">
-                            <a href="" class="post-title">
-                                <i class="fas fa-cog icon-width" aria-hidden="true" style="color: #bebebe"></i>
-                                <strong>Settings</strong>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-
-                <a class="navbar-item button" href="{% url 'users:login' %}" style="border-radius: 15px;">
-                    <span class="icon">
-                        <i class="fas fa-sign-in-alt"></i>
-                    </span>
-                    <span>Log In</span>
-                </a>
-
-            {% endif %}
-
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="d-flex ms-3 search-bar">
+                <input class="form-control me-2 no-radius" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light no-radius" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Create_Post</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                </li>
+                <!-- Language Switcher -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Language
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">English</a></li>
+                        <li><a class="dropdown-item" href="#">Ukrainian</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
-
-<style>
-.navbar {
-    max-width: 100%;
-    margin: 0;
-    position: relative;
-    z-index: 0;
-}
-
-@media screen and (min-width: 1200px) {
-    .navbar {
-        max-width: 90%;
-        margin: 0 auto;
-    }
-}
-
-.search-container {
-    width: 100%;
-    padding: 0 1rem;
-    position: relative;
-    z-index: 5;
-}
-
-@media screen and (max-width: 780px) {
-    .search-container {
-        margin-top: 70px;
-        margin-bottom: 20px;
-    }
-
-    .navbar-burger {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        display: block;
-        z-index: 1000;
-    }
-
-    .navbar-menu {
-        position: fixed;
-        border-bottom-left-radius: 20px;
-        border-top-left-radius: 20px;
-        
-        top: 0;
-        right: 0;
-        width: 250px;
-        height: 100vh;
-        box-shadow: 0 0 5px 1px rgba(81, 106, 114, 0.6);
-        transform: translateX(100%);
-        transition: transform 1s ease-in-out;
-        z-index: 999;
-        border-left: 1px solid #566972;
-        border-bottom: 1px solid #566972;
-    }
-
-    .navbar-menu.is-active {
-        transform: translateX(0);
-    }
-
-    .dropdown-menu {
-        width: max-content;
-        padding: 0.5rem;
-        border-radius: 8px;
-        z-index: 1;
-    }
-
-    .dropdown.is-active .dropdown-menu {
-        display: block;
-    }
-}
-
-    .profile-image {
-        cursor: pointer;
-    }
-
-    .dropdown-content {
-        /* margin-right: 200px; */
-        width: 200px;
-    }
-</style>
-
-<script>
-    function toggleDropdown(button) {
-        const dropdown = button.closest('.dropdown');
-        dropdown.classList.toggle('is-active');
-    }
-
-    document.addEventListener('click', function(event) {
-        document.querySelectorAll('.dropdown.is-active').forEach(dropdown => {
-            if (!dropdown.contains(event.target)) {
-                dropdown.classList.remove('is-active');
-            }
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const burger = document.querySelector('.navbar-burger');
-        const menu = document.querySelector('#navbarMenu');
-
-        burger.addEventListener('click', function () {
-            menu.classList.toggle('is-active');
-            burger.classList.toggle('is-active');
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!menu.contains(event.target) && !burger.contains(event.target) && menu.classList.contains('is-active')) {
-                menu.classList.remove('is-active');
-                burger.classList.remove('is-active');
-            }
-        });
-    });
-
-    function adjustDropdown() {
-        const dropdown = document.getElementById('dropdown-navbar');
-        if (window.innerWidth >= 1024) {
-            dropdown.classList.add('is-right');
-        } else {
-            dropdown.classList.remove('is-right');
-        }
-    }
-
-    adjustDropdown();
-
-    window.addEventListener('resize', adjustDropdown);
-</script>
-
