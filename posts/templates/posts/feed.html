@@ -3,40 +3,51 @@
 {% load static %}
 
 {% block content %}
-    
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered">
 
-            <!-- SIDE PANEL -->
-            {% include 'posts/left_side_panel.html' %}
+<div class="container-fluid">
+    <div class="row">
 
-            <!-- FEED -->
-            <div class="column is-8">
-                <div class="content">
-                    <h1 class="title">Recent Posts</h1>
+        <!-- left panel -->
+        {% include 'posts/left_side_panel.html' %}
 
-                    <div id="posts-box"></div>
+        <!-- main col -->
+        <div class="col main-content">
+            
+            <h4>Recent Posts</h4>
 
-                    <div id="spinner-box" class="not-visible" style="text-align: center;">
-                        <span class="mt-6 loader"></span>
-                    </div>
+            <div id="posts-box"></div>
 
-                    <div id="loading-box" style="text-align: center; height: 250px;">
-                        <!-- <span class="mt-3 loader"></span> -->
-                    </div>
-  
-                </div>
+            <div id="spinner-box" class="not-visible" style="text-align: center;">
+                <span class="mt-6 loader"></span>
             </div>
 
-            <!-- SIDE PANEL -->
-            {% include 'posts/right_side_panel.html' %}
-            
+            <div id="loading-box" style="text-align: center; min-height: 250px;">
+            </div>
+
         </div>
+
+        <!-- modal -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="" alt="Zoomed Image" id="modalImage" class="img-fluid">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- right panel -->
+        {% include 'posts/right_side_panel.html' %}
+
     </div>
-</section>
+</div>
 
 <!-- JS -->
+
 <script src="{% static 'js/posts.js' %}"></script>
 
 {% endblock content %}

@@ -12,23 +12,32 @@
             {% include 'posts/left_side_panel.html' %}
 
             <!-- POST -->
-            <div class="col main-content" style="background: linear-gradient(45deg,#353535, #2e0c2c);">
+            <div class="col main-content" style="background: linear-gradient(45deg,#353535, #2e0c2c); border-radius: 20px !important;">
                 
                 <h4>Post</h4>
 
-                <div class="post">
-                    <div class="post-header d-flex align-items-center">
+                <div class="post radius-md">
+
+                    <div class="post-header">
                         <img src="{% static 'img/profile2.jpg' %}" alt="Community Logo" class="community-logo me-2">
-                        <div class="d-flex flex-column">
-                            <div class="d-flex align-items-center">
-                                <span class="post-community me-2">c/dedsec</span>
-                                <span class="pub-date"> • 2 hours ago</span>
-                            </div>
-                            <span class="post-username">{{ post.user.get_username }}</span>
+                        <div>
+                            <span class="post-community">c/dedsec</span>
+                            <span class="pub-date"> •
+                                {% if post.time_since_posted.type != 'now' %}
+                                    {{ post.time_since_posted.num }}
+                                    {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+
+                                    {% if post.updated_status %}
+                                        <small class="additional-info">{{post.updated_status}}</small>
+                                    {% endif %}
+                                {% else %}
+                                    {{ post.time_since_posted.type }}
+                                {% endif %}
+                            </span>
                         </div>
                         
                         <div class="dropdown ms-auto">
-                            <button class="btn btn-secondary dropdown-toggle post-dropdown" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle post-dropdown" style="background-color: rgb(42, 42, 42);" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ellipsis-h"></i>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -54,109 +63,116 @@
                         {% if post.has_media_files == 1 %}
 
                             {% if post.postmedia_set.first.file_ext.type == 'image' %}
-                                
+                                                
                                 {% with post.postmedia_set.first.file.url as image %}
                                     <div class="post-image text-center mt-3">
-                                        <a href="">
-                                            <img src="{{ image }}" alt="Post Image" class="img-fluid" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                        <a>
+                                            <img src="{{ image }}" alt="Post Image" class="img-fluid radius-md" data-bs-toggle="modal" data-bs-target="#imageModal">
                                         </a>
                                     </div>
                                 {% endwith %}
-                            
+                                            
                             {% else %}
 
-                            <div class="post-image text-center mt-3">
-                                <video controls class="img-fluid d-block mx-auto">
-                                    <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
+                                <div class="post-image text-center mt-3">
+                                    <video controls class="img-fluid d-block mx-auto radius-md">
+                                        <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
 
                             {% endif %}
-                        
+                                        
                         {% else %}
-                            
-                        <div id="postCarousel" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-ride="false">
-                            <div class="carousel-indicators">
-                                {% for media in post.postmedia_set.all %}
-                                    <button type="button" data-bs-target="#postCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="carousel-indicators-round {% if forloop.counter == 1 %}active{% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
-                                {% endfor %}
-                            </div>
-                            <div class="carousel-inner">
-                                {% for media in post.postmedia_set.all %}
-                                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
-                                        {% if media.file_ext.type == 'image' %}
-                                            <a>
-                                                <img src="{{ media.file.url }}" alt="Post Image" class="img-fluid d-block mx-auto" data-bs-toggle="modal" data-bs-target="#imageModal">
-                                            </a>
-                                        {% else %}
-                                            <video controls class="img-fluid d-block mx-auto">
-                                                <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#postCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>            
+                                            
+                            <div id="postCarousel" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-ride="false">
+                                <div class="carousel-indicators">
+                                    
+                                    {% for media in post.postmedia_set.all %}
+                                        <button type="button" data-bs-target="#postCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="carousel-indicators-round {% if forloop.counter == 1 %}active{% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+                                    {% endfor %}
+                                    
+                                </div>
+                                <div class="carousel-inner">
+                                    {% for media in post.postmedia_set.all %}
+                                        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                                            {% if media.file_ext.type == 'image' %}
+                                                <a>
+                                                    <img src="{{ media.file.url }}" alt="Post Image" class="img-fluid d-block mx-auto radius-md" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                                </a>
+                                            {% else %}
+                                                <video controls class="img-fluid d-block mx-auto radius-md">
+                                                    <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#postCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>            
 
                         {% endif %}
-                        
+                                        
                     {% endif %}
 
                     {% if post.video_url %}
                         <div class="post-youtube text-center mt-3">
-                            <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/KdoaiGTIBY4?si=wgmLc9jzzm5ZmmfY" frameborder="0" allowfullscreen></iframe>
+                            <iframe class="mb-2 radius-md" width="560" height="315" src="https://www.youtube.com/embed/KdoaiGTIBY4?si=wgmLc9jzzm5ZmmfY" frameborder="0" allowfullscreen></iframe>
                         </div>
                     {% endif %}
                     
                 
                     <div class="post-actions d-flex justify-content-between align-items-center mt-3">
                         <div class="vote-group d-flex align-items-center">
-                            <button class="btn btn-outline-primary btn-sm me-2">
-                                <i class="bi bi-caret-up-fill"></i>
-                            </button>
-                            <span class="vote-count me-2">10</span>
-                            <button class="btn btn-outline-danger btn-sm me-2">
-                                <i class="bi bi-caret-down-fill"></i>
-                            </button>
+                            <form method="post" action="{% url 'posts:vote_post' post.id %}">
+                                {% csrf_token %}
+                                <button type="submit" name="vote_type" value="upvote" class="btn btn-outline-primary btn-sm me-2 radius-sm">
+                                    <i class="bi bi-caret-up-fill"></i>
+                                </button>
+                
+                                <span class="vote-count me-2">{{ post.poststats.votes }}</span>
+                
+                                <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
+                                    <i class="bi bi-caret-down-fill"></i>
+                                </button>
+                            </form>
                         </div>
                         <div class="action-group d-flex align-items-center">
-                            <button class="btn btn-outline-secondary btn-sm me-2">
+                            <a href="{% url 'posts:post' post.id %}" class="btn btn-outline-secondary btn-sm me-2">
                                 <i class="bi bi-chat-dots-fill"></i> Comments
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm">
+                            </a>
+                            <a href="" class="btn btn-outline-secondary btn-sm">
                                 <i class="bi bi-share-fill"></i> Share
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- comments -->
-                <div class="comments-section mt-4">
+                <div class="comments-section mt-4 radius-md">
                     <h5 class="text-white">Comments</h5>
             
                     <!-- Comment Form -->
                     <div class="comment-form mb-3">
-                        <textarea class="form-control no-radius" placeholder="Add a comment..." rows="3"></textarea>
-                        <button class="btn btn-dark btn-sm mt-2 no-radius">Comment</button>
+                        <textarea class="form-control" placeholder="Add a comment..." rows="3"></textarea>
+                        <button class="btn btn-dark btn-sm mt-2">Comment</button>
                     </div>
             
                     <!-- Comments List -->
                     <div class="comment-list">
 
-                        <div class="comment mb-2">  
+                        <div class="comment mb-2 radius-md">  
                             <div class="comment-header align-items-center ms-2 mt-2 mb-1">
                                 <a href="" class="mb-0">
-                                    <img src="img/img1.jpg" alt="Community Logo" class="community-logo-sm">
+                                    <img src="{% static 'img/img1.jpg' %}" alt="Community Logo" class="community-logo-sm">
                                     <span class="title-sm">u/CodeExplorer</span>
                                 </a>
                                 <span class="pub-date">• 30 minutes ago</span>
@@ -168,24 +184,26 @@
 
                             <div class="comment-actions ms-2 mb-1">
                                 <div class="vote-group d-flex align-items-center">
-                                    <button class="btn btn-outline-primary btn-sm me-2">
+                                    <button class="btn btn-outline-primary btn-sm me-2 radius-sm">
                                         <i class="bi bi-caret-up-fill"></i>
                                     </button>
+
                                     <span class="vote-count me-2">10</span>
-                                    <button class="btn btn-outline-danger btn-sm me-2">
+
+                                    <button class="btn btn-outline-danger btn-sm me-2 radius-sm">
                                         <i class="bi bi-caret-down-fill"></i>
                                     </button>
-                                    <button class="btn btn-outline-light btn-sm me-2">
+                                    <button class="btn btn-outline-light btn-sm me-2 radius-sm">
                                         <span>reply</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="comment nested-comment mb-2">
+                        <div class="comment nested-comment mb-2 radius-md">
                             <div class="comment-header align-items-center ms-2 mt-2 mb-1">
                                 <a href="" class="mb-0">
-                                    <img src="img/img1.jpg" alt="Community Logo" class="community-logo-sm">
+                                    <img src="{% static 'img/img3.jpg' %}" alt="Community Logo" class="community-logo-sm">
                                     <span class="title-sm">u/CodeExplorer</span>
                                 </a>
                                 <span class="pub-date">• 30 minutes ago</span>
@@ -197,14 +215,16 @@
 
                             <div class="comment-actions ms-2 mb-1">
                                 <div class="vote-group d-flex align-items-center">
-                                    <button class="btn btn-outline-primary btn-sm me-2">
+                                    <button class="btn btn-outline-primary btn-sm me-2 radius-sm">
                                         <i class="bi bi-caret-up-fill"></i>
                                     </button>
+
                                     <span class="vote-count me-2">10</span>
-                                    <button class="btn btn-outline-danger btn-sm me-2">
+
+                                    <button class="btn btn-outline-danger btn-sm me-2 radius-sm">
                                         <i class="bi bi-caret-down-fill"></i>
                                     </button>
-                                    <button class="btn btn-outline-light btn-sm me-2">
+                                    <button class="btn btn-outline-light btn-sm me-2 radius-sm">
                                         <span>reply</span>
                                     </button>
                                 </div>

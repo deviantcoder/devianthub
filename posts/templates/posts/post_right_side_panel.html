@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="col fixed-column right-column">
 
     <div style="margin-bottom: 15px; margin-top: 15px;">
@@ -6,7 +8,7 @@
     
     <div class="d-flex align-items-center justify-content-between" style="margin-bottom: 15px; margin-top: 15px;">
         <a href="" class="d-flex align-items-center">
-            <img src="img/img2.jpg" alt="Community Logo" class="community-logo me-2">
+            <img src="{% static 'img/img2.jpg' %}" alt="Community Logo" class="community-logo me-2">
             <span class="me-3 community-name-white">c/django</span>
         </a>
         <button class="btn btn-info no-radius">Join</button>
@@ -44,15 +46,15 @@
 
     <div style="margin-bottom: 15px;">
         <a href="" class="w-100 mt-2 d-flex justify-content-start align-items-center">
-            <img src="img/img1.jpg" alt="Community Logo" class="community-logo-sm me-2">
+            <img src="{% static 'img/img1.jpg' %}" alt="Logo" class="community-logo-sm me-2">
             <span class="me-3 title-sm">u/CodeExplorer</span>
         </a>
         <a href="" class="w-100 mt-2 d-flex justify-content-start align-items-center">
-            <img src="img/img2.jpg" alt="Community Logo" class="community-logo-sm me-2">
+            <img src="{% static 'img/img2.jpg' %}" alt="Logo" class="community-logo-sm me-2">
             <span class="me-3 title-sm">u/PixelNomad</span>
         </a>
         <a href="" class="w-100 mt-2 d-flex justify-content-start align-items-center">
-            <img src="img/img3.jpg" alt="Community Logo" class="community-logo-sm me-2">
+            <img src="{% static 'img/img3.jpg' %}" alt="Logo" class="community-logo-sm me-2">
             <span class="me-3 title-sm">u/CyberWanderer</span>
         </a>
     </div>

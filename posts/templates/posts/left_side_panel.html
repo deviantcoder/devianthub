@@ -1,20 +1,22 @@
+{% load static %}
+
 <div class="col fixed-column left-column">
     <div style="margin-bottom: 15px; margin-top: 15px;">
         <span class="menu-title">Menu</span>
     </div>
-    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center">
+    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center radius-md">
         <span>Home</span>
         <i class="bi bi-house-door-fill ms-auto"></i>
     </button>
-    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center">
+    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center radius-md">
         <span>Popular</span>
         <i class="bi bi-star-fill ms-auto"></i>
     </button>
-    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center">
+    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center radius-md">
         <span>Explore</span>
         <i class="bi bi-search ms-auto"></i>
     </button>
-    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center">
+    <button class="btn btn-white btn-white-custom w-100 mt-2 d-flex justify-content-start align-items-center radius-md">
         <span>All</span>
         <i class="bi bi-list ms-auto"></i>
     </button>
@@ -24,18 +26,18 @@
         <span class="menu-title">Recent</span>
     </div>
 
-    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center">
-        <img src="img/img1.jpg" alt="Community Logo" class="community-logo me-2">
-        <span class="me-3 community-title">c/dedsec</span>
+    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center radius-sm">
+        <img src="{% static 'img/img1.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <span class="me-3 community-title">c/backend</span>
     </button>
 
-    <button class="btn btn-white btn-white-custom-2 border-0 w-100 mt-2 d-flex justify-content-start align-items-center">
-        <img src="img/img2.jpg" alt="Community Logo" class="community-logo me-2">
-        <span class="me-3 community-title">c/dedsec</span>
+    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center radius-sm">
+        <img src="{% static 'img/img2.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <span class="me-3 community-title">c/frontend</span>
     </button>
 
-    <button class="btn btn-white btn-white-custom-2 border-0 w-100 mt-2 d-flex justify-content-start align-items-center">
-        <img src="img/img3.jpg" alt="Community Logo" class="community-logo me-2">
-        <span class="me-3 community-title">c/dedsec</span>
+    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center radius-sm">
+        <img src="{% static 'img/img3.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <span class="me-3 community-title">c/webdesign</span>
     </button>
 </div>

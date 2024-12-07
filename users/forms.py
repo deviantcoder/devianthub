@@ -19,23 +19,23 @@ class CustomUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
 
         self.fields['username'].widget.attrs.update({
-            'class': 'input round-corners-medium is-medium',
+            'class': 'form-control login-field',
             'placeholder': 'Username',
             'name': 'username',
             'id': 'username',
             'maxlength': '15',
         })
         self.fields['email'].widget.attrs.update({
-            'class': 'input round-corners-medium is-medium',
+            'class': 'form-control login-field',
             'placeholder': 'Email'
         })
         self.fields['password1'].widget.attrs.update({
-            'class': 'input round-corners-medium is-medium',
+            'class': 'form-control login-field',
             'placeholder': 'Password'
         })
         self.fields['password2'].widget.attrs.update({
-            'class': 'input round-corners-medium is-medium',
-            'placeholder': 'Repeat password'
+            'class': 'form-control login-field',
+            'placeholder': 'Confirm password'
         })
 
     def clean_username(self):

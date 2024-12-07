@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
         
-        <a class="navbar-brand text-white" href="#">
+        <a class="navbar-brand text-white" href="/">
             <img src="{% static 'img/logo_no_text2.png' %}" alt="Logo" class="logo-img">
         </a>
 
@@ -22,19 +22,49 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Create_Post</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
                 <!-- Language Switcher -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Language
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">English</a></li>
-                        <li><a class="dropdown-item" href="#">Ukrainian</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-flag-usa me-2"></i>English</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-flag me-2"></i>Ukrainian</a></li>
                     </ul>
                 </li>
+
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle profile-dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ user.profile.image.url }}" class="profile-image" alt="Profile">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user-circle me-2"></i>
+                                    View Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'users:edit_profile' %}" class="dropdown-item">
+                                    <i class="fas fa-edit me-2"></i>
+                                    Edit Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'users:logout' %}" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt me-2" style="color: red;"></i>
+                                    Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light" href="{% url 'users:login' %}">Log In</a>
+                    </li>
+                {% endif %}
+
             </ul>
         </div>
     </div>

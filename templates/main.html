@@ -20,12 +20,13 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div class="notification custom-notification is-{{ message.tags }}" style="border-radius: 30px;">
-                <button class="delete"></button>
-                <span class="notification-text mt-2">{{ message }}</span>
+            <div class="alert dark-alert custom-alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
     {% endif %}
+
 
 
 
@@ -48,26 +49,9 @@
         });
     </script>
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/dropdown.js' %}"></script> -->
-
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.notification .delete').forEach(($delete) => {
-                const $notification = $delete.parentNode;
-
-                $delete.addEventListener('click', () => {
-                    $notification.classList.add('fade-out');
-
-                    $notification.addEventListener('animationend', () => {
-                        $notification.remove();
-                    });
-                });
-            });
-        });
-
-    </script> -->
+    <script src="{% static 'js/dropdown.js' %}"></script>
 
 </body>
 </html>

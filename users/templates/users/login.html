@@ -4,86 +4,53 @@
 
 {% block content %}
 
-    <!-- PAGE CONTENT -->
-    <section class="hero">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <div class="columns is-centered">
-                    <div class="column is-5">
-                        <div class="box" style="background: linear-gradient(to bottom right, rgb(0, 90, 102), rgb(133, 0, 89));">
-                            <h3 class="title">Log In</h3>
-                            <figure>
-                                <img src="{% static 'img/logo.png' %}" class="glow-effect" style="width: 200px; height: auto; border-radius: 20px;">
-                            </figure>
-
-                            <form method="post" class="mt-5">
-                                {% csrf_token %}
-
-                                <div class="field">
-                                    <div class="control">
-                                        <p class="control has-icons-left has-icons-right">
-                                            <input class="input round-corners-medium is-medium" type="text" name="username" placeholder="Username" autofocus="">
-                                            <span class="icon is-small is-left">
-                                                <i class="fas fa-user"></i>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="field">
-                                    <div class="control">
-                                        <p class="control has-icons-left has-icons-right">
-                                            <input class="input round-corners-medium is-medium" type="password" name="password" placeholder="Password">
-                                            <span class="icon is-small is-left">
-                                                <i class="fas fa-lock"></i>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="field">
-                                    <label class="checkbox">
-                                        <input type="checkbox">
-                                        Remember me
-                                    </label>
-                                </div>
-
-                                <div style="text-align: center;">
-                                    <button class="button is-info auth-button glow-effect">
-                                        <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>
-                                        Sign in
-                                    </button>
-                                </div>
-
-                            </form>
-
-                            <hr>
-
-                            <span>or sign in using</span>
-
-                            <div class="buttons is-centered mt-3">
-                                <a class="button is-rounded" href="#">
-                                    <span class="icon" style="font-size: 25px;">
-                                        <i class="fab fa-google"></i>
-                                    </span>
-                                </a>
-                                <a class="button is-rounded" href="#">
-                                    <span class="icon" style="font-size: 25px;">
-                                        <i class="fab fa-github"></i>
-                                    </span>
-                                </a>
-                            </div>
-
-                        </div>
-                        <p class="has-text-grey">
-                            <a href="{% url 'users:register' %}">Sign Up</a> &nbsp;·&nbsp;
-                            <a href="">Forgot Password</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+<div class="container d-flex justify-content-center align-items-center mt-4">
+    <div class="card p-4 login radius-md">
+        <div class="text-center mb-3">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" style="max-width: 200px;">
         </div>
 
-    </section>
+        <h4 class="text-center mb-3">Welcome back!</h4>
+        
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control login-field" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control login-field" id="password" placeholder="Enter password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 mb-3 login-button">Log in</button>
+            
+            <hr>
+
+            <div class="text-center mb-3">
+                <span class="form-label">or sign in using</span>
+            </div>
+            
+            <div class="d-flex justify-content-center mb-3">
+                <a href="" class="btn login-button btn-dark d-flex justify-content-center align-items-center" style="background-color: #333; color: #fff; margin-right: 10px;">
+                    <i class="fab fa-google me-2" style="font-size: 20px;"></i>
+                    <span>Google</span>
+                </a>
+                <a href="" class="btn btn-dark d-flex justify-content-center align-items-center" style="background-color: #333; color: #fff;">
+                    <i class="fab fa-github me-2" style="font-size: 20px;"></i>
+                    <span>Github</span>
+                </a>
+            </div>
+            
+        </form>
+
+        <div class="text-center mt-2">
+            <span><a href="{% url 'users:register' %}" class="text-light">Sign up</a></span>
+            <span>•</span>
+            <span><a href="#" class="text-light">Forgot password?</a></span>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

@@ -2,15 +2,13 @@
 
 {% for post in posts %}
 
-    <div class="box">
+<div class="post radius-md">
 
-        <!-- Post Info -->
-        <div class="community-info">
-            <a href="#community-link" class="community-link">
-                <img src="{% static 'img/c7.jpg' %}" alt="Community Logo" class="community-avatar">
-                <span class="community-name">c/webdesign</span>
-            </a>
-            <span class="post-timestamp"> • 
+    <div class="post-header">
+        <img src="{% static 'img/profile2.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <div>
+            <span class="post-community">c/dedsec</span>
+            <span class="pub-date"> •
                 {% if post.time_since_posted.type != 'now' %}
                     {{ post.time_since_posted.num }}
                     {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
@@ -22,149 +20,122 @@
                     {{ post.time_since_posted.type }}
                 {% endif %}
             </span>
-            <div class="more-options">
-                <!-- <i class="fas fa-ellipsis-h"></i> -->
-                {% include 'posts/post_controls.html' %}
-            </div>
         </div>
+        
+        <div class="dropdown ms-auto">
+            <button class="btn btn-secondary dropdown-toggle post-dropdown" style="background-color: rgb(42, 42, 42);" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-flag me-2"></i>Report</a></li>
+            </ul>                            
+        </div>
+    </div>
 
-        <!-- Post Content -->
-        <div class="content">
+    <div class="post-title">
+        <h5 class="post-title mt-2">
+            <a class="post-title" href="{% url 'posts:post' post.id %}">
+                {{ post.title }}
+            </a>
+        </h5>
+    </div>
 
-            {% if post.has_media_files %}
-                {% if post.has_media_files == 1 %}
-                
-                    {% if post.postmedia_set.first.file_ext.type == 'image' %}
-                        {% with post.postmedia_set.first.file.url as image %}
+    {% if post.body %}
+    <div class="post-description mt-3">
+        <p>
+            {{ post.body|slice:100 }}...
+        </p>
+    </div>
+    {% endif %}
 
-                            <div class="post-header">
-                                <a 
-                                    class="js-modal-trigger" 
-                                    data-target="modal-single-{{ forloop.counter }}" 
-                                    data-image="{{ image }}
-                                ">
-                                    <img src="{{ image }}" alt="Post" class="post-image">
-                                </a>
-                            </div>
-
-                            <!-- Modal -->
-                            <div id="modal-single-{{ forloop.counter }}" class="modal">
-                                <div class="modal-background"></div>
-                                <div class="modal-content">
-                                    <img id="modal-image" src="{{ image }}" alt="Full Size Image">
-                                </div>
-                                <button class="modal-close is-large" aria-label="close"></button>
-                            </div>
-
-                        {% endwith %}
-                    {% else %}
-                        <div class="post-header">
-                            <video class="glow-effect" controls style="height: 300px; width: auto; border-radius: 20px;">
-                                <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
-                            </video>
-                        </div>
-                    {% endif %}
-                {% else %}
-                    <section class="carousel">
-                        <div class="carousel-wrapper">
-                                                    
-                        {% for media in post.postmedia_set.all %}
-                            <div class="carousel-slide">
-                                {% if media.file_ext.type == 'image' %}
-                                    <a href="#" class="js-modal-trigger" data-target="modal" data-image="{{media.file.url}}">
-                                        <img src="{{ media.file.url }}" alt="Post" class="post-image">
-                                    </a>
-                                {% else %}
-                                    <video class="glow-effect" data-target="modal" controls style="height: 300px; width: auto; border-radius: 20px;">
-                                        <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
-                                    </video>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                                                    
-                        </div>
-
-                        <button class="carousel-control prev" style="font-size: 25px; border-radius: 20px;">‹</button>
-                        <button class="carousel-control next" style="font-size: 25px; border-radius: 20px;">›</button>
-                                            
-                        <!-- Modal -->
-                        <div id="modal" class="modal">
-                            <div class="modal-background"></div>
-                            <div class="modal-content">
-                                <img id="modal-image" src="" alt="Full Size Image">
-                            </div>
-                            <button class="modal-close is-large" aria-label="close"></button>
-                        </div>
-                                            
-                            <!-- Indicators -->
-                            <div class="carousel-indicators">
-                                <!-- Dynamically created -->
-                            </div>
-                    </section>
-                {% endif %}
-            {% endif %}
-
-            {% if post.video_url %}
-                <div class="youtube-container">
-                    {% if 'youtube' in post.video_url %}
-                        {% with post.video_url|slice:"32:" as video_id %}
-                            <iframe class="mb-2" width="560" height="315" src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
-                        {% endwith %}
-                    {% endif %}
+    {% if post.has_media_files %}
+    {% if post.has_media_files == 1 %}
+        {% if post.postmedia_set.first.file_ext.type == 'image' %}
+            {% with post.postmedia_set.first.file.url as image %}
+                <div class="post-image text-center mt-3">
+                    <a>
+                        <img src="{{ image }}" alt="Post Image" class="img-fluid radius-md" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ image }}">
+                    </a>
                 </div>
-            {% endif %}
-
-            <div class="post-content-container">
-                    <p>
-                        <strong class="mb-3">
-                            <a href="{% url 'posts:post' post.id %}?feed=/" class="post-title-custom">{{ post.title }}</a>
-                        </strong>
-                    </p>
-
-                    {% if post.body %}
-                    <p>
-                        <span class="post-description">
-                            {{ post.body|slice:300 }}...
-                        </span>
-                    </p>
-                    {% endif %}
+            {% endwith %}
+        {% else %}
+            <div class="post-image text-center mt-3">
+                <video controls class="img-fluid d-block mx-auto radius-md">
+                    <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                    Your browser does not support the video tag.
+                </video>
             </div>
+        {% endif %}
+    {% else %}
+        <div id="postCarousel{{ post.id }}" class="carousel slide mt-3" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                {% for media in post.postmedia_set.all %}
+                    <button type="button" data-bs-target="#postCarousel{{ post.id }}" data-bs-slide-to="{{ forloop.counter0 }}"
+                            class="carousel-indicators-round {% if forloop.counter == 1 %}active{% endif %}"
+                            aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for media in post.postmedia_set.all %}
+                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                        {% if media.file_ext.type == 'image' %}
+                            <a>
+                                <img src="{{ media.file.url }}" alt="Post Image" class="img-fluid d-block mx-auto radius-md" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            </a>
+                        {% else %}
+                            <video controls class="img-fluid d-block mx-auto radius-md">
+                                <source src="{{ media.file.url }}" type="video/{{ media.file_ext.ext }}">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel{{ post.id }}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#postCarousel{{ post.id }}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
+    {% endif %}
+{% endif %}
 
-        <!-- Buttons -->
-        <div class="post-actions">
 
-            <!-- Upvote/Downvote -->
-            <div class="votes-group">
-                <form method="post" action="{% url 'posts:vote_post' post.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="vote-button upvote" name="vote_type" value="upvote" aria-label="upvote">
-                        <i class="fas fa-arrow-up"></i>
-                    </button>
-
-                    <span class="vote-count">{{ post.poststats.votes }}</span>
-                    
-                    <button type="submit" class="vote-button downvote" name="vote_type" value="downvote" aria-label="downvote">
-                        <i class="fas fa-arrow-down"></i>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Share/Comments -->
-            <div class="votes-group">
-                <a href="#" class="share-button">
-                    <i class="fas fa-share"></i>
-                    <span>Share</span>
-                </a> |
-                <a href="{% url 'posts:post' post.id %}" class="comment-button">
-                    <i class="fas fa-comments"></i>
-                    <span>Comments</span>
-                </a>
-            </div>
-
+    {% if post.video_url %}
+        <div class="post-youtube text-center mt-3">
+            <iframe class="mb-2 radius-md" width="560" height="315" src="https://www.youtube.com/embed/KdoaiGTIBY4?si=wgmLc9jzzm5ZmmfY" frameborder="0" allowfullscreen></iframe>
         </div>
-    </div>                
+    {% endif %}
 
-    <hr>
+    <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+        <div class="vote-group d-flex align-items-center">
+            <form method="post" action="{% url 'posts:vote_post' post.id %}">
+                {% csrf_token %}
+                <button type="submit" name="vote_type" value="upvote" class="btn btn-outline-primary btn-sm me-2 radius-sm">
+                    <i class="bi bi-caret-up-fill"></i>
+                </button>
+
+                <span class="vote-count me-2">{{ post.poststats.votes }}</span>
+
+                <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
+                    <i class="bi bi-caret-down-fill"></i>
+                </button>
+            </form>
+        </div>
+        <div class="action-group d-flex align-items-center">
+            <a href="{% url 'posts:post' post.id %}" class="btn btn-outline-secondary btn-sm me-2">
+                <i class="bi bi-chat-dots-fill"></i> Comments
+            </a>
+            <a href="" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-share-fill"></i> Share
+            </a>
+        </div>
+    </div>
+</div>               
 
 {% endfor %}

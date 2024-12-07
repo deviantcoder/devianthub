@@ -1,76 +1,54 @@
 {% load static %}
 
-<div class="column is-3">
-    <aside class="menu" style="position: sticky; top: 70px; max-height: 85vh; overflow-y: auto;">
-        <p class="menu-label">Recent Posts</p>
+<div class="col fixed-column right-column">
+    <div style="margin-bottom: 15px; margin-top: 15px;">
+        <span class="menu-title mb-2">Recent Posts</span>
+    </div>
 
-        <ul class="">
-            
-            <li class="community-item recent-item">
-                <div class="container">
-                    <div class="item">
-                        <a href="" class="recent-post-link">
-                            <img src="{% static 'img/c5.jpg' %}" alt="Logo" class="community-image-small">
-                            <span class="is-size-7">c/webdesign</span>
-                        </a>
-                    </div>
-                    <div class="item"><p><a href="" class="recent-post-link"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></a></p></div>
-                    <div class="item"><span class="is-size-7 additional-info">99 upvotes - 29 comments</span></div>
-                  </div>
-            </li>
+    <div style="margin-bottom: 15px;">
+        <a href="" class="w-100 mt-2 d-flex justify-content-start align-items-center">
+            <img src="{% static 'img/img1.jpg' %}" alt="Community Logo" class="community-logo-sm me-2">
+            <span class="me-3 title-sm">c/dedsec</span>
+        </a>
+        <a href="" class="recent-post-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</a>
+        <span class="recent-post-stats">29 upvotes • 92 comments</span>
+    </div>
 
-            <li class="community-item recent-item">
-                <div class="container">
-                    <div class="item">
-                        <a href="" class="recent-post-link">
-                            <img src="{% static 'img/c6.jpg' %}" alt="Logo" class="community-image-small">
-                            <span class="is-size-7">c/coding</span>
-                        </a>
-                    </div>
-                    <div class="item"><p><a href="" class="recent-post-link"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></a></p></div>
-                    <div class="item"><span class="is-size-7 additional-info">29 upvotes - 9 comments</span></div>
-                  </div>
-            </li>
+    <div style="margin-bottom: 15px;">
+        <a href="" class="w-100 mt-2 d-flex justify-content-start align-items-center">
+            <img src="{% static 'img/img2.jpg' %}" alt="Community Logo" class="community-logo-sm me-2">
+            <span class="me-3 title-sm">c/coding</span>
+        </a>
+        <a href="" class="recent-post-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</a>
+        <span class="recent-post-stats">29 upvotes • 92 comments</span>
+    </div>
 
-            <li class="community-item recent-item">
-                <div class="container">
-                    <div class="item">
-                        <a href="" class="recent-post-link">
-                            <img src="{% static 'img/c6.jpg' %}" alt="Logo" class="community-image-small">
-                            <span class="is-size-7">c/metalcore</span>
-                        </a>
-                    </div>
-                    <div class="item"><p>
-                        <a href="" class="recent-post-link">
-                            <strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></a></p></div>
-                    <div class="item"><span class="is-size-7 additional-info">29 upvotes - 9 comments</span></div>
-                  </div>
-            </li>
-            
-        </ul>
+    <div style="margin-bottom: 15px;">
+        <a href="" class="w-100 mt-2 d-flex justify-content-start align-items-center">
+            <img src="{% static 'img/img3.jpg' %}" alt="Community Logo" class="community-logo-sm me-2">
+            <span class="me-3 title-sm">c/design</span>
+        </a>
+        <a href="" class="recent-post-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</a>
+        <span class="recent-post-stats">29 upvotes • 92 comments</span>
+    </div>
+    <hr>
 
-        <hr>
+    <div style="margin-bottom: 15px;">
+        <span class="menu-title mb-2">Popular Communities</span>
+    </div>
 
-        <p class="menu-label">Topics</p>
+    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center radius-sm">
+        <img src="{% static 'img/img1.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <span class="me-3 community-title">c/backend</span>
+    </button>
 
-        <ul class="menu-list menu-list-custom">
-            <li>
-                <a href="#" class="is-active">
-                    Home
-                </a>
-            </li>
-            <li>
-                <a href="#" class="is-active">
-                    Popular
-                </a>
-            </li>
-            <li>
-                <a href="#" class="is-active">
-                    Explore
-                </a>
-            </li>
-            
-        </ul>
+    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center radius-sm">
+        <img src="{% static 'img/img2.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <span class="me-3 community-title">c/frontend</span>
+    </button>
 
-    </aside>
+    <button class="btn btn-white btn-white-custom-2 w-100 mt-2 d-flex justify-content-start align-items-center radius-sm">
+        <img src="{% static 'img/img3.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <span class="me-3 community-title">c/webdesign</span>
+    </button>
 </div>
