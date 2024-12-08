@@ -617,3 +617,27 @@ a:hover {
         border-radius: 20px;
     }
 }
+
+/* REGISTER USERNAME CHECK */
+
+.icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #342f46;
+}
+
+.username-error {
+    font-size: 1.3rem;
+    color: rgb(255, 0, 0);
+}
+
+.username-success {
+    font-size: 1.3rem;
+    color: rgb(0, 255, 0);
+}
+
+/* ****** */

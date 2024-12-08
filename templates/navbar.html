@@ -40,6 +40,9 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li>
+                                <h5 class="dropdown-item">u/{{ request.user.profile.get_username }}</h5>
+                            </li>
+                            <li>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user-circle me-2"></i>
                                     View Profile
@@ -62,6 +65,7 @@
                 {% else %}
                     <li class="nav-item">
                         <a class="btn btn-outline-light" href="{% url 'users:login' %}">Log In</a>
+                        <a class="btn btn-outline-light" href="{% url 'users:register' %}">Sign Up</a>
                     </li>
                 {% endif %}
 

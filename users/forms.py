@@ -59,29 +59,29 @@ class ProfileForm(forms.ModelForm):
         ]
         widgets = {
             'username': forms.TextInput(attrs={
-                'class': 'input round-corners-small is-medium',
+                'class': 'form-control login-field',
                 'placeholder': 'Username',
                 'name': 'username',
                 'id': 'username',
             }),
             'display_name': forms.TextInput(attrs={
-                'class': 'input round-corners-small is-medium',
+                'class': 'form-control login-field',
                 'placeholder': 'Display Name',
                 'name': 'display_name',
                 'id': 'display_name',
             }),
             'bio': forms.Textarea(attrs={
-                'class': 'input round-corners-small is-medium',
-                'placeholder': 'Bio',
+                'class': 'form-control login-field',
+                'placeholder': 'Write something about yourself...',
                 'style': 'resize: vertical; min-height: 243px; max-height: 243px; font-size: 17px;',
             }),
             'image': forms.FileInput(attrs={
-                'class': 'input is-small',
+                'class': 'form-control login-field',
                 'placeholder': 'Image',
                 'name': 'image',
             }),
             'banner': forms.FileInput(attrs={
-                'class': 'input is-small',
+                'class': 'form-control login-field',
                 'placeholder': 'Banner',
                 'name': 'banner',
             })

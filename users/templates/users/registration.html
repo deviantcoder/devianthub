@@ -27,21 +27,36 @@
                 {% csrf_token %}
 
                 <div class="mb-3 d-flex">
+
                     <div class="me-2" style="flex: 1;">
+                        <span id="username-feedback">
+                        </span>
                         <label for="username" class="form-label">Username</label>
                         {{ form.username }}
+                        <span id="username-feedback">
+                        </span>
                     </div>
+
                     <div style="flex: 1;">
+                        <span>
+                            <i class="fas fa-envelope"></i>
+                        </span>
                         <label for="email" class="form-label">Email</label>
                         {{ form.email }}
                     </div>
                 </div>
 
                 <div class="mb-3">
+                    <span>
+                        <i class="fas fa-lock"></i>
+                    </span>
                     <label for="password" class="form-label">Password</label>
                     {{ form.password1 }}
                 </div>
-                <div class="mb-3">                        
+                <div class="mb-3">
+                    <span>
+                        <i class="fas fa-lock"></i>
+                    </span>                    
                     <label for="password" class="form-label">Confirm Password</label>
                     {{ form.password2 }}
                 </div>

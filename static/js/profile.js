@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const usernameInput = document.querySelector('input[name="username"]');
     const feedbackSpan = document.getElementById('username-feedback');
     const usernamePreview = document.getElementById('username-preview');
-    const saveButton = document.querySelector('button[type="submit"]');
+    const saveButton = document.getElementById('submitButton');
+
+    console.log(saveButton)
 
     if (usernameInput && feedbackSpan) {
         usernameInput.addEventListener('input', function () {
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isValidUsername = /^[a-zA-Z0-9]+$/.test(username);
 
             if (!isValidUsername || username === '') {
-                feedbackSpan.innerHTML = '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i></span>';
+                feedbackSpan.innerHTML = '<span class="icon-container"><i class="fas fa-times username-error"></i></span>';
                 if (saveButton) {
                     saveButton.disabled = true;
                 }
@@ -41,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     feedbackSpan.innerHTML = '';
                     if (data.available) {
-                        feedbackSpan.innerHTML = '<span class="icon is-small has-text-success"><i class="fas fa-check"></i></span>';
+                        feedbackSpan.innerHTML = '<span class="icon-container"><i class="fas fa-check username-success"></i></span>';
                         if (saveButton) {
                             saveButton.disabled = false;
                         }
                     } else {
-                        feedbackSpan.innerHTML = '<span class="icon is-small has-text-danger"><i class="fas fa-times"></i></span>';
+                        feedbackSpan.innerHTML = '<span class="icon-container"><i class="fas fa-times username-error"></i></span>';
                         if (saveButton) {
                             saveButton.disabled = true;
                         }
