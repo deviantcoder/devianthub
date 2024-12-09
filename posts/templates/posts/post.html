@@ -11,6 +11,8 @@
             <!-- LEFT PANEL -->
             {% include 'posts/left_side_panel.html' %}
 
+            <input type="hidden" id="post-id" value="{{ post.id }}">
+
             <!-- POST -->
             <div class="col main-content" style="background: linear-gradient(45deg,#353535, #2e0c2c); border-radius: 20px !important;">
                 
@@ -42,14 +44,12 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                                <li><a class="dropdown-item" href="{% url 'posts:delete_post' post.id %}?post={{request.path}}"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-flag me-2"></i>Report</a></li>
                             </ul>                            
                         </div>
-                    </div>
-                    
-                    
-                
+                    </div>  
+
                     <div class="post-title">
                         <h5 class="post-title mt-2">{{ post.title }}</h5>
                     </div>
@@ -158,77 +158,37 @@
 
                 <!-- comments -->
                 <div class="comments-section mt-4 radius-md">
-                    <h5 class="text-white">Comments</h5>
+                    <h5 class="text-white">
+                        Comments
+
+                        {% with all_comments.count as total_comments %}
+                            {% if total_comments %}
+                                <small>({{ total_comments }} comment{{ total_comments|pluralize }})</small>
+                            {% else %}
+                                <small>(No comments yet)</small>
+                            {% endif %}
+                        {% endwith %}
+                    </h5>
             
                     <!-- Comment Form -->
                     <div class="comment-form mb-3">
-                        <textarea class="form-control" placeholder="Add a comment..." rows="3"></textarea>
-                        <button class="btn btn-dark btn-sm mt-2">Comment</button>
+                        <form method="post" action="{% url 'posts:comment_post' post.id %}">
+                            {% csrf_token %}
+                            {{ form.body }}
+                            <button type="submit" class="btn btn-dark btn-sm mt-2">Comment</button>
+                        </form>
                     </div>
             
                     <!-- Comments List -->
                     <div class="comment-list">
 
-                        <div class="comment mb-2 radius-md">  
-                            <div class="comment-header align-items-center ms-2 mt-2 mb-1">
-                                <a href="" class="mb-0">
-                                    <img src="{% static 'img/img1.jpg' %}" alt="Community Logo" class="community-logo-sm">
-                                    <span class="title-sm">u/CodeExplorer</span>
-                                </a>
-                                <span class="pub-date">• 30 minutes ago</span>
-                            </div>
-    
-                            <div class="comment-text ms-2">
-                                <p>This is a comment on the post. I really like the content! This is a comment on the post. I really like the content!</p>
-                            </div>
+                        <div id="comments-box"></div>
 
-                            <div class="comment-actions ms-2 mb-1">
-                                <div class="vote-group d-flex align-items-center">
-                                    <button class="btn btn-outline-primary btn-sm me-2 radius-sm">
-                                        <i class="bi bi-caret-up-fill"></i>
-                                    </button>
-
-                                    <span class="vote-count me-2">10</span>
-
-                                    <button class="btn btn-outline-danger btn-sm me-2 radius-sm">
-                                        <i class="bi bi-caret-down-fill"></i>
-                                    </button>
-                                    <button class="btn btn-outline-light btn-sm me-2 radius-sm">
-                                        <span>reply</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div id="comments-spinner-box" class="not-visible" style="text-align: center;">
+                            <span class="mt-6 loader"></span>
                         </div>
 
-                        <div class="comment nested-comment mb-2 radius-md">
-                            <div class="comment-header align-items-center ms-2 mt-2 mb-1">
-                                <a href="" class="mb-0">
-                                    <img src="{% static 'img/img3.jpg' %}" alt="Community Logo" class="community-logo-sm">
-                                    <span class="title-sm">u/CodeExplorer</span>
-                                </a>
-                                <span class="pub-date">• 30 minutes ago</span>
-                            </div>
-    
-                            <div class="comment-text ms-2">
-                                <p>This is a comment on the post. I really like the content! This is a comment on the post. I really like the content!</p>
-                            </div>
-
-                            <div class="comment-actions ms-2 mb-1">
-                                <div class="vote-group d-flex align-items-center">
-                                    <button class="btn btn-outline-primary btn-sm me-2 radius-sm">
-                                        <i class="bi bi-caret-up-fill"></i>
-                                    </button>
-
-                                    <span class="vote-count me-2">10</span>
-
-                                    <button class="btn btn-outline-danger btn-sm me-2 radius-sm">
-                                        <i class="bi bi-caret-down-fill"></i>
-                                    </button>
-                                    <button class="btn btn-outline-light btn-sm me-2 radius-sm">
-                                        <span>reply</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div id="comments-loading-box" style="text-align: center; height: 250px;">
                         </div>
 
                     </div>
@@ -256,43 +216,48 @@
         </div>
     </div>
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
-    <!-- <script src="{% static 'js/comments.js' %}"></script>
-    <script src="{% static 'js/post_modal.js' %}"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{% static 'js/comments.js' %}"></script>
+    <!--<script src="{% static 'js/post_modal.js' %}"></script> -->
 
-    <!-- <script>
+    <script>
         function commentReply(id) {
             if (document.contains(document.getElementById("newForm"))) {
                 document.getElementById("newForm").remove();
             }
-
+    
             var comment = document.getElementById(id);
-
+    
             comment.insertAdjacentHTML('afterend',
-                '<form id="newForm" method="post" class="box" action="{% url "posts:comment_post" post.id %}"> \
-                        {% csrf_token %} \
-                        <select name="parent" class="is-hidden" id="id_parentt"> \
-                            <option value="' + id + '" selected="' + id + '"></option> \
-                        </select> \
-                        <textarea name="body" class="textarea" required id="id_content" style="resize: vertical; height: 50px; min-height: 50px; max-height: 200px; border-radius: 20px;"></textarea> \
-                        <a class="button mt-2" style="border-radius: 20px;" onclick="removeForm()">Cancel</a> \
-                        <button type="submit" class="button is-info mt-2" style="border-radius: 20px;">Reply</button> \
+                '<form id="newForm" method="post" class="p-3 rounded" action="{% url "posts:comment_post" post.id %}"> \
+                    {% csrf_token %} \
+                    <input type="hidden" name="parent" id="id_parentt" value="' + id + '"> \
+                    <textarea name="body" class="form-control mb-2 login-field" required id="id_content" style="resize: vertical; height: 50px; min-height: 50px; max-height: 200px;"></textarea> \
+                    <div class="d-flex"> \
+                        <button type="submit" class="btn btn-outline-light btn-sm me-2 radius-sm">Reply</button> \
+                        <button type="button" class="btn btn-outline-light btn-sm me-2 radius-sm" onclick="removeForm()">Cancel</button> \
+                    </div> \
                 </form>');
         }
-        document.addEventListener("DOMContentLoaded", function() {
+    
+        document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.querySelector('textarea[name="body"]');
-
-            textarea.addEventListener('input', function() {
-                this.style.height = '50px';
-                this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-            });
-        })
+    
+            if (textarea) {
+                textarea.addEventListener('input', function () {
+                    this.style.height = '50px';
+                    this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+                });
+            }
+        });
+    
         function removeForm() {
             const form = document.getElementById("newForm");
             if (form) {
                 form.remove();
             }
         }
-    </script> -->
+    </script>
+    
 
 {% endblock content %}

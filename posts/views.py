@@ -305,7 +305,7 @@ def vote_comment(request, pk):
                 vote.vote_type = vote_type
                 vote.save()
 
-                if vote.vote_type.vote_type == 'upvote':
+                if vote.vote_type == 'upvote':
                     comment_stats.upvotes = F('upvotes') + 1
                 else:
                     comment_stats.downvotes = F('downvotes') + 1

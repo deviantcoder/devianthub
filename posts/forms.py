@@ -12,14 +12,14 @@ class PostForm(forms.ModelForm):
         ]
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': 'input post-creation-field', 'placeholder': 'Enter your post title', 'type': 'text', 'title': 'title'
+                'class': 'form-control login-field', 'placeholder': 'Enter your post title', 'type': 'text', 'title': 'title'
             }),
             'body': forms.Textarea(attrs={
-                'class': 'textarea post-creation-field', 'placeholder': 'Write your post here...', 'name': 'body', 'rows': 4, 
+                'class': 'form-control login-field', 'placeholder': 'Write your post here...', 'name': 'body', 'rows': 4, 
                 'style': 'resize: vertical; min-height: 50px;'
             }),
             'video_url': forms.TextInput(attrs={
-                'class': 'input post-creation-field', 'placeholder': 'YouTube video link', 'type': 'text', 'name': 'video_url'
+                'class': 'form-control login-field post-creation-field', 'placeholder': 'YouTube video link', 'type': 'text', 'name': 'video_url'
             }),
         }
         labels = {
@@ -61,7 +61,7 @@ class CommentForm(forms.ModelForm):
         fields = ['parent', 'body']
         widgets = {
             'body': forms.Textarea(attrs={
-                'class': 'textarea', 'placeholder': 'Write your comment here...', 'name': 'body', 'rows': 4,
-                'style': 'resize: vertical; height: 50px; min-height: 50px; max-height: 200px; border-radius: 20px;'
+                'class': 'form-control login-field', 'placeholder': 'Write your comment here...', 'name': 'body', 'rows': 4,
+                'style': 'resize: vertical; height: 50px; min-height: 50px; max-height: 200px;'
             })
         }

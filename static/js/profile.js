@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const usernamePreview = document.getElementById('username-preview');
     const saveButton = document.getElementById('submitButton');
 
-    console.log(saveButton)
-
     if (usernameInput && feedbackSpan) {
         usernameInput.addEventListener('input', function () {
             const username = usernameInput.value.trim();
@@ -15,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 usernamePreview.textContent = 'u/' + username;
 
                 if (username.length <= 9) {
-                    usernamePreview.style.fontSize = "35px";
+                    usernamePreview.style.fontSize = "20px";
                 } else if (username.length <= 12) {
-                    usernamePreview.style.fontSize = "30px";
+                    usernamePreview.style.fontSize = "18px";
                 } else if (username.length <= 20) {
-                    usernamePreview.style.fontSize = "25px";
+                    usernamePreview.style.fontSize = "16px";
                 }
             }
 
@@ -71,6 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileBannerPreview = document.getElementById('profile-banner-preview');
     const profileImageError = document.getElementById('profile-image-error');
     const profileBannerError = document.getElementById('profile-banner-error');
+
+    console.log(profileBannerPreview)
 
     function updateIcon(element, isValid) {
         element.innerHTML = isValid

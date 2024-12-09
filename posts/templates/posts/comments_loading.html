@@ -1,52 +1,60 @@
 {% load mptt_tags %}
-{% recursetree comments %}
-<div class="comment">
-    <div id="{{ node.id }}" class="box">
-        <div class="mb-2">
-            <div class="profile-container">
-                <img src="{{ node.user.image.url }}" alt="Профиль" class="profile-image">
-                <span class="profile-name mr-3">{{ node.user.get_username }}</span>
-                <span class="is-size-7 ml-1">•
-                    {% if node.time_since_posted.type != 'now' %}
-                        {{ node.time_since_posted.num }}
-                        {{ node.time_since_posted.type }}{{ node.time_since_posted.num|pluralize }} ago
-                    {% else %}
-                        {{ node.time_since_posted.type }}
-                    {% endif %}
-                </span>
-            </div>
-        </div>
-        <div>
-            <div class="content">
-                <p>{{ node.body|linebreaks }}</p>
-                <div class="comment-actions">
-                    <div class="comment-votes-group mr-2">
-                        <form method="post", action="{% url 'posts:vote_comment' node.id %}">
-                            {% csrf_token %}
-                            <button type="submit" name="vote_type" value="upvote" aria-label="upvote" class="vote-button">
-                                <i class="fas fa-arrow-up"></i>
-                            </button>
+{% load static %}
 
-                            <span class="vote-count">{{ node.commentstats.votes }}</span>
-                            
-                            <button type="submit" name="vote_type" value="downvote" aria-label="downvote" class="vote-button">
-                                <i class="fas fa-arrow-down"></i>
-                            </button>
-                        </form>
-                    </div>
-                    <div>
-                        <button class="reply-button" onclick="commentReply('{{ node.id }}')" aria-label="comments">
-                            reply
-                        </button>
-                    </div>
-                </div>
-            </div>
+{% recursetree comments %}
+
+<div id="{{ node.id }}" class="comment mb-2 radius-md">  
+    <div class="comment-header align-items-center ms-2 mt-1 mb-1">
+        <a href="" class="mb-0">
+            <img src="{{ node.user.image.url }}" alt="Community Logo" class="community-logo-sm">
+            <span class="title-sm">u/{{ node.user.get_username }}</span>
+        </a>
+        <span class="pub-date">•
+            {% if node.time_since_posted.type != 'now' %}
+                {{ node.time_since_posted.num }}
+                {{ node.time_since_posted.type }}{{ node.time_since_posted.num|pluralize }} ago
+            {% else %}
+                {{ node.time_since_posted.type }}
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="comment-text ms-2">
+        {{ node.body|linebreaks }}
+    </div>
+
+    <div class="comment-actions ms-2 mb-1">
+        <div class="vote-group d-flex align-items-center">
+
+            <form method="post" action="{% url 'posts:vote_comment' node.id %}">
+                {% csrf_token %}
+
+                <button type="submit" name="vote_type" value="upvote" class="btn btn-outline-primary btn-sm me-2 radius-sm">
+                    <i class="bi bi-caret-up-fill"></i>
+                </button>
+
+                <span class="vote-count me-2">{{ node.commentstats.votes }}</span>
+
+                <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
+                    <i class="bi bi-caret-down-fill"></i>
+                </button>
+
+            </form>
+
+            {% if node.level < 4 %}
+                <button class="btn btn-outline-light btn-sm me-2 radius-sm" onclick="commentReply('{{ node.id }}')">
+                    <span>reply</span>
+                </button>
+            {% endif %}
+
         </div>
     </div>
-    {% if not node.is_leaf_node %}
-        <div class="children">
-            {{ children }}
-        </div>
-    {% endif %}
 </div>
+
+{% if not node.is_leaf_node %}
+    <div class="ms-4">
+        {{ children }}
+    </div>
+{% endif %}
+
 {% endrecursetree %}

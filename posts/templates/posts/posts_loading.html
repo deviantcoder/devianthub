@@ -129,7 +129,7 @@
         </div>
         <div class="action-group d-flex align-items-center">
             <a href="{% url 'posts:post' post.id %}" class="btn btn-outline-secondary btn-sm me-2">
-                <i class="bi bi-chat-dots-fill"></i> Comments
+                <i class="bi bi-chat-dots-fill"></i> Comments ({{ post.comments.all.count }})
             </a>
             <a href="" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-share-fill"></i> Share

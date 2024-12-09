@@ -2,29 +2,27 @@
 
 {% block content %}
 
-<div class="container has-text-centered mt-5" style="width: 800px;">
-    <div class="box">
-        <div class="level-left">
-            <div class="level-item">
-                <a href="{{ request.GET.post }}?feed={{ request.GET.feed }}" class="button" style="border-radius: 20px;">
-                    <span class="icon is-small">
-                        <i class="fas fa-chevron-left"></i>
-                    </span>
-                </a>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white radius-md">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <a href="{{ request.GET.post }}" class="btn btn-secondary rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                    <h5 class="text-center w-100">You are about to delete <strong>Object Name</strong>.</h5>
+                </div>
+                <div class="card-body text-center">
+                    <small>This action cannot be undone.</small>
+
+                    <form action="#" method="POST" class="d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-danger mx-2">Delete</button>
+                        <a href="{{ request.GET.post }}" class="btn btn-secondary mx-2">Cancel</a>
+                    </form>
+                </div>
             </div>
         </div>
-        <h1 class="title">Are you sure you want to delete: {{ object }}?</h1>
-        <p>This action cannot be undone.</p>
-
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div class="buttons is-centered mt-3">
-                <button type="submit" class="button is-danger" style="border-radius: 20px;">Delete</button>
-                <a href="{{ request.GET.post }}?feed={{ request.GET.feed }}" class="button" style="border-radius: 20px;">Cancel</a>
-            </div>
-        </form>
     </div>
 </div>
-
 
 {% endblock content %}

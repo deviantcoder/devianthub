@@ -116,7 +116,6 @@ class VotePost(models.Model):
         ('downvote', 'Downvote'),
     )
 
-
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
 

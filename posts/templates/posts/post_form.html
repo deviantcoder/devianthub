@@ -3,144 +3,84 @@
 {% load static %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered">
 
-            <!-- SIDE PANEL -->
-            {% include 'posts/left_side_panel.html' %}
-
-            <!-- FORM -->
-            <div class="column is-8">
-                <div class="content">
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-dark text-white no-radius">
+                <div class="card-header">
                     <h4>Create Post</h4>
+                </div>
+                <div class="card-body">
 
-                    <div class="box mb-3">
-                        <article class="media">
-                            <div class="media-content">
-                                <div class="content">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                                    <form method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        
-                                        <!-- post_type hidden -->
-                                        <input type="hidden" name="post_type" id="post-type" value="text">
+                        <!-- post_type hidden -->
+                        <input type="hidden" name="post_type" id="post-type" value="text">
 
-                                        <!-- Post Title -->
-                                        <div class="field">
-                                            <label class="label">Title</label>
-                                            <div class="control">
-                                                {{ form.title }}
-                                            </div>
-                                        </div>
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            {{ form.title }}
+                        </div>
 
-                                        <!-- Tabs for post types -->
-                                        <div class="tabs is-boxed">
-                                            <ul>
-                                                <li id="text-tab" class="is-active">
-                                                    <a class="tab-link">Text</a>
-                                                </li>
-                                                <li id="media-tab">
-                                                    <a class="tab-link">Media</a>
-                                                </li>
-                                                <li id="link-tab">
-                                                    <a class="tab-link">Link</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                        <ul class="nav nav-tabs bg-dark text-white" id="postTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="text-tab" data-bs-toggle="tab" href="#text" role="tab" aria-controls="text" aria-selected="true">Text</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="media-tab" data-bs-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="false">Media</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="link-tab" data-bs-toggle="tab" href="#link" role="tab" aria-controls="link" aria-selected="false">Link</a>
+                            </li>
+                        </ul>
 
-                                        <!-- Text Post Form -->
-                                        <div id="text-form" class="post-type-form">
-                                            <div class="field">
-                                                <label class="label">Body</label>
-                                                <div class="control">
-                                                    <textarea style="min-height: 50px; max-height: 300px;" name="body_text" class="textarea post-creation-field" placeholder="Write your post here..." rows="4"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
+                        <div class="tab-content mt-3" id="postTabsContent">
 
-                                        <!-- Image Post Form -->
-                                        <div id="images-form" class="post-type-form hidden">
-                                            <div class="field">
-                                                <label class="label">Body</label>
-                                                <div class="control">
-                                                    <textarea style="min-height: 50px; max-height: 300px;" name="body_media" class="textarea post-creation-field" placeholder="Write your post here..." rows="4"></textarea>
-                                                </div>
-                                            </div>
-                                            <div id="media-formset">
-                                                {{ media_formset.management_form }}
-                                                {% for form in media_formset %}
-                                                    <div class="media-form">
-                                                        {{ form.as_p }}
-                                                    </div>
-                                                    <hr>
-                                                {% endfor %}
-                                            </div>
-
-                                            <!-- hidden form template -->
-                                            <div id="empty-form" style="display: none;">
-                                                <div class="media-form">
-                                                    {{ media_formset.empty_form.as_p }}
-                                                    <button type="button" class="delete-media delete-button">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                        Remove
-                                                    </button>
-                                                    <hr>
-                                                </div>
-                                            </div>
-
-                                            <div class="button-container">
-                                                <button type="button" id="add-media" class="add-button">Add Media</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Link Post Form -->
-                                        <div id="link-form" class="post-type-form hidden">
-                                            <div class="field">
-                                                <label class="label">Body</label>
-                                                <div class="control">
-                                                    <textarea style="min-height: 50px; max-height: 300px;" name="body_link" class="textarea post-creation-field" placeholder="Write your post here..." rows="4"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="field">
-                                                <label class="label">YouTube video link</label>
-                                                <div class="control">
-                                                    {{ form.video_url }}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="field is-grouped mt-3">
-                                            <div class="control">
-                                                <button type="submit" class="button is-primary" style="border-radius: 20px;">
-                                                    Post
-                                                </button>
-                                            </div>
-                                            <div class="control">
-                                                <button type="reset" class="button is-dark" style="border-radius: 20px;">
-                                                    Save draft
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-
+                            <!-- TEXT TAB -->
+                            <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
+                                <div class="mb-3">
+                                    <label for="body" class="form-label">Body</label>
+                                    {{ form.body }}
                                 </div>
                             </div>
-                        </article>
-                    </div>
 
+                            <!-- MEDIA TAB -->
+                            <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="media-tab">
+                                <div class="mb-3">
+                                    <label for="body-media" class="form-label">Body</label>
+                                    {{ form.body }}
+                                </div>
+
+                                <div class="text-center mb-3">
+                                    <button type="button" class="btn btn-info">Add Media</button>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="link" role="tabpanel" aria-labelledby="link-tab">
+                                <div class="mb-3">
+                                    <label for="body-link" class="form-label">Body</label>
+                                    <textarea class="form-control login-field" id="body-link" name="body-link" rows="5" placeholder="Enter post content" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="youtube-link" class="form-label">YouTube Link</label>
+                                    <input type="url" class="form-control login-field" id="youtube-link" name="youtube-link" placeholder="Enter YouTube link">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-4">
+                            <button type="submit" class="btn btn-primary mx-2">Create</button>
+                            <button type="submit" class="btn btn-secondary mx-2">Save Draft</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
         </div>
     </div>
-</section>
-
-<style>
-    .hidden {
-        display: none;
-    }
-</style>
+</div>
 
 <script src="{% static 'js/tabs.js' %}"></script>
 
