@@ -4,7 +4,9 @@
 
 {% block content %}
 
-<div class="container d-flex justify-content-center align-items-stretch mt-3" style="min-height: 80vh; max-width: 1000px;">
+{% include 'posts/left_side_panel.html' %}
+
+<div class="container d-flex justify-content-center align-items-stretch mt-3" style="min-height: 80vh; max-width: 800px;">
     <div class="row w-100">
         
         <div class="col-md-5 p-4 d-none d-md-block register-left-panel">
@@ -89,6 +91,8 @@
         </div>
     </div>
 </div>
+
+{% include 'posts/right_side_panel.html' %}
 
 <script src="{% static 'js/profile.js' %}"></script>
 

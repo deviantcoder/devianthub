@@ -1,0 +1,123 @@
+{% load static %}
+
+<div class="post radius-md">
+
+    <div class="post-header d-flex">
+        <img src="{% static 'img/profile2.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <div class="post-info d-flex align-items-center">
+            <span class="post-community">c/dedsec_with_a_very_long_name</span>
+            <span class="pub-date ms-1"> •
+                {% if post.time_since_posted.type != 'now' %}
+                    {{ post.time_since_posted.num }}
+                    {{ post.time_since_posted.type }}{{ post.time_since_posted.num|pluralize }} ago
+                    {% if post.updated_status %}
+                        <small class="additional-info">{{post.updated_status}}</small>
+                    {% endif %}
+                {% else %}
+                    {{ post.time_since_posted.type }}
+                {% endif %}
+            </span>
+        </div>
+        <div class="dropdown ms-auto">
+            <button class="btn btn-secondary dropdown-toggle post-dropdown" style="background-color: rgb(42, 42, 42);" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                <li><a class="dropdown-item" href="{% url 'posts:delete_post' post.id %}?post={{request.path}}"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-flag me-2"></i>Report</a></li>
+            </ul>
+        </div>
+    </div>
+    
+
+    <div class="post-title">
+        <h5 class="post-title mt-2">
+            <a class="post-title" href="{% url 'posts:post' post.id %}">
+                {{ post.title }}
+            </a>
+        </h5>
+    </div>
+
+    {% if post.body %}
+    <div class="post-description mt-3">
+        <p>
+            {{ post.body|slice:100 }}...
+        </p>
+    </div>
+    {% endif %}
+
+    {% if post.has_media_files %}
+    {% if post.has_media_files == 1 %}
+        {% if post.postmedia_set.first.file_ext.type == 'image' %}
+            {% with post.postmedia_set.first.file.url as image %}
+                <div class="post-image text-center mt-3">
+                    <a>
+                        <img src="{{ image }}" alt="Post Image" class="img-fluid radius-md" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ image }}">
+                    </a>
+                </div>
+            {% endwith %}
+        {% else %}
+            <div class="post-image text-center mt-3">
+                <video controls class="img-fluid d-block mx-auto radius-md">
+                    <source src="{{ post.postmedia_set.first.file.url }}" type="video/{{ post.postmedia_set.first.file_ext.ext }}">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        {% endif %}
+    {% else %}
+        
+    
+    <div class="carousel-container mt-4">
+        <div class="carousel">
+            {% for media in post.postmedia_set.all %}
+                <div class="carousel-slide">
+                    <img src="{% static 'img/c1.jpg' %}" alt="Image 1">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-control next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-indicators">
+            {% for media in post.postmedia_set.all %}
+                <span class="indicator" onclick="goToSlide(1)"></span>    
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    {% endif %}
+{% endif %}
+
+
+    {% if post.video_url %}
+        <div class="post-youtube text-center mt-3">
+            <iframe class="mb-2 radius-md" width="560" height="315" src="https://www.youtube.com/embed/KdoaiGTIBY4?si=wgmLc9jzzm5ZmmfY" frameborder="0" allowfullscreen></iframe>
+        </div>
+    {% endif %}
+
+    <div class="post-actions d-flex justify-content-between align-items-center mt-3">
+        <div class="vote-group d-flex align-items-center">
+            <form method="post" action="{% url 'posts:vote_post' post.id %}">
+                {% csrf_token %}
+                <button type="submit" name="vote_type" value="upvote" class="btn btn-outline-primary btn-sm me-2 radius-sm">
+                    <i class="bi bi-caret-up-fill"></i>
+                </button>
+
+                <span class="vote-count me-2">{{ post.poststats.votes }}</span>
+
+                <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
+                    <i class="bi bi-caret-down-fill"></i>
+                </button>
+            </form>
+        </div>
+        <div class="action-group d-flex align-items-center">
+            <a href="{% url 'posts:post' post.id %}" class="btn btn-outline-secondary btn-sm me-2">
+                <i class="bi bi-chat-dots-fill"></i> Comments ({{ post.comments.all.count }})
+            </a>
+            <a href="" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-share-fill"></i> Share
+            </a>
+        </div>
+    </div>
+</div>

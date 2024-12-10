@@ -3,24 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const imagesTab = document.getElementById('media-tab');
     const linkTab = document.getElementById('link-tab');
 
-    const textForm = document.getElementById('text-form');
-    const imagesForm = document.getElementById('images-form');
-    const linkForm = document.getElementById('link-form');
+    const textForm = document.getElementById('text');
+    const imagesForm = document.getElementById('media');
+    const linkForm = document.getElementById('link');
 
     const postTypeField = document.getElementById('post-type');
     const tabs = [textTab, imagesTab, linkTab];
 
     function setActiveTab(activeTab, activeForm, postType) {
-        textTab.classList.remove('is-active');
-        imagesTab.classList.remove('is-active');
-        linkTab.classList.remove('is-active');
+        // Remove active class from all tabs and forms
+        textTab.classList.remove('active');
+        imagesTab.classList.remove('active');
+        linkTab.classList.remove('active');
 
-        textForm.classList.add('hidden');
-        imagesForm.classList.add('hidden');
-        linkForm.classList.add('hidden');
+        textForm.classList.add('d-none');
+        imagesForm.classList.add('d-none');
+        linkForm.classList.add('d-none');
 
-        activeTab.classList.add('is-active');
-        activeForm.classList.remove('hidden');
+        // Set active tab and form
+        activeTab.classList.add('active');
+        activeForm.classList.remove('d-none');
 
         postTypeField.value = postType;
     }
@@ -52,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    if (textForm){
+    if (textForm) {
         textForm.addEventListener('input', function() {
             if (textForm.querySelector('textarea').value.trim() !== "") {
                 disableTabs(textTab);
@@ -61,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
 
     if (linkForm) {
         linkForm.addEventListener('input', function() {

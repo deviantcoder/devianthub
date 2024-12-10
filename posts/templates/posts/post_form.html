@@ -4,16 +4,18 @@
 
 {% block content %}
 
+{% include 'posts/left_side_panel.html' %}
+
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card bg-dark text-white no-radius">
+            <div class="card bg-dark text-white radius-md">
                 <div class="card-header">
                     <h4>Create Post</h4>
                 </div>
                 <div class="card-body">
 
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         <!-- post_type hidden -->
@@ -25,55 +27,75 @@
                             {{ form.title }}
                         </div>
 
-                        <ul class="nav nav-tabs bg-dark text-white" id="postTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
+                        <!-- Tabs for post types -->
+                        <ul class="nav nav-tabs" id="postTabs" role="tablist">
+                            <li class="nav-item">
                                 <a class="nav-link active" id="text-tab" data-bs-toggle="tab" href="#text" role="tab" aria-controls="text" aria-selected="true">Text</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item">
                                 <a class="nav-link" id="media-tab" data-bs-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="false">Media</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item">
                                 <a class="nav-link" id="link-tab" data-bs-toggle="tab" href="#link" role="tab" aria-controls="link" aria-selected="false">Link</a>
                             </li>
                         </ul>
 
+                        <!-- Tab content -->
                         <div class="tab-content mt-3" id="postTabsContent">
-
-                            <!-- TEXT TAB -->
+                            <!-- Text Post Form -->
                             <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
                                 <div class="mb-3">
-                                    <label for="body" class="form-label">Body</label>
-                                    {{ form.body }}
+                                    <label for="body-text" class="form-label">Body</label>
+                                    <textarea class="form-control login-field" name="body_text" id="body-text" rows="4" placeholder="Write your post here..."></textarea>
                                 </div>
                             </div>
 
-                            <!-- MEDIA TAB -->
+                            <!-- Media Post Form -->
                             <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="media-tab">
                                 <div class="mb-3">
                                     <label for="body-media" class="form-label">Body</label>
-                                    {{ form.body }}
+                                    <textarea class="form-control login-field" name="body_media" id="body-media" rows="4" placeholder="Write your post here..."></textarea>
                                 </div>
 
-                                <div class="text-center mb-3">
-                                    <button type="button" class="btn btn-info">Add Media</button>
+                                <div id="media-formset">
+                                    {{ media_formset.management_form }}
+                                    {% for form in media_formset %}
+                                        <div class="media-form mb-3">
+                                            {{ form.as_p }}
+                                            <button type="button" class="btn btn-danger btn-sm delete-media mt-2">Remove</button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Template for new forms -->
+                                <div id="empty-form" class="d-none">
+                                    <div class="media-form mb-3">
+                                        {{ media_formset.empty_form.as_p }}
+                                        <button type="button" class="btn btn-danger btn-sm delete-media mt-2">Remove</button>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="button" id="add-media" class="btn btn-info">Add Media</button>
                                 </div>
                             </div>
 
+                            <!-- Link Post Form -->
                             <div class="tab-pane fade" id="link" role="tabpanel" aria-labelledby="link-tab">
                                 <div class="mb-3">
                                     <label for="body-link" class="form-label">Body</label>
-                                    <textarea class="form-control login-field" id="body-link" name="body-link" rows="5" placeholder="Enter post content" required></textarea>
+                                    <textarea class="form-control login-field" name="body_link" id="body-link" rows="4" placeholder="Write your post here..."></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="youtube-link" class="form-label">YouTube Link</label>
-                                    <input type="url" class="form-control login-field" id="youtube-link" name="youtube-link" placeholder="Enter YouTube link">
+                                    {{ form.video_url }}
                                 </div>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-center mt-4">
                             <button type="submit" class="btn btn-primary mx-2">Create</button>
-                            <button type="submit" class="btn btn-secondary mx-2">Save Draft</button>
+                            <button type="reset" class="btn btn-secondary mx-2">Save Draft</button>
                         </div>
                     </form>
                 </div>
@@ -81,6 +103,8 @@
         </div>
     </div>
 </div>
+
+{% include 'posts/right_side_panel.html' %}
 
 <script src="{% static 'js/tabs.js' %}"></script>
 

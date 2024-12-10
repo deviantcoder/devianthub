@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     isLoading = false;
-                }, 1000); // Optional timeout for loading effect
+                }, 1000); // 1000
             },
             error: function (error) {
                 console.error(error);
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (loadingBox) {
         observer.observe(loadingBox);
-        handleGetComments();
     }
 
 });

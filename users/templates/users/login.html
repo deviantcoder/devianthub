@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% include 'posts/left_side_panel.html' %}
+
 <div class="container d-flex justify-content-center align-items-center mt-4">
     <div class="card p-4 login radius-md">
         <div class="text-center mb-3">
@@ -52,5 +54,7 @@
         </div>
     </div>
 </div>
+
+{% include 'posts/right_side_panel.html' %}
 
 {% endblock content %}

@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     isLoading = false;
-                }, 1000);
+                }, 0); // 1000
             },
             error: function (error) {
                 console.error(error);
