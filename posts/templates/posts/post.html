@@ -46,7 +46,6 @@
             
                     <!-- Comments List -->
                     <div class="comment-list">
-
                         <div id="comments-box"></div>
 
                         <div id="comments-spinner-box" class="not-visible" style="text-align: center;">
@@ -57,7 +56,6 @@
                         <div id="comments-loading-box" style="text-align: center; height: 100px;">
                         </div>
                         {% endif %}
-
                     </div>
                 </div> 
 
@@ -85,6 +83,48 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{% static 'js/comments.js' %}"></script>
+
+    <script>
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            const carousel = document.querySelector('.carousel');
+            const indicators = document.querySelectorAll('.indicator');
+            const totalSlides = document.querySelectorAll('.carousel-slide').length;
+
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function prevSlide() {
+            const totalSlides = document.querySelectorAll('.carousel-slide').length;
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function nextSlide() {
+            const totalSlides = document.querySelectorAll('.carousel-slide').length;
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+
+        updateCarousel();
+
+        document.querySelector('.carousel-control.prev').addEventListener('click', prevSlide);
+        document.querySelector('.carousel-control.next').addEventListener('click', nextSlide);
+
+        document.querySelectorAll('.indicator').forEach((indicator, index) => {
+            indicator.addEventListener('click', () => goToSlide(index));
+        });
+    </script>
 
     <script>
         function commentReply(id) {

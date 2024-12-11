@@ -16,6 +16,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function initializeCarousels() {
+        const carousels = postsBox.querySelectorAll('.carousel-container:not(.initialized)');
+        carousels.forEach((carousel) => {
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                const slides = carousel.querySelectorAll('.carousel-slide');
+                const indicators = carousel.querySelectorAll('.indicator');
+
+                carousel.querySelector('.carousel').style.transform = `translateX(-${currentIndex * 100}%)`;
+
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentIndex);
+                });
+            }
+
+            function prevSlide() {
+                const slides = carousel.querySelectorAll('.carousel-slide').length;
+                currentIndex = (currentIndex - 1 + slides) % slides;
+                updateCarousel();
+            }
+
+            function nextSlide() {
+                const slides = carousel.querySelectorAll('.carousel-slide').length;
+                currentIndex = (currentIndex + 1) % slides;
+                updateCarousel();
+            }
+
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+            }
+
+            const prevButton = carousel.querySelector('.carousel-control.prev');
+            const nextButton = carousel.querySelector('.carousel-control.next');
+            const indicators = carousel.querySelectorAll('.indicator');
+
+            prevButton?.addEventListener('click', prevSlide);
+            nextButton?.addEventListener('click', nextSlide);
+
+            indicators.forEach((indicator, idx) => {
+                indicator.addEventListener('click', () => goToSlide(idx));
+            });
+
+            updateCarousel();
+
+            carousel.classList.add('initialized');
+        });
+    }
+
     function handleGetData() {
         if (isLoading) return;
         isLoading = true;
@@ -39,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         postsBox.appendChild(child);
                     });
 
-                    initializeCarousels();
                     initializeModals();
+                    initializeCarousels();
 
                     if (maxSize) {
                         observer.disconnect();
@@ -53,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     isLoading = false;
-                }, 0); // 1000
+                }, 0);
             },
             error: function (error) {
                 console.error(error);
@@ -62,19 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    function initializeCarousels() {
-        const carousels = document.querySelectorAll('.carousel');
-        carousels.forEach(carousel => {
-            if (!carousel.dataset.bsInitialized) {
-                new bootstrap.Carousel(carousel, {
-                    interval: 4000, // Интервал смены слайдов
-                    ride: false     // Автозапуск карусели
-                });
-                carousel.dataset.bsInitialized = true;
-            }
-        });
-    }    
 
     const observer = new IntersectionObserver((entries) => {
         const entry = entries[0];

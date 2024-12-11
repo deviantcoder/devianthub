@@ -36,7 +36,7 @@ class PostMediaForm(forms.ModelForm):
         widgets = {
             'file': forms.ClearableFileInput(attrs={
                 'accept': 'image/*',
-                'class': 'browse-files-button'
+                'class': 'form-control login-field radius-md'
             }),
         }
 

@@ -8,9 +8,7 @@
 
 <div class="container d-flex justify-content-center align-items-stretch mt-3" style="min-height: 80vh; max-width: 800px;">
     <div class="row w-100">
-        
         <div class="col-md-5 p-4 d-none d-md-block register-left-panel">
-
             <div class="text-left mb-4">
                 <img src="{% static 'img/logo.png' %}" alt="DeviantHub Logo" style="max-width: 250px;">
             </div>
@@ -27,9 +25,7 @@
 
             <form method="post">
                 {% csrf_token %}
-
                 <div class="mb-3 d-flex">
-
                     <div class="me-2" style="flex: 1;">
                         <span id="username-feedback">
                         </span>

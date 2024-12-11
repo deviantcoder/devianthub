@@ -1,133 +1,124 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered">
 
-            <!-- SIDE PANEL -->
-            {% include 'posts/left_side_panel.html' %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div>
+                <h4>Edit Post</h4>
+            </div>
 
-            <!-- FORM -->
-            <div class="column is-8">
-                <div class="content">
-                    <h4>Edit Post</h4>
+            <div class="card mb-3 bg-dark text-white">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
 
-                    <div class="box mb-3">
-                        <article class="media">
-                            <div class="media-content">
-                                <div class="content">
+                        {% csrf_token %}
 
-                                    <form method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
+                        <div class="field">
+                            <label class="label">Title</label>
+                            {{ form.title }}
+                        </div>
 
-                                        <!-- Post Title -->
-                                        <div class="field">
-                                            <label class="label">Title</label>
-                                            <div class="control">
-                                                {{ form.title }}
+                        {% if post_type == 'text' %}
+
+                            <div class="field">
+                                <label class="label">Body</label>
+                                {{ form.body }}
+                            </div>
+
+                        {% elif post_type == 'media' %}
+
+                            <div class="field">
+                                <label class="label">Body</label>
+                                {{ form.body }}
+                            </div>
+
+                            <div id="media-formset">
+                                {{ media_formset.management_form }}
+
+                                {% for form in media_formset %}
+                                    <div class="media-form" style="display: flex; align-items: center; margin-bottom: 20px;">
+                                        
+                                        <div class="form-fields" style="flex: 1;">
+                                            {{ form.id }}
+                                            {{ form.file }}
+
+                                            <div class="d-none">
+                                                {{ form.DELETE }}
                                             </div>
+                                            
+                                            <button type="button" class="delete-media delete-button btn btn-danger radius-md mt-2">
+                                                <i class="fas fa-trash-alt"></i>
+                                                Remove
+                                            </button>
                                         </div>
 
-                                        {% if post_type == 'text' %}
-                                            <!-- Text Post Form -->
-                                            <div class="field">
-                                                <label class="label">Content</label>
-                                                <div class="control">
-                                                    {{ form.body }}
+                                        {% if form.instance.file %}
+                                            {% if form.instance.file_ext.type == 'image' %}
+                                                <div class="image-preview" style="margin-left: 20px; flex-shrink: 0;">
+                                                    <img src="{{ form.instance.file.url }}" alt="Image preview" style="max-width: 200px; max-height: auto;">
                                                 </div>
-                                            </div>
-                                        {% elif post_type == 'media' %}
-                                            <!-- Image Post Form -->
-                                            <div class="field">
-                                                <label class="label">Content</label>
-                                                <div class="control">
-                                                    {{ form.body }}
+                                            {% else %}
+                                                <div class="image-preview" style="margin-left: 20px; flex-shrink: 0;">
+                                                    <video controls style="height: auto; width: 200px;">
+                                                        <source src="{{ form.instance.file.url }}" type="video/{{ form.instance.file_ext.ext }}">
+                                                    </video>
                                                 </div>
-                                            </div>
-                                            <div id="media-formset">
-                                                {{ media_formset.management_form }}
-                                                {% for form in media_formset %}
-                                                    <div class="media-form" style="display: flex; align-items: center;">
-
-                                                        <div class="form-fields">
-                                                            {{ form.as_p }} 
-                                                        </div>
-
-                                                        {% if form.instance.file %}
-                                                            {% if form.instance.file_ext.type == 'image' %}
-                                                                <div class="image-preview" style="margin-left: 20px;">
-                                                                    <img src="{{ form.instance.file.url }}" alt="Image preview" style="max-width: 200px; max-height: auto;">
-                                                                </div>
-                                                            {% else %}
-                                                                <div lass="image-preview" style="margin-left: 20px;">
-                                                                    <video controls style="height: auto; width: 200px;">
-                                                                        <source src="{{ form.instance.file.url }}" type="video/{{ form.instance.file_ext.ext }}">
-                                                                    </video>
-                                                                </div>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </div>
-                                                    <hr style="grid-column: span 2;">
-                                                {% endfor %}
-                                            </div>
-                                            
-                                            <div id="empty-form" style="display: none;">
-                                                <div class="media-form">
-                                                    {{ media_formset.empty_form.as_p }}
-                                                    <button type="button" class="delete-media delete-button">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                        Remove
-                                                    </button>
-                                                    <hr style="grid-column: span 2;">
-                                                </div>
-                                            </div>
-
-                                            <div class="button-container">
-                                                <button type="button" id="add-media" class="add-button">Add Media</button>
-                                            </div>
-                                            
-                                        {% elif post_type == 'link' %}
-                                            <!-- Link Post Form -->
-                                            <div class="field">
-                                                <label class="label">Content</label>
-                                                <div class="control">
-                                                    {{ form.body }}
-                                                </div>
-                                            </div>
-                                            <div class="field">
-                                                <label class="label">YouTube video link</label>
-                                                <div class="control">
-                                                    {{ form.video_url }}
-                                                </div>
-                                            </div>
+                                            {% endif %}
                                         {% endif %}
+                                    </div>
+                                    
+                                    <hr>
+                                {% endfor %}
+                            </div>
 
-                                        <div class="field is-grouped">
-                                            <div class="control">
-                                                <button type="submit" class="button is-primary" style="border-radius: 20px;">
-                                                    Update Post
-                                                </button>
-                                            </div>
-                                            <div class="control">
-                                                <a href="{{ request.GET.post }}?feed={{ request.GET.feed }}" class="button is-dark" style="border-radius: 20px;">
-                                                    Cancel
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </form>
-
+                            <div id="empty-form" style="display: none;">
+                                <div class="media-form">
+                                    {{ media_formset.empty_form.as_p }}
+                                    <button type="button" class="delete-media delete-button btn btn-danger radius-md">
+                                        <i class="fas fa-trash-alt"></i>
+                                        Remove
+                                    </button>
+                                    <hr style="grid-column: span 2;">
                                 </div>
                             </div>
-                        </article>
-                    </div>
 
+                            <div class="button-container">
+                                <button type="button" id="add-media" class="add-button btn btn-primary radius-md">Add Media</button>
+                            </div>
+
+                        {% elif post_type == 'link' %}
+                            <div class="field">
+                                <label class="label">Content</label>
+                                <div class="control">
+                                    {{ form.body }}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">YouTube video link</label>
+                                <div class="control">
+                                    {{ form.video_url }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-center mt-4">
+                            <button type="submit" class="btn btn-primary me-2" style="border-radius: 20px;">
+                                Update Post
+                            </button>
+                            <a href="{% url 'posts:feed' %}" class="btn btn-dark btn-outline-light" style="border-radius: 20px;">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
                 </div>
             </div>
 
         </div>
     </div>
-</section>
+</div>
 
 <script>
     document.getElementById('add-media').addEventListener('click', function() {
@@ -140,27 +131,19 @@
 
         totalForms.value = formNum + 1;
     });
-    document.addEventListener('click', function(event) {
+
+    document.addEventListener('click', function (event) {
         if (event.target.classList.contains('delete-media')) {
             const form = event.target.closest('.media-form');
-            const deleteField = form.querySelector('input[name$="-DELETE"]');
 
+            const deleteField = form.querySelector('input[name$="-DELETE"]');
             if (deleteField) {
-                deleteField.value = 'on';
+                deleteField.checked = true;
             }
 
-            form.remove();
-
-            const totalForms = document.getElementById('id_postmedia_set-TOTAL_FORMS');
-            totalForms.value = document.querySelectorAll('.media-form').length;
+            form.style.display = 'none';
         }
     });
 </script>
-
-<style>
-    .hidden {
-        display: none;
-    }
-</style>
 
 {% endblock content %}

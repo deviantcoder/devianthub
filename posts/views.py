@@ -173,6 +173,8 @@ def delete_post(request, pk):
 
 
 def post(request, pk):
+    page = 'post'
+
     post = get_object_or_404(Post, id=pk)
     form = CommentForm()
     
@@ -182,6 +184,7 @@ def post(request, pk):
         'post': post,
         'form': form,
         'all_comments': comments,
+        'page': page,
     }
 
     return render(request, 'posts/post.html', context)
@@ -267,6 +270,7 @@ def vote_post(request, pk):
                     post_stats.downvotes = F('downvotes') + 1
         
         post_stats.save()
+        post_stats.refresh_from_db()
 
     return redirect('posts:feed')
 

@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabs = [textTab, imagesTab, linkTab];
 
     function setActiveTab(activeTab, activeForm, postType) {
-        // Remove active class from all tabs and forms
         textTab.classList.remove('active');
         imagesTab.classList.remove('active');
         linkTab.classList.remove('active');
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         imagesForm.classList.add('d-none');
         linkForm.classList.add('d-none');
 
-        // Set active tab and form
         activeTab.classList.add('active');
         activeForm.classList.remove('d-none');
 
