@@ -1,0 +1,156 @@
+{% extends 'chat_main.html' %}
+
+{% block content %}
+
+{% load static %}
+    
+<div class="container-fluid">
+    <div class="row h-100">
+        <!-- Left Panel -->
+        <div class="col-3 col-md-4 col-lg-3 chat-list-wrapper d-none d-md-block">
+            <div class="chat-list">
+
+                <div class="chat-list-header d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'img/logo_2.png' %}" alt="Logo" style="max-width: 50px;" class="me-2">
+                        <span style="font-size: 20px;">Chatrooms</span>
+                    </div>
+                    <a href="/" class="btn btn-dark" style="border-radius: 20px;">
+                        Back to Posts
+                    </a>
+                </div>
+
+                <hr>
+
+                <div class="chat-list-header">
+                    <i class="fas fa-lock me-2"></i>
+                    Private
+                </div>                    
+
+                <div class="chat-item d-flex justify-content-between align-items-center">
+                    <a href="" class="chat-link">
+                        <div class="d-flex align-items-center">
+                            <img src="{% static 'img/c1.jpg' %}" alt="Avatar" class="avatar">
+                            u/deviantcoder
+                        </div>
+                    </a>
+                    <button class="btn btn-sm chat-more-button">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+                
+                <div class="chat-item d-flex justify-content-between align-items-center">
+                    <a href="" class="chat-link">
+                        <div class="d-flex align-items-center">
+                            <img src="{% static 'img/c2.jpg' %}" alt="Avatar" class="avatar">
+                            u/johndoe
+                        </div>
+                    </a>
+                    <button class="btn btn-sm chat-more-button">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+                <div class="chat-item d-flex justify-content-between align-items-center">
+                    <a href="" class="chat-link">
+                        <div class="d-flex align-items-center">
+                            <img src="{% static 'img/c3.png' %}" alt="Avatar" class="avatar">
+                            u/janedoe
+                        </div>
+                    </a>
+                    <button class="btn btn-sm chat-more-button">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+                <hr>
+
+                <div class="chat-list-header d-flex align-items-center">
+                    <i class="fas fa-globe me-2"></i>
+                    Public
+                </div>
+
+                <div class="chat-item d-flex justify-content-between align-items-center">
+                    <a href="" class="chat-link">
+                        <div class="d-flex align-items-center">
+                            <img src="{% static 'img/c3.png' %}" alt="Avatar" class="avatar">
+                            u/janedoe
+                        </div>
+                    </a>
+                    <button class="btn btn-sm chat-more-button">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="col-12 col-md-8 col-lg-9 chat-window">
+            <!-- Header -->
+
+            <div class="chat-header d-flex justify-content-center align-items-center position-relative p-3">
+                <a href="" class="position-absolute start-0 ms-2 mb-2 mt-2 chat-link">
+                    <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar">
+                    <strong>John Doe</strong>
+                </a>
+                <span>
+                    <span class="online-status-indicator"></span>
+                    <span class="online-status ms-1">Online</span>
+                </span>
+                <div class="dropdown position-absolute end-0 me-2">
+                    <button class="btn chat-more-button dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item text-danger" href="#">Log out</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-messages">
+                <!-- Test Messages -->
+                <div class="message self">
+                    <div class="content">Hi, how are you?</div>
+                </div>
+
+                <div class="message other">
+                    <a href="">
+                        <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar">
+                    </a>
+                    <div>
+                        <div class="content">I’m good, thanks! How about you?</div>
+                        <div class="timestamp">10:15 AM</div>
+                    </div>
+                </div>
+
+                <div class="message self">
+                    <div class="content">I’m doing great, working on a project.</div>
+                </div>
+
+                <div class="message other">
+                    <a href="">
+                        <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar">
+                    </a>
+                    <div>
+                        <div class="content">That’s awesome. Let me know if you need any help.</div>
+                        <div class="timestamp">10:16 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <form method="post" class="chat-footer border-top d-flex align-items-center">
+                <input type="text" class="form-control me-2" placeholder="Type a message...">
+                <button class="btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

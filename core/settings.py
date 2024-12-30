@@ -37,6 +37,8 @@ CSRF_TRUSTED_ORIGINS = ['https://*.app']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,8 +48,10 @@ INSTALLED_APPS = [
 
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
+    'chat.apps.ChatConfig',
 
     'mptt',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +84,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+# WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
 
 
 # Database
