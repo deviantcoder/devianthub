@@ -1,8 +1,8 @@
 {% extends 'chat_main.html' %}
 
-{% block content %}
-
 {% load static %}
+
+{% block content %}
     
 <div class="container-fluid">
     <div class="row h-100">
@@ -111,41 +111,27 @@
             </div>
 
             <!-- Messages -->
-            <div class="chat-messages">
-                <!-- Test Messages -->
-                <div class="message self">
-                    <div class="content">Hi, how are you?</div>
-                </div>
+            <div class="chat-messages" id='chat_messages'>
 
-                <div class="message other">
-                    <a href="">
-                        <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar">
-                    </a>
-                    <div>
-                        <div class="content">I’m good, thanks! How about you?</div>
-                        <div class="timestamp">10:15 AM</div>
-                    </div>
-                </div>
+                {% for message in messages reversed %}
+                    {% include 'chat/message.html' %}
+                {% endfor %}
 
-                <div class="message self">
-                    <div class="content">I’m doing great, working on a project.</div>
-                </div>
-
-                <div class="message other">
-                    <a href="">
-                        <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar">
-                    </a>
-                    <div>
-                        <div class="content">That’s awesome. Let me know if you need any help.</div>
-                        <div class="timestamp">10:16 AM</div>
-                    </div>
-                </div>
             </div>
+            
 
             <!-- Footer -->
-            <form method="post" class="chat-footer border-top d-flex align-items-center">
-                <input type="text" class="form-control me-2" placeholder="Type a message...">
-                <button class="btn">
+            <form class="chat-footer border-top d-flex align-items-center"
+                hx-ext="ws"
+                ws-connect="/ws/chat/public-chat/"
+                ws-send
+                _="on htmx:wsAfterSend reset() me"
+            >
+                {% csrf_token %}
+
+                {{ form.body }}
+
+                <button class="btn" type="submit">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </form>
@@ -154,3 +140,15 @@
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+
+<script>
+    function scrollToBottom() {
+        const container = document.getElementById('chat_messages');
+        container.scrollTop = container.scrollHeight;
+    }
+    scrollToBottom()
+</script>
+    
+{% endblock javascript %}
