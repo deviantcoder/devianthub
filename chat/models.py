@@ -1,10 +1,15 @@
+import shortuuid
 from uuid import uuid4
 from django.db import models
 from users.models import Profile
 
 
 class Chat(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, default=shortuuid.uuid)
+    online_users = models.ManyToManyField(Profile, related_name='online_in_chat', blank=True)
+
+    members = models.ManyToManyField(Profile, related_name='chats', blank=True)
+    is_private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

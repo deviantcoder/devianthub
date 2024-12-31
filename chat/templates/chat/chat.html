@@ -27,41 +27,27 @@
                     Private
                 </div>                    
 
-                <div class="chat-item d-flex justify-content-between align-items-center">
-                    <a href="" class="chat-link">
-                        <div class="d-flex align-items-center">
-                            <img src="{% static 'img/c1.jpg' %}" alt="Avatar" class="avatar">
-                            u/deviantcoder
-                        </div>
-                    </a>
-                    <button class="btn btn-sm chat-more-button">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </button>
-                </div>
-                
-                <div class="chat-item d-flex justify-content-between align-items-center">
-                    <a href="" class="chat-link">
-                        <div class="d-flex align-items-center">
-                            <img src="{% static 'img/c2.jpg' %}" alt="Avatar" class="avatar">
-                            u/johndoe
-                        </div>
-                    </a>
-                    <button class="btn btn-sm chat-more-button">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </button>
-                </div>
+                {% for chat in request.user.profile.chats.all %}
+                    {% if chat.is_private %}
+                        {% for member in chat.members.all %}
+                            {% if member != request.user.profile %}
 
-                <div class="chat-item d-flex justify-content-between align-items-center">
-                    <a href="" class="chat-link">
-                        <div class="d-flex align-items-center">
-                            <img src="{% static 'img/c3.png' %}" alt="Avatar" class="avatar">
-                            u/janedoe
-                        </div>
-                    </a>
-                    <button class="btn btn-sm chat-more-button">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </button>
-                </div>
+                                <div class="chat-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'chat:chatroom' chat.name %}" class="chat-link">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ member.image.url }}" alt="Avatar" class="avatar">
+                                            {{ member.get_username }}
+                                        </div>
+                                    </a>
+                                    <button class="btn btn-sm chat-more-button">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                </div>
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
 
                 <hr>
 
@@ -71,10 +57,10 @@
                 </div>
 
                 <div class="chat-item d-flex justify-content-between align-items-center">
-                    <a href="" class="chat-link">
+                    <a href="{% url 'chat:chatroom' 'public-chat' %}" class="chat-link">
                         <div class="d-flex align-items-center">
                             <img src="{% static 'img/c3.png' %}" alt="Avatar" class="avatar">
-                            u/janedoe
+                            Public Chat
                         </div>
                     </a>
                     <button class="btn btn-sm chat-more-button">
@@ -91,12 +77,14 @@
 
             <div class="chat-header d-flex justify-content-center align-items-center position-relative p-3">
                 <a href="" class="position-absolute start-0 ms-2 mb-2 mt-2 chat-link">
-                    <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar">
-                    <strong>John Doe</strong>
+                    <!-- <img class="avatar" src="{% static 'img/c1.jpg' %}" alt="User Avatar"> -->
+                    <strong>{{ other_user.get_username }}</strong>
                 </a>
                 <span>
-                    <span class="online-status-indicator"></span>
-                    <span class="online-status ms-1">Online</span>
+                    <span id="online-count"><strong></strong></span>
+
+                    <!-- <span class="online-status-indicator"></span> -->
+                    <span class="online-status ms-1">online</span>
                 </span>
                 <div class="dropdown position-absolute end-0 me-2">
                     <button class="btn chat-more-button dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

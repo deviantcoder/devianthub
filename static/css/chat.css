@@ -44,7 +44,7 @@ body {
     padding: 8px 15px;
     color: #e0e0e0;
     cursor: pointer;
-    background-color: #0C0C0C;
+    background-color: #202020;
     border-radius: 20px;
     margin-bottom: 5px;
     margin-left: 10px;
@@ -87,7 +87,7 @@ body {
 .chat-header,
 .chat-footer {
     flex-shrink: 0;
-    background-color: #101010;
+    background-color: #1d1d1d;
     color: #e0e0e0;
     border: hidden !important;
 }
