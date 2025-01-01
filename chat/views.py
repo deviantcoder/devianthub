@@ -7,6 +7,11 @@ from users.models import Profile
 
 
 @login_required(login_url='users:login')
+def chat_home(request):
+    return render(request, 'chat/chat.html', {'page': 'chat_home'})
+
+
+@login_required(login_url='users:login')
 def chat(request, chatroom_name='public-chat'):
     chat = get_object_or_404(Chat, name=chatroom_name)
     messages = chat.chat_messages.all()
@@ -64,7 +69,7 @@ def get_or_create_chat(request, username):
                 break
             else:
                 chat = Chat.objects.create(is_private=True)
-                chat.members.add(other_user.ofile, request.user.profile)
+                chat.members.add(other_user, request.user.profile)
     else:
         chat = Chat.objects.create(is_private=True)
         chat.members.add(other_user, request.user.profile)

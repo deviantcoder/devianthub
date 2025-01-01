@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.user = self.scope.get('user')
+        self.user = self.scope['user']
         self.chatroom_name = self.scope['url_route']['kwargs']['chatroom_name']
         self.chat = get_object_or_404(Chat, name=self.chatroom_name)
 

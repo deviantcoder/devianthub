@@ -5,7 +5,7 @@
 
 <div id="{{ node.id }}" class="comment mb-2 radius-md">  
     <div class="comment-header align-items-center ms-2 mt-1 mb-1">
-        <a href="" class="mb-0">
+        <a href="{% url 'users:user_profile' node.user.username %}" class="mb-0">
             <img src="{{ node.user.image.url }}" alt="Community Logo" class="community-logo-sm">
             <span class="title-sm">u/{{ node.user.get_username }}</span>
         </a>

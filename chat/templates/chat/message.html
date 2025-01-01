@@ -7,7 +7,7 @@
     </div>
 {% else %}
     <div class="message other">
-        <a href="">
+        <a href="{% url 'users:user_profile' message.author.username %}">
             <img class="avatar" src="{{ message.author.image.url }}" alt="User Avatar">
         </a>
         <div>

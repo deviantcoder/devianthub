@@ -98,31 +98,39 @@
                 </div>
             </div>
 
-            <!-- Messages -->
-            <div class="chat-messages" id='chat_messages'>
+            {% if page != 'chat_home' %}
 
-                {% for message in messages reversed %}
-                    {% include 'chat/message.html' %}
-                {% endfor %}
+                <!-- Messages -->
+                <div class="chat-messages" id='chat_messages'>
 
-            </div>
-            
+                    {% for message in messages reversed %}
+                        {% include 'chat/message.html' %}
+                    {% endfor %}
 
-            <!-- Footer -->
-            <form class="chat-footer border-top d-flex align-items-center"
-                hx-ext="ws"
-                ws-connect="/ws/chat/public-chat/"
-                ws-send
-                _="on htmx:wsAfterSend reset() me"
-            >
-                {% csrf_token %}
+                </div>
 
-                {{ form.body }}
+                <!-- Footer -->
+                <form class="chat-footer border-top d-flex align-items-center"
+                    hx-ext="ws"
+                    ws-connect="/ws/chat/{{ chat_name }}/"
+                    ws-send
+                    _="on htmx:wsAfterSend reset() me"
+                >
+                    {% csrf_token %}
 
-                <button class="btn" type="submit">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
+                    {{ form.body }}
+
+                    <button class="btn" type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+
+            {% else %}
+
+                <h4>Select a chatroom</h4>
+
+            {% endif %}
+
         </div>
     </div>
 </div>
