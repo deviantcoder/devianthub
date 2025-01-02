@@ -1,17 +1,21 @@
 {% if message.author == user.profile %}
-    <div class="message self">
-        <div>
-            <div class="content">{{ message.body }}</div>
+    <div class="message sent">
+        <div class="message-content">
+            <div class="content">
+                {{ message.body }}
+            </div>
             <div class="timestamp">{{ message.time_sent }}</div>
         </div>
     </div>
 {% else %}
-    <div class="message other">
+    <div class="message received">
         <a href="{% url 'users:user_profile' message.author.username %}">
             <img class="avatar" src="{{ message.author.image.url }}" alt="User Avatar">
         </a>
-        <div>
-            <div class="content">{{ message.body }}</div>
+        <div class="message-content">
+            <div class="content">
+                {{ message.body }}
+            </div>
             <div class="timestamp">{{ message.time_sent }}</div>
         </div>
     </div>

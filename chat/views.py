@@ -6,6 +6,10 @@ from django.http import Http404
 from users.models import Profile
 
 
+def test(request):
+    return render(request, 'chat/new_chat.html')
+
+
 @login_required(login_url='users:login')
 def chat_home(request):
     return render(request, 'chat/chat.html', {'page': 'chat_home'})
