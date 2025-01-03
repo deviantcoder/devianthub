@@ -62,20 +62,16 @@ def chat(request, chatroom_name='public-chat'):
 def get_or_create_chat(request, username):
     if request.user.profile.username == username:
         return redirect('/')
-    
-    other_user = Profile.objects.get(username=username)
-    my_chats = request.user.profile.chats.filter(is_private=True)
 
-    if my_chats.exists():
-        for chat in my_chats:
-            if other_user in chat.members.all():
-                chat = chat
-                break
-            else:
-                chat = Chat.objects.create(is_private=True)
-                chat.members.add(other_user, request.user.profile)
-    else:
+    try:
+        other_user = Profile.objects.get(username=username)
+    except Profile.DoesNotExist:
+        return redirect('/')
+    
+    chat = request.user.profile.chats.distinct().filter(is_private=True, members=other_user).first()
+
+    if not chat:
         chat = Chat.objects.create(is_private=True)
-        chat.members.add(other_user, request.user.profile)
+        chat.members.add(request.user.profile, other_user)
 
     return redirect('chat:chatroom', chat.name)
