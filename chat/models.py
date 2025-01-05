@@ -6,13 +6,19 @@ from users.models import Profile
 
 class Chat(models.Model):
     name = models.CharField(max_length=100, unique=True, default=shortuuid.uuid)
+
+    group_name = models.CharField(max_length=100, null=True, blank=True)
+    admin = models.ForeignKey(Profile, related_name='groups', null=True, blank=True, on_delete=models.SET_NULL)
+
     online_users = models.ManyToManyField(Profile, related_name='online_in_chat', blank=True)
 
     members = models.ManyToManyField(Profile, related_name='chats', blank=True)
     is_private = models.BooleanField(default=False)
 
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
     def __str__(self):
-        return self.name
+        return self.group_name or self.name
     
 
 class Message(models.Model):
