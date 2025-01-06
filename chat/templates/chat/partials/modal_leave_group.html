@@ -1,0 +1,23 @@
+<div class="modal fade" id="leaveChatModal" tabindex="-1" aria-labelledby="leaveChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveChatModalLabel">Leave Group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'chat:leave_group' chat.name %}" id="leaveChatForm">
+                    {% csrf_token %}
+
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                            <button class="btn btn-danger mt-3" type="submit" style="border-radius: 20px;">Leave</button>
+                            <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal" style="border-radius: 20px;">Close</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

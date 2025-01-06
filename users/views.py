@@ -1,5 +1,5 @@
 import re
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -110,3 +110,13 @@ def check_username(request):
             return JsonResponse({'available': False})
 
     return JsonResponse({'available': True})
+
+
+def user_profile(request, username):
+    profile = get_object_or_404(Profile, username=username)
+
+    context = {
+        'profile': profile
+    }
+
+    return render(request, 'users/user_profile.html', context)

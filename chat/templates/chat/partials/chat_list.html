@@ -1,0 +1,110 @@
+{% load static %}
+
+<div class="chat-type">
+    <i class="fas fa-lock"></i>
+    Private
+</div>
+
+{% for chat in request.user.profile.chats.all %}
+    {% if chat.is_private %}
+        {% for member in chat.members.all %}
+            {% if member != request.user.profile %}
+
+                {% if chat.name == chat_name %}
+                    <div class="chat-item d-flex justify-content-between align-items-center" style="background-color: rgb(63, 63, 108);">
+                {% else %}
+                    <div class="chat-item d-flex justify-content-between align-items-center">
+                {% endif %}
+
+                    <a href="{% url 'chat:chatroom' chat.name %}">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ member.image.url }}" alt="Avatar" class="avatar">
+                            {{ member.get_username }}
+                        </div>
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-dark dropdown-toggle chat-button" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+<hr>
+
+<div class="chat-type">
+    <i class="fas fa-users"></i>
+    Public
+</div>
+
+{% for chat in request.user.profile.chats.all %}
+    {% if chat.group_name and chat.group_name != 'public-chat' %}
+
+        {% if chat.name == chat_name %}
+            <div class="chat-item d-flex justify-content-between align-items-center" style="background-color: rgb(63, 63, 108);">
+        {% else %}
+            <div class="chat-item d-flex justify-content-between align-items-center">
+        {% endif %}
+        
+            <a href="{% url 'chat:chatroom' chat.name %}">
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'img/c1.jpg' %}" alt="Avatar" class="avatar">
+                    {{ chat.group_name }}
+                </div>
+            </a>
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle chat-button" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+
+                    {% if chat.admin == request.user.profile %}
+                        <a href="{% url 'chat:edit_group' chat.name %}" class="btn btn-dark dropdown-item">
+                            Edit Group
+                        </a>
+                    {% endif %}
+
+                    <hr>
+
+                    {% if chat.admin == request.user.profile %}
+                        <li><a class="dropdown-item" href="{% url 'chat:delete_group' chat.name %}" style="color: red">Delete</a></li>
+                    {% endif %}
+                    
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+<hr>
+
+<div class="chat-type">
+    <i class="fas fa-globe"></i>
+    Public Chat
+</div>
+
+<div class="chat-item d-flex justify-content-between align-items-center">
+    <a href="{% url 'chat:chatroom' 'public-chat' %}">
+        <div class="d-flex align-items-center">
+            <img src="{% static 'img/c1.jpg' %}" alt="Avatar" class="avatar">
+            Public Chat
+        </div>
+    </a>
+    <div class="dropdown">
+        <button class="btn btn-dark dropdown-toggle chat-button" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-ellipsis-h"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+        </ul>
+    </div>
+</div>

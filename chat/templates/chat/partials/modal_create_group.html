@@ -1,0 +1,21 @@
+<div class="modal fade" id="createChatModal" tabindex="-1" aria-labelledby="createChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createChatModalLabel">Create new group chat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'chat:create_group' %}" id="createChatForm">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        {{ group_form }}
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="border-radius: 20px;">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 20px;">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

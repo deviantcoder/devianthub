@@ -1,0 +1,28 @@
+{% extends 'chat_main.html' %}
+
+{% block content %}
+
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="card" style="border: none !important;">
+        <div class="card-header bg-dark text-white text-center">
+            <h3 class="mb-0">Delete this group?</h3>
+            <hr>
+            <h5>"{{ group.group_name }}"</h5>
+        </div>
+        <div class="card-body bg-dark text-white">
+            <form method="post">
+                {% csrf_token %}
+            
+                <div class="d-flex flex-column align-items-center">
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <button class="btn btn-danger mt-3" type="submit" style="border-radius: 20px;">Delete</button>
+                        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light mt-3" style="border-radius: 20px;">Cancel</a>
+                    </div>
+                </div>
+            
+            </form>            
+        </div>
+    </div>
+</div>
+    
+{% endblock content %}

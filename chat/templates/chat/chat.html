@@ -1,0 +1,206 @@
+{% extends 'chat_main.html' %}
+
+{% load static %}
+
+{% block content %}
+    
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Chat List -->
+        <div class="col-md-3 d-none d-md-block chat-list mt-2 p-2">
+
+            <div class="chat-list-header d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'img/logo_2.png' %}" alt="Logo" style="max-width: 50px;" class="me-2">
+                    <span style="font-size: 20px;">Chats</span>
+                </div>
+                <a href="/" class="btn btn-dark" style="border-radius: 20px;">
+                    Back to Posts
+                </a>
+                <div class="dropdown">
+                    <button class="btn btn-dark dropdown-toggle chat-button" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                            <button type="button" class="btn btn-dark dropdown-item" data-bs-toggle="modal" data-bs-target="#createChatModal">
+                                Create new group
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+
+            {% include 'chat/partials/chat_list.html' %}
+
+        </div>
+
+        <!-- offcanvas -->
+        <div class="offcanvas offcanvas-start" id="offcanvasChats">
+
+            <div class="offcanvas-header chat-list-header d-flex flex-column align-items-start">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="{% static 'img/logo_2.png' %}" alt="Logo" style="max-width: 50px;" class="me-2">
+                    <span style="font-size: 20px;">Chats</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="me-2">
+                        <a href="/" class="btn btn-dark" style="border-radius: 20px; font-size: 14px;">
+                            Back to Posts
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-dark dropdown-toggle chat-button" type="button" data-bs-toggle="dropdown" style="background-color: #192025 !important;">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li>
+                                <button type="button" class="btn btn-dark dropdown-item" data-bs-toggle="modal" data-bs-target="#createChatModal">
+                                    Create new group
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="offcanvas-body chat-list">
+
+                {% include 'chat/partials/chat_list.html' %}
+
+            </div>
+        </div>
+
+
+        <!-- Chat Area -->
+        <div class="col-md-9 col-12 d-flex flex-column chat-window">
+
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <button class="btn btn-dark d-md-none chat-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasChats">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                {% if page != 'chat_home' %}
+
+                <div class="d-flex align-items-center">
+                    {% if chat.group_name %}
+                        <!-- <a href="">
+                            <img class="avatar" src="{{ other_user.image.url }}" alt="User Avatar">
+                        </a> -->
+                        <span class="chat-title">{{ chat.group_name }}</span>
+                    {% elif other_user %}
+                        <a href="">
+                            <img class="avatar" src="{{ other_user.image.url }}" alt="User Avatar">
+                        </a>
+                        <span class="chat-title">{{ other_user.get_username }}</span>
+                    {% else %}
+                        <span class="chat-title">Public Chat</span>
+                    {% endif %}
+                </div>
+                
+                {% else %}
+                No chat selected
+                {% endif %}
+
+                <div class="dropdown">
+                    <button class="btn btn-dark dropdown-toggle chat-button" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                            <button type="button" class="btn btn-dark dropdown-item">
+                                Action
+                            </button>
+                        </li>
+                    
+                        {% if page != 'chat_home' and chat.group_name %}
+                            <li>
+                                <button type="button" class="btn btn-dark dropdown-item" data-bs-toggle="modal" data-bs-target="#leaveChatModal" style="color: red">
+                                    Leave
+                                </button>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+
+            {% if page != 'chat_home' %}
+
+            <div class="chat-online-header">
+                <div class="online-indicator">
+                    <div class="online-green-dot"></div>
+                    <span id="online-count"></span>
+                    <span>online</span>
+                </div>
+            </div>
+
+            {% endif %}
+
+            <!-- Chat Body -->
+
+            {% if page != 'chat_home' %}
+
+                <div class="chat-body" id='chat_messages'>
+
+                    {% for message in messages reversed %}
+                        {% include 'chat/message.html' %}
+                    {% endfor %}
+
+                </div>
+            {% else %}
+                <div class="d-flex justify-content-center align-items-center vh-100">
+                    <h4>Select a chat</h4>
+                </div>
+            {% endif %}
+
+            {% if page != 'chat_home' %}
+
+            <!-- Chat Footer -->
+            <form class="chat-footer d-flex align-items-center"
+                autocomplete="off"
+                hx-ext="ws"
+                ws-connect="/ws/chat/{{ chat_name }}/"
+                ws-send
+                _="on htmx:wsAfterSend reset() me"
+            >
+                {% csrf_token %}
+
+                {{ form.body }}
+
+                <button type="submit" class="btn btn-primary rounded-circle send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+
+            {% endif %}
+
+        </div>
+    </div>
+    
+    {% include 'chat/partials/modal_create_group.html' %}
+
+    {% if page != 'chat_home' %}
+        {% include 'chat/partials/modal_leave_group.html' %}
+    {% endif %}
+
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+<script>
+    function scrollToBottom() {
+        const container = document.getElementById('chat_messages');
+        container.scrollTop = container.scrollHeight;
+    }
+    scrollToBottom()
+</script>
+    
+{% endblock javascript %}

@@ -6,4 +6,4 @@ __pycache__/
 .flaskenv*
 !.env.project
 !.env.vault
-.idea
+.idea/
