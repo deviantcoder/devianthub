@@ -1,0 +1,98 @@
+{% load static %}
+
+<div class="col fixed-column-no-bottom right-column" style="background-color: #14161A; border-radius: 20px !important;">
+    
+    <div class="profile-card" style="border: 1px solid; margin-top: 20px;">
+        <div class="profile-background" style="background: url('{{ profile.banner.url }}') center/cover no-repeat;"></div>
+        <div class="profile-info">
+            <div class="username ms-2">
+                <span class="name">{{ profile.get_username }}</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="" class="btn btn-dark btn-sm radius-md mt-2">
+        <i class="fas fa-share" aria-hidden="true"></i>
+        Share
+    </a>
+    
+    <div class="d-flex justify-content-between text-center mt-3" style="font-size: 13px;">
+        <div>
+            <strong>292</strong>
+            <div class="stat-text-sm">Post Upvotes</div>
+        </div>
+        <div>
+            <strong>1.2k</strong>
+            <div class="stat-text-sm">Comment Upvotes</div>
+        </div>
+        <div>
+            <strong>Nov 29, 2003</strong>
+            <div class="stat-text-sm">Reg Date</div>
+        </div>
+    </div>
+
+    {% if profile == request.user.profile %}
+        <hr>
+
+        <div style="margin-bottom: 5px; margin-top: 5px;">
+            <span class="menu-title">Settings</span>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="{{ profile.image.url }}" class="pfp me-3">
+        
+                <div>
+                    <span class="d-block" style="font-size: small;">Profile</span>
+                    <span class="d-block" style="font-size: 10px; color: rgb(129, 121, 147);">customize your profile</span>
+                </div>
+            </div>
+        
+            <a href="{% url 'users:edit_profile' %}?next={{request.path}}" class="btn btn-dark btn-sm radius-md" style="font-size: small;">
+                <strong>Edit</strong>
+            </a>
+        </div>
+    {% endif %}
+
+    <hr>
+
+    <div style="margin-bottom: 5px; margin-top: 5px;">
+        <span class="menu-title">Links</span>
+    </div>
+
+    <div class="d-flex flex-wrap">
+        <div class="share-link-group mt-1">
+            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
+                <i class="fab fa-instagram me-2"></i>
+                <strong>Instagram</strong>
+            </a>
+        </div>
+        <div class="share-link-group mt-1">
+            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
+                <i class="fab fa-twitter me-2"></i>
+                <strong>Twitter</strong>
+            </a>
+        </div>
+        <div class="share-link-group mt-1">
+            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
+                <i class="fab fa-facebook me-2"></i>
+                <strong>Facebook</strong>
+            </a>
+        </div>
+        <div class="share-link-group mt-1">
+            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
+                <i class="fab fa-telegram me-2"></i>
+                <strong>Telegram</strong>
+            </a>
+        </div>
+    </div>
+
+    {% if profile == request.user.profile %}
+        <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-primary btn-sm radius-md d-flex align-items-center">
+                <i class="fas fa-plus me-2"></i>
+                Add
+            </button>
+        </div>
+    {% endif %}
+</div>

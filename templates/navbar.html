@@ -43,23 +43,27 @@
                                 <h5 class="dropdown-item">u/{{ request.user.profile.get_username }}</h5>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'users:user_profile' request.user.profile %}">
                                     <i class="fas fa-user-circle me-2"></i>
                                     View Profile
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'users:edit_profile' %}" class="dropdown-item">
+                                <a href="{% url 'users:edit_profile' %}?next={{request.path}}" class="dropdown-item">
                                     <i class="fas fa-edit me-2"></i>
                                     Edit Profile
                                 </a>
                             </li>
+
+                            <hr>
+
                             <li>
-                                <a href="{% url 'users:logout' %}" class="dropdown-item">
+                                <button type="button" class="btn btn-danger dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt me-2" style="color: red;"></i>
-                                    Log Out
-                                </a>
+                                    Log out
+                                </button>
                             </li>
+
                         </ul>
                     </li>
                 {% else %}

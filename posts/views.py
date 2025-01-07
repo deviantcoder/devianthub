@@ -1,13 +1,17 @@
 import os
+
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, VotePost, PostStats, Comment, CommentStats, VoteComment
-from .forms import PostForm, PostMediaFormSet, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
+
+from .models import Post, VotePost, PostStats, Comment, CommentStats, VoteComment
+from .forms import PostForm, PostMediaFormSet, CommentForm
+from users.models import UserActivityStats
+
 
 
 def feed(request):
@@ -60,8 +64,6 @@ def comments_json(request, **kwargs):
     size = True if upper_index >= comments_num else False
 
     return JsonResponse({'data': comments_html, 'max': size,})
-
-
 
 
 @login_required(login_url='users:login')
@@ -194,6 +196,7 @@ def comment_post(request, pk):
     post = get_object_or_404(Post, id=pk)
     post_stats, _ = PostStats.objects.get_or_create(post=post)
     user = request.user.profile
+    user_stats, _ = UserActivityStats.objects.get_or_create(profile=user)
 
     form = CommentForm(request.POST)
 
@@ -206,6 +209,8 @@ def comment_post(request, pk):
 
         comment.save()
         post_stats.save()
+
+        user_stats.written_comments.add(comment)
 
         messages.success(request, 'Comment was created!')
 
@@ -235,6 +240,7 @@ def vote_post(request, pk):
         post = get_object_or_404(Post, id=pk)
         user = request.user.profile
         post_stats, _ = PostStats.objects.get_or_create(post=post)
+        user_stats, _ = UserActivityStats.objects.get_or_create(profile=user)
         
         vote_type = request.POST.get('vote_type')
 
@@ -246,28 +252,36 @@ def vote_post(request, pk):
 
             if vote_type == 'upvote':
                 post_stats.upvotes = F('upvotes') + 1
+                user_stats.upvoted_posts.add(post)
             else:
                 post_stats.downvotes = F('downvotes') + 1
+                user_stats.downvoted_posts.add(post)
         else:
             if vote.vote_type == vote_type:
                 vote.delete()
                 if vote.vote_type == 'upvote':
                     post_stats.upvotes = F('upvotes') - 1
+                    user_stats.upvoted_posts.remove(post)
                 else:
                     post_stats.downvotes = F('downvotes') - 1
+                    user_stats.downvoted_posts.remove(post)
             else:
                 if vote.vote_type == 'upvote':
                     post_stats.upvotes = F('upvotes') - 1
+                    user_stats.upvoted_posts.remove(post)
                 else:
                     post_stats.downvotes = F('downvotes') - 1
+                    user_stats.downvoted_posts.remove(post)
 
                 vote.vote_type = vote_type
                 vote.save()
 
                 if vote_type == 'upvote':
                     post_stats.upvotes = F('upvotes') + 1
+                    user_stats.upvoted_posts.add(post)
                 else:
                     post_stats.downvotes = F('downvotes') + 1
+                    user_stats.downvoted_posts.add(post)
         
         post_stats.save()
         post_stats.refresh_from_db()
@@ -280,6 +294,7 @@ def vote_comment(request, pk):
         comment = get_object_or_404(Comment, id=pk)
         user = request.user.profile
         comment_stats, _ = CommentStats.objects.get_or_create(comment=comment)
+        user_stats, _ = UserActivityStats.objects.get_or_create(profile=user)
 
         vote_type = request.POST.get('vote_type')
 
@@ -291,28 +306,36 @@ def vote_comment(request, pk):
 
             if vote_type == 'upvote':
                 comment_stats.upvotes = F('upvotes') + 1
+                user_stats.upvoted_comments.add(comment)
             else:
                 comment_stats.downvotes = F('downvotes') + 1
+                user_stats.downvoted_comments.add(comment)
         else:
             if vote.vote_type == vote_type:
                 vote.delete()
                 if vote.vote_type == 'upvote':
                     comment_stats.upvotes = F('upvotes') - 1
+                    user_stats.upvoted_comments.remove(comment)
                 else:
                     comment_stats.downvotes = F('downvotes') - 1
+                    user_stats.downvoted_comments.remove(comment)
             else:
                 if vote.vote_type == 'upvote':
                     comment_stats.upvotes = F('upvotes') - 1
+                    user_stats.upvoted_comments.remove(comment)
                 else:
                     comment_stats.downvotes = F('downvotes') - 1
+                    user_stats.downvoted_comments.remove(comment)
 
                 vote.vote_type = vote_type
                 vote.save()
 
                 if vote.vote_type == 'upvote':
                     comment_stats.upvotes = F('upvotes') + 1
+                    user_stats.upvoted_comments.add(comment)
                 else:
                     comment_stats.downvotes = F('downvotes') + 1
+                    user_stats.downvoted_comments.add(comment)
 
         comment_stats.save()
 

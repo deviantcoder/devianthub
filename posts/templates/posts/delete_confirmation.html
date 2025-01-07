@@ -12,15 +12,15 @@
                     <a href="{% url 'posts:feed' %}" class="btn btn-secondary rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
                         <i class="fa fa-arrow-left"></i>
                     </a>
-                    <h5 class="text-center w-100">You are about to delete <strong>{{ object }}</strong>.</h5>
+                    <h5 class="text-center w-100">You are about to delete "<strong>{{ object }}</strong>".</h5>
                 </div>
                 <div class="card-body text-center">
                     <small>This action cannot be undone.</small>
 
                     <form method="POST" class="d-flex justify-content-center mt-4">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger mx-2">Delete</button>
-                        <a href="{% url 'posts:feed' %}" class="btn btn-secondary mx-2">Cancel</a>
+                        <button type="submit" class="btn btn-danger mx-2 radius-md">Delete</button>
+                        <a href="{% url 'posts:feed' %}" class="btn btn-secondary mx-2 radius-md">Cancel</a>
                     </form>
                 </div>
             </div>

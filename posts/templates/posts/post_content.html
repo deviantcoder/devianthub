@@ -2,7 +2,7 @@
 
 <div class="post radius-md">
     <div class="post-header d-flex">
-        <img src="{% static 'img/profile2.jpg' %}" alt="Community Logo" class="community-logo me-2">
+        <img src="{% static 'img/profile2.jpg' %}" alt="Community Logo" class="community-logo-sm me-2">
         <div class="post-info d-flex align-items-center">
             <span class="post-community">c/dedsec_with_a_very_long_name</span>
             <span class="pub-date ms-1 text-wrap"> •
@@ -30,9 +30,9 @@
     </div>
 
     <div class="post-title">
-        <div style="font-size: 16px; color: rgb(99, 114, 128);">
-            by
-            <a href="{% url 'users:user_profile' post.user.username %}" style="color: rgb(156, 167, 176);;">
+        <div style="font-size: 14px; color: rgb(99, 114, 128);">
+            <span>by</span>
+            <a href="{% url 'users:user_profile' post.user.username %}" style="color: rgb(156, 167, 176);">
                 {{ post.user.username }}
             </a>
         </div>
@@ -54,10 +54,10 @@
     {% if post.body %}
     <div class="post-description mt-3">
         <p>
-            {% if page == 'feed' %}
-                {{ post.body|slice:100 }}...
-            {% else %}
+            {% if page == 'post' %}
                 {{ post.body }}
+            {% else %}
+                {{ post.body|slice:100 }}...
             {% endif %}
         </p>
     </div>
@@ -136,10 +136,10 @@
             </form>
         </div>
         <div class="action-group d-flex align-items-center mt-1">
-            <a href="{% url 'posts:post' post.id %}" class="btn btn-outline-secondary btn-sm me-2">
+            <a href="{% url 'posts:post' post.id %}" class="btn btn-outline-secondary btn-sm me-2 radius-md">
                 <i class="bi bi-chat-dots-fill"></i> Comments ({{ post.comments.all.count }})
             </a>
-            <a href="" class="btn btn-outline-secondary btn-sm">
+            <a href="#" class="btn btn-outline-secondary btn-sm radius-md">
                 <i class="bi bi-share-fill"></i> Share
             </a>
         </div>

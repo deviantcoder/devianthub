@@ -15,7 +15,7 @@ class Post(models.Model):
         ('link', 'Link')
     )
 
-    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='posts')
     # community
     title = models.CharField(max_length=100)
     body = models.TextField(null=True, blank=True)

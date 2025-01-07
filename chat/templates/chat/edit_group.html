@@ -48,7 +48,7 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <div class="d-flex flex-wrap gap-2">
                         <button class="btn btn-primary mt-3" type="submit" style="border-radius: 20px;">Update</button>
-                        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light mt-3" style="border-radius: 20px;">Cancel</a>
+                        <a href="{% url 'chat:chatroom' group.name %}" class="btn btn-light mt-3" style="border-radius: 20px;">Cancel</a>
                     </div>
                     <div class="d-flex flex-wrap gap-2">
                         <!-- <a href="" class="btn btn-danger mt-3" style="border-radius: 20px;">Leave</a> -->

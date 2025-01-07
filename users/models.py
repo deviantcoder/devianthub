@@ -7,6 +7,7 @@ from django.core.validators import FileExtensionValidator
 from django.core.files.storage import default_storage
 
 
+
 def upload_to(instance, filename):
     seq = ''.join(map(str, random.sample(range(10), 10)))
     return f'profiles/{instance.username}/{seq}_{filename[-10:]}'
@@ -76,3 +77,32 @@ class Profile(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
+class UserActivityStats(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='activity_stats')
+
+    # posts up/down-voted by user
+    upvoted_posts = models.ManyToManyField('posts.Post', related_name='upvoted_posts_by_user', blank=True)
+    downvoted_posts = models.ManyToManyField('posts.Post', related_name='downvoted_posts_by_user', blank=True)
+
+    upvoted_comments = models.ManyToManyField('posts.Comment', related_name='upvoted_comments_by_user', blank=True)
+    downvoted_comments = models.ManyToManyField('posts.Comment', related_name='downvoted_comments_by_user', blank=True)
+
+    written_comments = models.ManyToManyField('posts.Comment', related_name='comments_by_user', blank=True)
+
+    post_upvotes = models.PositiveIntegerField(default=0) # n of upvotes on user's posts
+    post_downvotes = models.PositiveIntegerField(default=0) # n of downvotes on user's posts
+
+    comment_upvotes = models.PositiveIntegerField(default=0) # n of upvotes on user's comments
+
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    class Meta:
+        verbose_name = 'User activity stats'
+        verbose_name_plural = 'User activity stats'
+
+
+    def __str__(self):
+        return f'Stats for: {self.profile.username}'

@@ -86,25 +86,23 @@
                 </button>
 
                 {% if page != 'chat_home' %}
-
-                <div class="d-flex align-items-center">
-                    {% if chat.group_name %}
-                        <!-- <a href="">
-                            <img class="avatar" src="{{ other_user.image.url }}" alt="User Avatar">
-                        </a> -->
-                        <span class="chat-title">{{ chat.group_name }}</span>
-                    {% elif other_user %}
-                        <a href="">
-                            <img class="avatar" src="{{ other_user.image.url }}" alt="User Avatar">
-                        </a>
-                        <span class="chat-title">{{ other_user.get_username }}</span>
-                    {% else %}
-                        <span class="chat-title">Public Chat</span>
-                    {% endif %}
-                </div>
-                
+                    <div class="d-flex align-items-center">
+                        {% if chat.group_name %}
+                            <!-- <a href="">
+                                <img class="avatar" src="{{ other_user.image.url }}" alt="User Avatar">
+                            </a> -->
+                            <span class="chat-title">{{ chat.group_name }}</span>
+                        {% elif other_user %}
+                            <a href="{% url 'users:user_profile' other_user %}">
+                                <img class="avatar" src="{{ other_user.image.url }}" alt="User Avatar">
+                            </a>
+                            <span class="chat-title">{{ other_user.get_username }}</span>
+                        {% else %}
+                            <span class="chat-title">Public Chat</span>
+                        {% endif %}
+                    </div>
                 {% else %}
-                No chat selected
+                    No chat selected
                 {% endif %}
 
                 <div class="dropdown">

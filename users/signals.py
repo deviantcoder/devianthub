@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, UserActivityStats
 
 
 @receiver(post_save, sender=User)
@@ -32,3 +32,11 @@ def update_user(sender, instance, created, *args, **kwargs):
         user = profile.user
         user.username = profile.username
         user.save()
+
+
+@receiver(post_save, sender=Profile)
+def init_user_activity_stats(sender, instance, created, **kwargs):
+    if created:
+        stats = UserActivityStats.objects.create(
+            profile=instance
+        )

@@ -16,13 +16,18 @@ body {
 @media (min-width: 992px) {
     .navbar-nav {
         display: flex;
-        align-items: center; /* Центрируем вертикально */
+        align-items: center;
     }
 }
 
 .logo-img {
     max-width: 100%;
     height: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: rgb(169, 165, 201);
 }
 
 .nav-link:hover {
@@ -35,7 +40,15 @@ body {
 
 .fixed-column {
     position: fixed;
-    top: 63px;
+    top: 85px;
+    bottom: 0;
+    width: 300px;
+    background-color: black;
+    overflow-y: auto;
+}
+.fixed-column-no-bottom {
+    position: fixed;
+    top: 85px;
     bottom: 0;
     width: 300px;
     background-color: black;
@@ -58,6 +71,9 @@ body {
 
 @media (max-width: 768px) {
     .fixed-column {
+        display: none;
+    }
+    .fixed-column-no-bottom {
         display: none;
     }
     .main-content {
@@ -155,8 +171,8 @@ a:hover {
 }
 
 .menu-title {
-    color: #afafaf;
-    font-size: 13px;
+    color: #817c92;
+    font-size: 11px;
 }
 
 .recent-post-title {
@@ -218,7 +234,7 @@ a:hover {
 .post-community {
     font-weight: bold;
     color: #ff4500;
-    font-size: 1rem;
+    font-size: 13px;
     white-space: nowrap;
 }
 
@@ -714,3 +730,23 @@ a:hover {
 }
 
 /* ****** */
+
+.link-no-decoration {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav-item {
+    border: none !important;
+}
+
+.nav-link {
+    border-radius: 20px !important;
+    padding: 5px !important;
+    border: none !important;
+    font-size: 14px;
+}

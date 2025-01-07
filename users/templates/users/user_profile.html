@@ -55,12 +55,26 @@
         z-index: 1;
     }
 
+    .pfp {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        object-fit: cover;
+    }
+
     .menu-label {
         margin-top: 20px;
         font-weight: bold;
     }
 
     .stat-text {
+        font-size: 12px;
+        color: #b1c1cf;
+    }
+
+    .stat-text-sm {
         font-size: 14px;
         color: #b1c1cf;
     }
@@ -72,8 +86,26 @@
     .name {
         font-weight: bold;
         font-size: 20px;
-
     }
+
+    .profile-stats {
+        border: 1px solid;
+        padding: 5px;
+        width: 150px;
+    }
+
+    .profile-stats {
+        border: 1px solid;
+        padding: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-stats {
+            width: 100%;
+        }
+    }
+
+
 </style>
 
 <div class="container-fluid">
@@ -83,15 +115,14 @@
         {% include 'posts/left_side_panel.html' %}
 
         <!-- POST -->
-        <div class="col main-content" style="background: linear-gradient(45deg,#5c5c5c, #2f232c); border-radius: 20px !important;">
-            
-            <div class="profile-card">
+        <div class="col main-content">
+            <div class="profile-card" style="border: 1px solid;">
                 <div class="profile-background" style="background: url('{{ profile.banner.url }}') center/cover no-repeat;"></div>
                 <div class="profile-info">
                     <img src="{{ profile.image.url }}" alt="User Avatar">
                     <div class="username ms-2">
-                        POST        <span class="name">{{ profile.get_username }}</span>
-                        <span>{{ profile.username }}</span>
+                        <span class="name">{{ profile.get_username }}</span>
+                        <span>@{{ profile.username }}</span>
                     </div>
                 </div>
             </div>
@@ -114,43 +145,102 @@
                 </div>
             {% endif %}
 
-            <div class="d-flex justify-content-between text-center mt-3">
-                <div>
-                    <strong>292</strong>
-                    <div class="stat-text">Post Upvotes</div>
-                </div>
-                <div>
-                    <strong>1.2k</strong>
-                    <div class="stat-text">Comment Upvotes</div>
-                </div>
-                <div>
-                    <strong>Nov 29, 2003</strong>
-                    <div class="stat-text">Reg Date</div>
-                </div>
-            </div>
-
             <hr>
+            <div>
+                <span class="menu-title" style="font-size: 13px;">Lifetime statistics</span>
+            </div>
 
-            <p class="menu-label">Links</p>
-            <div class="d-flex flex-wrap">
-                <div class="share-link-group">
-                    <a href="#" class="btn btn-outline-secondary btn-sm d-flex align-items-center text-white radius-md">
-                        <i class="fab fa-instagram me-2"></i>
-                        <strong>Instagram</strong>
-                    </a>
+            <div class="container d-flex flex-wrap justify-content-between mt-2">
+                <div class="item profile-stats radius-sm text-center mb-3 mb-sm-0" style="width: 150px;">
+                    <div><strong class="stat-number">100%</strong></div>
+                    <div>
+                        <span class="icon is-small">
+                            <i class="fas fa-arrow-up" style="font-size: 16px;"></i>
+                        </span>
+                        <span class="stat-text">Upvote Rate</span>
+                    </div>
                 </div>
-                <div class="share-link-group">
-                    <a href="#" class="btn btn-outline-secondary btn-sm d-flex align-items-center text-white radius-md">
-                        <i class="fab fa-facebook me-2"></i>
-                        <strong>Facebook</strong>
-                    </a>
+                <div class="item profile-stats radius-sm text-center mb-3 mb-sm-0" style="width: 150px;">
+                    <div><strong class="stat-number">291</strong></div>
+                    <div>
+                        <span class="icon is-small">
+                            <i class="fas fa-comments" style="font-size: 16px;"></i>
+                        </span>
+                        <span class="stat-text">Comments</span>
+                    </div>
+                </div>
+                <div class="item profile-stats radius-sm text-center mb-3 mb-sm-0" style="width: 150px;">
+                    <div><strong class="stat-number">12</strong></div>
+                    <div>
+                        <span class="icon is-small">
+                            <i class="fas fa-edit" style="font-size: 16px;"></i>
+                        </span>
+                        <span class="stat-text">Total Posts</span>
+                    </div>
                 </div>
             </div>
+            
+
+            <div class="mt-4">
+                <ul class="nav nav-tabs flex-column flex-sm-row justify-content-center">
+                    <li class="nav-item me-2">
+                        <a class="nav-link active" href="#overview" data-bs-toggle="tab">Overview</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="#posts" data-bs-toggle="tab">Posts</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="#comments" data-bs-toggle="tab">Comments</a>
+                    </li>
+
+                    {% if profile == request.user.profile %}
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="#saved" data-bs-toggle="tab">Saved</a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="#hidden" data-bs-toggle="tab">Hidden</a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="#upvotes" data-bs-toggle="tab">Upvoted</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#downvoted" data-bs-toggle="tab">Downvoted</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            
+                <div class="tab-content mt-3">
+                    <div class="tab-pane fade show active" id="overview">
+                        {% for post in profile.posts.all %}
+                            {% include 'posts/post_content.html' %}
+                        {% endfor %}
+                    </div>
+                    <div class="tab-pane fade" id="posts">
+                        <p>Content for Posts.</p>
+                    </div>
+                    <div class="tab-pane fade" id="comments">
+                        <p>Content for Comments.</p>
+                    </div>
+                    <div class="tab-pane fade" id="saved">
+                        <p>Content for Saved.</p>
+                    </div>
+                    <div class="tab-pane fade" id="hidden">
+                        <p>Content for Hidden.</p>
+                    </div>
+                    <div class="tab-pane fade" id="upvotes">
+                        <p>Content for Upvotes.</p>
+                    </div>
+                    <div class="tab-pane fade" id="downvoted">
+                        <p>Content for Downvoted.</p>
+                    </div>
+                </div>
+            </div>
+            
 
         </div>
 
         <!-- RIGHT PANEL -->
-        {% include 'posts/right_side_panel.html' %}
+        {% include 'users/profile_side_panel.html' %}
 
     </div>
 </div>
