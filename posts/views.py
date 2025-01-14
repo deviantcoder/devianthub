@@ -13,7 +13,6 @@ from .forms import PostForm, PostMediaFormSet, CommentForm
 from users.models import UserActivityStats
 
 
-
 def feed(request):
     page = 'feed'
     posts = Post.objects.filter(draft=False)

@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block layout %}
+
+    {% include 'posts/left_side_panel.html' %}
+
+    <div class="container my-3 d-flex align-items-center flex-column" style="background-color: ;">
+        <div class="login rounded-3 p-2 shadow-sm d-flex align-items-center flex-column" style="max-width: 600px; border-radius: 20px !important;">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    {% include 'posts/right_side_panel.html' %}
+
+{% endblock %}
