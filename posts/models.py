@@ -154,6 +154,9 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return self.user.username
+    
+    class Meta:
+        ordering = ['-created']
 
 
 class CommentStats(models.Model):
@@ -174,7 +177,7 @@ class CommentStats(models.Model):
         return votes_ratio if votes_ratio else 0
 
     class Meta:
-        ordering = ['comment']
+        ordering = ['-created', 'comment']
         verbose_name = 'Comment statistics'
         verbose_name_plural = 'Comment stats'
 

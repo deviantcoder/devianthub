@@ -5,10 +5,19 @@
 
 <div id="{{ node.id }}" class="comment mb-2 radius-md">  
     <div class="comment-header align-items-center ms-2 mt-1 mb-1">
-        <a href="{% url 'users:user_profile' node.user.username %}" class="mb-0">
+
+        {% if request.user.profile == node.user %}
+        <a href="{% url 'users:profile' %}" class="mb-0">
             <img src="{{ node.user.image.url }}" alt="Community Logo" class="community-logo-sm">
             <span class="title-sm">u/{{ node.user.get_username }}</span>
         </a>
+        {% else %}
+            <a href="{% url 'users:user_profile' node.user.username %}" class="mb-0">
+                <img src="{{ node.user.image.url }}" alt="Community Logo" class="community-logo-sm">
+                <span class="title-sm">u/{{ node.user.get_username }}</span>
+            </a>
+        {% endif %}
+
         <span class="pub-date">•
             {% if node.time_since_posted.type != 'now' %}
                 {{ node.time_since_posted.num }}
@@ -28,16 +37,33 @@
 
             <form method="post" action="{% url 'posts:vote_comment' node.id %}">
                 {% csrf_token %}
-
-                <button type="submit" name="vote_type" value="upvote" class="btn btn-outline-primary btn-sm me-2 radius-sm">
-                    <i class="bi bi-caret-up-fill"></i>
-                </button>
+                
+                {% if node in request.user.profile.activity_stats.upvoted_comments.all %}
+                    <button type="submit" name="vote_type" value="upvote" 
+                        class="btn btn-outline-primary btn-sm me-2 radius-sm"
+                        style="background-color: rgb(5, 5, 154);">
+                        <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                {% else %}
+                    <button type="submit" name="vote_type" value="upvote" 
+                        class="btn btn-outline-primary btn-sm me-2 radius-sm">
+                        <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                {% endif %}
 
                 <span class="vote-count me-2">{{ node.commentstats.votes }}</span>
-
-                <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
-                    <i class="bi bi-caret-down-fill"></i>
-                </button>
+                
+                {% if node in request.user.profile.activity_stats.downvoted_comments.all %}
+                    <button type="submit" name="vote_type" value="downvote" 
+                        class="btn btn-outline-danger btn-sm me-2 radius-sm"
+                        style="background-color: rgb(140, 0, 0);">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                {% else %}
+                    <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                {% endif %}
 
             </form>
 

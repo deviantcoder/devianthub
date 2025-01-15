@@ -65,7 +65,7 @@ def comments_json(request, **kwargs):
     return JsonResponse({'data': comments_html, 'max': size,})
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def create_post(request):
     page = 'create_post'
 
@@ -117,6 +117,7 @@ def create_post(request):
     return render(request, 'posts/post_form.html', context)
 
 
+@login_required(login_url='account_login')
 def edit_post(request, pk):
     post = get_object_or_404(Post, id=pk)
     post_type = post.post_type
@@ -148,6 +149,7 @@ def edit_post(request, pk):
     return render(request, 'posts/edit_post.html', context)
 
 
+@login_required(login_url='account_login')
 def delete_post(request, pk):
     post = get_object_or_404(Post, id=pk)
 
@@ -191,6 +193,7 @@ def post(request, pk):
     return render(request, 'posts/post.html', context)
 
 
+@login_required(login_url='account_login')
 def comment_post(request, pk):
     post = get_object_or_404(Post, id=pk)
     post_stats, _ = PostStats.objects.get_or_create(post=post)
@@ -216,6 +219,7 @@ def comment_post(request, pk):
     return redirect('posts:post', pk)
 
 
+@login_required(login_url='account_login')
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, id=pk)
     post_stats = get_object_or_404(PostStats, post=comment.post)
@@ -234,6 +238,7 @@ def delete_comment(request, pk):
     return redirect('posts:post', comment.post.id)
 
 
+@login_required(login_url='account_login')
 def vote_post(request, pk):
     if request.method == 'POST':
         post = get_object_or_404(Post, id=pk)
@@ -288,6 +293,7 @@ def vote_post(request, pk):
     return redirect('posts:feed')
 
 
+@login_required(login_url='account_login')
 def vote_comment(request, pk):
     if request.method == 'POST':
         comment = get_object_or_404(Comment, id=pk)

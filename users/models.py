@@ -1,8 +1,10 @@
 import random
+from datetime import datetime
+from uuid import uuid4
 import utils.file_utils as utils
+
 from django.db import models
 from django.contrib.auth.models import User
-from uuid import uuid4
 from django.core.validators import FileExtensionValidator
 from django.core.files.storage import default_storage
 
@@ -49,6 +51,9 @@ class Profile(models.Model):
 
     def get_username(self):
         return self.display_name if self.display_name else self.username
+    
+    def get_created_date(self):
+        return datetime.strftime(self.created, '%b %d, %Y')
 
     def save(self, *args, **kwargs):
         old_files = {'image': None, 'banner': None}

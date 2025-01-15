@@ -104,6 +104,14 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+ACCOUNT_FORMS = {
+    'login': 'users.forms.CustomLoginForm',
+    'signup': 'users.forms.CustomSignupForm',
+}
+
+LOGIN_REDIRECT_URL = 'users:profile'
+# LOGIN_REDIRECT_URL = '/'
+
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [

@@ -1,31 +1,46 @@
 {% extends "socialaccount/base_entrance.html" %}
 {% load i18n %}
 {% load allauth %}
+
 {% block head_title %}
     {% trans "Sign In" %}
 {% endblock head_title %}
+
 {% block content %}
-    {% if process == "connect" %}
-        {% element h1 %}
-            {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
-        {% endelement %}
-        {% element p %}
-            {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
-        {% endelement %}
-    {% else %}
-        {% element h1 %}
-            {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
-        {% endelement %}
-        {% element p %}
-            {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
-        {% endelement %}
-    {% endif %}
-    {% element form method="post" no_visible_fields=True %}
-        {% slot actions %}
-            {% csrf_token %}
-            {% element button type="submit" %}
-                {% trans "Continue" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm" style="max-width: 400px; width: 100%; border-radius: 20px !important;">
+        <div class="card-body text-center">
+            {% if process == "connect" %}
+                <h1 class="card-title h4 mb-3">
+                    {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+                </h1>
+                <p class="card-text text-muted">
+                    {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+                </p>
+            {% else %}
+                {% if provider.id == 'google' %}
+                    <i class="fab fa-google mb-2" style="font-size: 40px;"></i>
+                {% else %}
+                    <i class="fab fa-github mb-2" style="font-size: 40px;"></i>
+                {% endif %}
+                <!-- <h1 class="card-title h4 mb-3">
+                    {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+                </h1> -->
+                <p class="card-text text-muted">
+                    {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+                </p>
+            {% endif %}
+            
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-block">
+                    {% trans "Continue" %}
+                </button>
+                <a href="{{request.META.HTTP_REFERER}}" class="btn btn-dark btn-block">
+                    Back
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}

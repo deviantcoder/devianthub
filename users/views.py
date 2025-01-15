@@ -66,7 +66,7 @@ def register_user(request):
     return render(request, 'users/registration.html', context)
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def edit_profile(request):
     profile = request.user.profile
     profile_copy = deepcopy(profile)
@@ -110,6 +110,16 @@ def check_username(request):
             return JsonResponse({'available': False})
 
     return JsonResponse({'available': True})
+
+
+def profile(request):
+    profile = request.user.profile
+
+    context = {
+        'profile': profile,
+    }
+
+    return render(request, 'users/user_profile.html', context)
 
 
 def user_profile(request, username):

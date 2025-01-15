@@ -57,10 +57,10 @@ class CommentAdmin(MPTTModelAdmin):
 
 @admin.register(CommentStats)
 class CommentsStatsAdmin(admin.ModelAdmin):
-    list_display = ['comment_text']
+    list_display = ['comment_text', 'upvotes', 'downvotes']
 
     def comment_text(self, obj):
-        return obj.comment.body
+        return obj.comment.body[:20]
 
 
 admin.site.register(VoteComment)

@@ -32,9 +32,15 @@
     <div class="post-title">
         <div style="font-size: 14px; color: rgb(99, 114, 128);">
             <span>by</span>
-            <a href="{% url 'users:user_profile' post.user.username %}" style="color: rgb(156, 167, 176);">
-                {{ post.user.username }}
-            </a>
+            {% if request.user.profile == post.user %}
+                <a href="{% url 'users:profile' %}" style="color: rgb(156, 167, 176);">
+                    {{ post.user.username }}
+                </a>
+            {% else %}
+                <a href="{% url 'users:user_profile' post.user.username %}" style="color: rgb(156, 167, 176);">
+                    {{ post.user.username }}
+                </a>
+            {% endif %}
         </div>
         
         <h5 class="post-title mt-2">
@@ -124,15 +130,35 @@
         <div class="vote-group d-flex flex-nowrap align-items-center">
             <form method="post" action="{% url 'posts:vote_post' post.id %}">
                 {% csrf_token %}
-                <button type="submit" name="vote_type" value="upvote" class="btn btn-outline-primary btn-sm me-2 radius-sm">
-                    <i class="bi bi-caret-up-fill"></i>
-                </button>
+
+                {% if post in request.user.profile.activity_stats.upvoted_posts.all %}
+                    <button type="submit" name="vote_type" value="upvote" 
+                        class="btn btn-outline-primary btn-sm me-2 radius-sm"
+                        style="background-color: rgb(5, 5, 154);">
+                        <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                {% else %}
+                    <button type="submit" name="vote_type" value="upvote" 
+                        class="btn btn-outline-primary btn-sm me-2 radius-sm">
+                        <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                {% endif %}
 
                 <span class="vote-count me-2">{{ post.poststats.votes }}</span>
+                
+                {% if post in request.user.profile.activity_stats.downvoted_posts.all %}
+                    <button type="submit" name="vote_type" value="downvote" 
+                        class="btn btn-outline-danger btn-sm me-2 radius-sm"
+                        style="background-color: rgb(140, 0, 0);">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                {% else %}
+                    <button type="submit" name="vote_type" value="downvote" 
+                        class="btn btn-outline-danger btn-sm me-2 radius-sm">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                {% endif %}
 
-                <button type="submit" name="vote_type" value="downvote" class="btn btn-outline-danger btn-sm me-2 radius-sm">
-                    <i class="bi bi-caret-down-fill"></i>
-                </button>
             </form>
         </div>
         <div class="action-group d-flex align-items-center mt-1">

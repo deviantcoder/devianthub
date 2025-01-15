@@ -1,47 +1,53 @@
-{% extends "account/base_entrance.html" %}
-{% load i18n %}
+{% extends 'layouts/blank.html' %}
+
 {% load static %}
-{% load allauth account %}
-{% block head_title %}
-    {% trans "Sign In" %}
-{% endblock head_title %}
+
 {% block content %}
-    <div class="text-center mb-3">
-        <img src="{% static 'img/logo.png' %}" alt="Logo" style="max-width: 200px;">
+
+{% include 'posts/left_side_panel.html' %}
+
+<div class="container d-flex justify-content-center align-items-center mt-4">
+    <div class="card p-4 login radius-md">
+        <div class="text-center mb-3">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" style="max-width: 200px;">
+        </div>
+
+        <h4 class="text-center mb-3">Welcome back!</h4>
+        
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                {{ form.login }}
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                {{ form.password }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 mb-3 login-button">Log in</button>
+            
+            <hr>
+
+            <div class="text-center mb-3">
+                <span class="form-label">or sign in using</span>
+            </div>
+            
+            <div class="d-flex justify-content-center mb-3">
+                {% include 'socialaccount/snippets/provider_list.html' %}
+            </div>
+            
+        </form>
+
+        <div class="text-center mt-2">
+            <span><a href="{% url 'account_signup' %}" class="text-light">Sign up</a></span>
+            <span>•</span>
+            <span><a href="#" class="text-light">Forgot password?</a></span>
+        </div>
     </div>
-    <h4>Welcome back!</h4>
-    {% if not SOCIALACCOUNT_ONLY %}
-        {% setvar link %}
-            <a href="{{ signup_url }}">
-            {% endsetvar %}
-            {% setvar end_link %}
-            </a>
-        {% endsetvar %}
-        {% element p %}
-            {% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}
-        {% endelement %}
-        {% url 'account_login' as login_url %}
-        {% element form form=form method="post" action=login_url tags="entrance,login" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form unlabeled=True %}
-                {% endelement %}
-                {{ redirect_field }}
-            {% endslot %}
-            {% slot actions %}
-                {% element button type="submit" tags="prominent,login" %}
-                    {% trans "Sign In" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
-    {% endif %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
+</div>
+
+{% include 'posts/right_side_panel.html' %}
+
 {% endblock content %}
-{% block extra_body %}
-    {{ block.super }}
-    {% if PASSKEY_LOGIN_ENABLED %}
-        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
-    {% endif %}
-{% endblock %}
