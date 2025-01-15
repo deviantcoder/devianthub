@@ -7,7 +7,7 @@ from users.models import Profile
 from django.contrib import messages
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def chat_home(request):
     group_form = GroupForm()
 
@@ -19,7 +19,7 @@ def chat_home(request):
     return render(request, 'chat/chat.html', context)
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def chat(request, chatroom_name='public-chat'):
     current_user = request.user.profile
 
@@ -71,7 +71,7 @@ def chat(request, chatroom_name='public-chat'):
     return render(request, 'chat/chat.html', context)
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def get_or_create_chat(request, username):
     if request.user.profile.username == username:
         return redirect('/')
@@ -90,7 +90,7 @@ def get_or_create_chat(request, username):
     return redirect('chat:chatroom', chat.name)
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def create_group(request):
     form = GroupForm()
 
@@ -111,7 +111,7 @@ def create_group(request):
     return redirect('/')
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def edit_group(request, chat_name):
     group = get_object_or_404(Chat, name=chat_name)
 
@@ -142,7 +142,7 @@ def edit_group(request, chat_name):
 
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def delete_group(request, chat_name):
     group = get_object_or_404(Chat, name=chat_name)
 
@@ -165,7 +165,7 @@ def delete_group(request, chat_name):
     return render(request, 'chat/delete_group.html', context)
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def leave_group(request, chat_name):
     group = get_object_or_404(Chat, name=chat_name)
     current_user = request.user.profile

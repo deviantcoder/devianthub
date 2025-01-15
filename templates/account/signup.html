@@ -69,18 +69,11 @@
             </div>
             
             <div class="d-flex justify-content-center mb-3">
-                <a href="#" class="btn login-button btn-dark d-flex justify-content-center align-items-center" style="background-color: #333; color: #fff; margin-right: 10px;">
-                    <i class="fab fa-google me-2" style="font-size: 20px;"></i>
-                    <span>Google</span>
-                </a>
-                <a href="#" class="btn btn-dark d-flex justify-content-center align-items-center" style="background-color: #333; color: #fff;">
-                    <i class="fab fa-github me-2" style="font-size: 20px;"></i>
-                    <span>Github</span>
-                </a>
+                {% include 'socialaccount/snippets/provider_list.html' %}
             </div>
             
             <div class="text-center mt-2">
-                <span><a href="{% url 'users:login' %}" class="text-light">Log In</a></span>
+                <span><a href="{% url 'account_login' %}" class="text-light">Log In</a></span>
                 <span>•</span>
                 <span><a href="#" class="text-light">Forgot password?</a></span>
             </div>

@@ -43,7 +43,7 @@
                                 <h5 class="dropdown-item">u/{{ request.user.profile.get_username }}</h5>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'users:user_profile' request.user.profile %}">
+                                <a class="dropdown-item" href="{% url 'users:profile' %}">
                                     <i class="fas fa-user-circle me-2"></i>
                                     View Profile
                                 </a>
@@ -68,8 +68,8 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="btn btn-outline-light" href="{% url 'users:login' %}">Log In</a>
-                        <a class="btn btn-outline-light" href="{% url 'users:register' %}">Sign Up</a>
+                        <a class="btn btn-outline-light" href="{% url 'account_login' %}">Log In</a>
+                        <a class="btn btn-outline-light" href="{% url 'account_signup' %}">Sign Up</a>
                     </li>
                 {% endif %}
 

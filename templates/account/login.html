@@ -19,11 +19,11 @@
 
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control login-field" id="username" placeholder="Enter username" required>
+                {{ form.login }}
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control login-field" id="password" placeholder="Enter password" required>
+                {{ form.password }}
             </div>
             
             <button type="submit" class="btn btn-primary w-100 mb-3 login-button">Log in</button>
@@ -35,20 +35,13 @@
             </div>
             
             <div class="d-flex justify-content-center mb-3">
-                <a href="" class="btn login-button btn-dark d-flex justify-content-center align-items-center" style="background-color: #333; color: #fff; margin-right: 10px;">
-                    <i class="fab fa-google me-2" style="font-size: 20px;"></i>
-                    <span>Google</span>
-                </a>
-                <a href="" class="btn btn-dark d-flex justify-content-center align-items-center" style="background-color: #333; color: #fff;">
-                    <i class="fab fa-github me-2" style="font-size: 20px;"></i>
-                    <span>Github</span>
-                </a>
+                {% include 'socialaccount/snippets/provider_list.html' %}
             </div>
             
         </form>
 
         <div class="text-center mt-2">
-            <span><a href="{% url 'users:register' %}" class="text-light">Sign up</a></span>
+            <span><a href="{% url 'account_signup' %}" class="text-light">Sign up</a></span>
             <span>•</span>
             <span><a href="#" class="text-light">Forgot password?</a></span>
         </div>

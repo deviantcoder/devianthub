@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.core.exceptions import ValidationError
 
+from allauth.account.forms import LoginForm, SignupForm
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -86,3 +88,34 @@ class ProfileForm(forms.ModelForm):
                 'name': 'banner',
             })
         }
+
+
+class CustomLoginForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name == 'password':
+                field.widget.attrs.update({
+                    'type': 'password',
+                    'name': 'password',
+                    'class': 'form-control login-field',
+                    'id': 'password',
+                    'placeholder': 'Enter a password',
+                })
+            elif name == 'login':
+                field.widget.attrs.update({
+                    'type': 'text',
+                    'name': 'username',
+                    'class': 'form-control login-field',
+                    'id': 'username',
+                    'placeholder': 'Enter username',
+                })
+
+
+class CustomSignupForm(SignupForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({
+                'class': 'form-control login-field',
+            })

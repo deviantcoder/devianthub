@@ -27,6 +27,8 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+SITE_ID = 1
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -38,6 +40,14 @@ CSRF_TRUSTED_ORIGINS = ['https://*.app']
 
 INSTALLED_APPS = [
     'daphne',
+
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,7 +72,45 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+GITHUB_CLIENT_ID = os.getenv('GITHUB_CLIENT_ID')
+GITHUB_SECRET = os.getenv('GITHUB_SECRET')
+
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_SECRET = os.getenv('GOOGLE_SECRET')
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'APP': {
+            'client_id': GITHUB_CLIENT_ID,
+            'secret': GITHUB_SECRET,
+            'key': ''
+        }
+    },
+    'google': {
+        'APP': {
+            'client_id': GOOGLE_CLIENT_ID,
+            'secret': GOOGLE_SECRET,
+            'key': ''
+        }
+    }
+}
+
+ACCOUNT_FORMS = {
+    'login': 'users.forms.CustomLoginForm',
+    'signup': 'users.forms.CustomSignupForm',
+}
+
+LOGIN_REDIRECT_URL = 'users:profile'
+# LOGIN_REDIRECT_URL = '/'
 
 ROOT_URLCONF = 'core.urls'
 

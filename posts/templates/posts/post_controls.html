@@ -1,47 +1,47 @@
-
-    <div class="dropdown is-right">
-        <div class="dropdown-trigger">
-            <button aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleDropdown(this)">
-                <span class="icon is-small">
-                    <i class="fas fa-ellipsis-v" style="font-size: 16px;"></i>
-                </span>
-            </button>
-        </div>
-        <div class="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-                {% if page != 'feed' %}
-                    <div class="dropdown-item">
-                        <a href="{% url 'posts:edit_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
-                            <i class="fas fa-edit icon-width" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
-                            <strong>Edit</strong>
-                        </a>
-                    </div>
-                    <div class="dropdown-item">
-                        <a href="{% url 'posts:delete_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}" class="post-title">
-                            <i class="fas fa-trash icon-width" aria-hidden="true" style="color: red;"></i>
-                            <strong>Delete</strong>
-                        </a>
-                    </div>
-                {% endif %}
-                <div class="dropdown-item">
-                    <a href="" class="post-title">
-                        <i class="fas fa-bookmark icon-width" aria-hidden="true"></i>
-                        <strong>Save</strong>
-                    </a>
-                </div>
-                <div class="dropdown-item">
-                    <a href="" class="post-title">
-                        <i class="fas fa-eye-slash icon-width" aria-hidden="true"></i>
-                        <strong>Hide</strong>
-                    </a>
-                </div>
-                <div class="dropdown-item">
-                    <a href="" class="post-title">
-                        <i class="fas fa-flag icon-width" aria-hidden="true"></i>
-                        <strong>Report</strong>
-                    </a>
-                </div>
+<div class="dropdown is-right">
+    <div class="dropdown-trigger">
+        <button aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleDropdown(this)">
+            <span class="icon is-small">
+                <i class="fas fa-ellipsis-v" style="font-size: 16px;"></i>
+            </span>
+        </button>
+    </div>
+    <div class="dropdown-menu" role="menu">
+        <div class="dropdown-content">
+            {% if page != 'feed' %}
+            <div class="dropdown-item">
+                <a href="{% url 'posts:edit_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}"
+                    class="post-title">
+                    <i class="fas fa-edit icon-width" aria-hidden="true" style="color: rgb(149, 149, 241);"></i>
+                    <strong>Edit</strong>
+                </a>
+            </div>
+            <div class="dropdown-item">
+                <a href="{% url 'posts:delete_post' post.id %}?post={{ request.path }}&feed={{ request.GET.feed }}"
+                    class="post-title">
+                    <i class="fas fa-trash icon-width" aria-hidden="true" style="color: red;"></i>
+                    <strong>Delete</strong>
+                </a>
+            </div>
+            {% endif %}
+            <div class="dropdown-item">
+                <a href="" class="post-title">
+                    <i class="fas fa-bookmark icon-width" aria-hidden="true"></i>
+                    <strong>Save</strong>
+                </a>
+            </div>
+            <div class="dropdown-item">
+                <a href="" class="post-title">
+                    <i class="fas fa-eye-slash icon-width" aria-hidden="true"></i>
+                    <strong>Hide</strong>
+                </a>
+            </div>
+            <div class="dropdown-item">
+                <a href="" class="post-title">
+                    <i class="fas fa-flag icon-width" aria-hidden="true"></i>
+                    <strong>Report</strong>
+                </a>
             </div>
         </div>
     </div>
-
+</div>
