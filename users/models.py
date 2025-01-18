@@ -84,6 +84,35 @@ class Profile(models.Model):
         ordering = ['-created']
 
 
+class SocialNetwork(models.Model):
+    SOCIAL_ICONS = (
+        ('fa-facebook', 'Facebook'),
+        ('fa-twitter', 'Twitter'),
+        ('fa-instagram', 'Instagram'),
+        ('fa-linkedin', 'LinkedIn'),
+        ('fa-youtube', 'YouTube'),
+    )
+
+    name = models.CharField(max_length=50, unique=True)
+    icon_class = models.CharField(max_length=50, choices=SOCIAL_ICONS, help_text='font-awesome icon class')
+
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+
+class SocialLink(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='socials')
+    network = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE, related_name='network')
+    url = models.URLField()
+
+    id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)
+
+    def __str__(self):
+        return self.network.name
+
+
 class UserActivityStats(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='activity_stats')
 

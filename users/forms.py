@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, SocialLink
 from django.core.exceptions import ValidationError
 
 from allauth.account.forms import LoginForm, SignupForm
@@ -119,3 +119,9 @@ class CustomSignupForm(SignupForm):
             field.widget.attrs.update({
                 'class': 'form-control login-field',
             })
+
+
+class SocialForm(forms.ModelForm):
+    class Meta:
+        model = SocialLink
+        fields = ['network', 'url']

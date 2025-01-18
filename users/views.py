@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import CustomUserCreationForm, ProfileForm
+from .forms import CustomUserCreationForm, ProfileForm, SocialForm
 from django.http import JsonResponse
 from .models import Profile
 from copy import deepcopy
@@ -112,21 +112,27 @@ def check_username(request):
     return JsonResponse({'available': True})
 
 
-def profile(request):
-    profile = request.user.profile
+def profile(request, username=None):
+    if username is None and request.user.is_authenticated:
+        username = request.user.profile.username
+    elif username is None:
+        return redirect('account_login')
 
-    context = {
-        'profile': profile,
-    }
-
-    return render(request, 'users/user_profile.html', context)
-
-
-def user_profile(request, username):
     profile = get_object_or_404(Profile, username=username)
 
     context = {
         'profile': profile
     }
-
+       
     return render(request, 'users/user_profile.html', context)
+
+
+@login_required(login_url='account_login')
+def add_social_link(request):
+    form = SocialForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'users/social_form.html', context)
