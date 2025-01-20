@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomUserCreationForm, ProfileForm, SocialForm
 from django.http import JsonResponse
-from .models import Profile
+from .models import Profile, SocialLink
 from copy import deepcopy
 
 
@@ -115,24 +115,79 @@ def check_username(request):
 def profile(request, username=None):
     if username is None and request.user.is_authenticated:
         username = request.user.profile.username
+        social_form = SocialForm()
     elif username is None:
         return redirect('account_login')
+    else:
+        social_form = None
 
     profile = get_object_or_404(Profile, username=username)
 
     context = {
-        'profile': profile
+        'profile': profile,
+        'form': social_form
     }
        
     return render(request, 'users/user_profile.html', context)
 
 
 @login_required(login_url='account_login')
-def add_social_link(request):
+def add_social(request):
     form = SocialForm()
+
+    if request.method == 'POST':
+        form = SocialForm(request.POST)
+        if form.is_valid():
+            social = form.save(commit=False)
+            social.profile = request.user.profile
+            social.save()
+
+            messages.success(request, 'Social was added')
+
+            return redirect('users:profile')
 
     context = {
         'form': form,
     }
 
     return render(request, 'users/social_form.html', context)
+
+
+@login_required(login_url='account_login')
+def edit_social(request, pk):
+    social = get_object_or_404(SocialLink, id=pk)
+
+    if request.user.profile != social.profile:
+        messages.warning(request, 'You are not allowed to change this!')
+        return redirect('/')
+
+    form = SocialForm(instance=social)
+
+    if request.method == 'POST':
+        form = SocialForm(request.POST, instance=social) 
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Link edited')
+            return redirect('users:profile')
+        
+    context = {
+        'form': form,
+        'social': social,
+    }
+
+    return render(request, 'users/edit_social.html', context)
+
+
+@login_required(login_url='account_login')
+def delete_social(request, pk):
+    social = get_object_or_404(SocialLink, id=pk)
+
+    if request.user.profile != social.profile:
+        messages.warning(request, 'You are not allowed to change this!')
+        return redirect('/')
+
+    social.delete()
+
+    messages.info(request, 'Social link was deleted')
+
+    return redirect('users:profile')

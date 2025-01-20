@@ -13,4 +13,8 @@ class UserActivityStatsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(SocialNetwork)
-admin.site.register(SocialLink)
+
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+    list_display = ['network', 'profile']

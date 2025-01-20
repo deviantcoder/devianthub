@@ -4,11 +4,11 @@
 
 {% block content %}
 
+<!-- left panel -->
+{% include 'posts/left_side_panel.html' %}
+
 <div class="container-fluid">
     <div class="row">
-
-        <!-- left panel -->
-        {% include 'posts/left_side_panel.html' %}
 
         <!-- main col -->
         <div class="col main-content">
@@ -36,11 +36,11 @@
             </div>
         </div>
 
-        <!-- right panel -->
-        {% include 'posts/right_side_panel.html' %}
-
     </div>
 </div>
+
+<!-- right panel -->
+{% include 'posts/right_side_panel.html' %}
 
 <!-- JS -->
 <script src="{% static 'js/posts.js' %}"></script>

@@ -54,6 +54,9 @@ class Profile(models.Model):
     
     def get_created_date(self):
         return datetime.strftime(self.created, '%b %d, %Y')
+    
+    def get_socials(self):
+        return self.socials.all() if self.socials.exists() else None
 
     def save(self, *args, **kwargs):
         old_files = {'image': None, 'banner': None}
@@ -86,11 +89,13 @@ class Profile(models.Model):
 
 class SocialNetwork(models.Model):
     SOCIAL_ICONS = (
-        ('fa-facebook', 'Facebook'),
-        ('fa-twitter', 'Twitter'),
-        ('fa-instagram', 'Instagram'),
-        ('fa-linkedin', 'LinkedIn'),
-        ('fa-youtube', 'YouTube'),
+        ('fab fa-facebook me-2', 'Facebook'),
+        ('fab fa-twitter me-2', 'Twitter'),
+        ('fab fa-instagram me-2', 'Instagram'),
+        ('fab fa-linkedin me-2', 'LinkedIn'),
+        ('fab fa-telegram me-2', 'Telegram'),
+        ('fab fa-youtube me-2', 'YouTube'),
+        ('fas fa-globe me-2', 'Website'),
     )
 
     name = models.CharField(max_length=50, unique=True)

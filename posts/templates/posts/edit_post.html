@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% include 'posts/left_side_panel.html' %}
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -119,6 +121,8 @@
         </div>
     </div>
 </div>
+
+{% include 'posts/right_side_panel.html' %}
 
 <script>
     document.getElementById('add-media').addEventListener('click', function() {

@@ -125,3 +125,17 @@ class SocialForm(forms.ModelForm):
     class Meta:
         model = SocialLink
         fields = ['network', 'url']
+        widgets = {
+            'network': forms.Select(attrs={
+                'class': 'form-control login-field',
+                'placeholder': 'Choose a social network',
+                'name': 'network',
+                'id': 'network',
+            }),
+            'url': forms.TextInput(attrs={
+                'class': 'form-control login-field',
+                'placeholder': 'Link',
+                'name': 'url',
+                'id': 'url',
+            }),
+        }

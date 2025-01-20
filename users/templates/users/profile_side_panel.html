@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="col fixed-column-no-bottom right-column" style="background-color: #14161A; border-radius: 20px !important;">
+<div class="col fixed-column-no-bottom right-column ps-2 pe-2 pb-3" style="background-color: #14161A; border-radius: 20px !important;">
     
     <div class="profile-card" style="border: 1px solid; margin-top: 20px;">
         <div class="profile-background" style="background: url('{{ profile.banner.url }}') center/cover no-repeat;"></div>
@@ -61,38 +61,44 @@
     </div>
 
     <div class="d-flex flex-wrap">
-        <div class="share-link-group mt-1">
-            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
-                <i class="fab fa-instagram me-2"></i>
-                <strong>Instagram</strong>
-            </a>
-        </div>
-        <div class="share-link-group mt-1">
-            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
-                <i class="fab fa-twitter me-2"></i>
-                <strong>Twitter</strong>
-            </a>
-        </div>
-        <div class="share-link-group mt-1">
-            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
-                <i class="fab fa-facebook me-2"></i>
-                <strong>Facebook</strong>
-            </a>
-        </div>
-        <div class="share-link-group mt-1">
-            <a href="#" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
-                <i class="fab fa-telegram me-2"></i>
-                <strong>Telegram</strong>
-            </a>
-        </div>
+        {% if profile.get_socials %}
+            {% for social in profile.get_socials %}
+
+                <div class="share-link-group mt-1 d-flex align-items-center">
+                    <a href="{{ social.url }}" class="btn btn-sm d-flex align-items-center text-white radius-md" style="background-color: #4c5568; font-size: 11px;">
+                        <i class="{{ social.network.icon_class }} me-2"></i>
+                        <strong>{{ social.network.name }}</strong>
+                    </a>
+                    
+                    {% if request.user.profile == social.profile %}
+                        <div class="dropdown">
+                            <button class="btn btn-dark btn-sm radius-md" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'users:edit_social' social.id %}"><i class="fas fa-pen-to-square me-2"></i>Edit</a>
+                                <a class="dropdown-item" href="{% url 'users:delete_social' social.id %}"><i class="fas fa-trash-can me-2 text-danger"></i>Delete</a>
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+        {% else %}
+            <small style="color: grey">No socials accounts links</small>
+        {% endif %}
+
     </div>
 
     {% if profile == request.user.profile %}
         <div class="d-flex justify-content-center mt-3">
-            <button class="btn btn-primary btn-sm radius-md d-flex align-items-center">
+            <button class="btn btn-primary btn-sm radius-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addSocialModal">
                 <i class="fas fa-plus me-2"></i>
                 Add
             </button>
         </div>
     {% endif %}
 </div>
+
+{% include 'users/modal_social.html' %}
