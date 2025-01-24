@@ -130,8 +130,8 @@ class UserActivityStats(models.Model):
 
     written_comments = models.ManyToManyField('posts.Comment', related_name='comments_by_user', blank=True)
 
-    post_upvotes = models.PositiveIntegerField(default=0) # n of upvotes on user's posts
-    post_downvotes = models.PositiveIntegerField(default=0) # n of downvotes on user's posts
+    post_upvotes = models.PositiveIntegerField(default=0) # n of upvotes on user's posts          # REMOVE <<<<<<
+    post_downvotes = models.PositiveIntegerField(default=0) # n of downvotes on user's posts      # REMOVE <<<<<<
 
     comment_upvotes = models.PositiveIntegerField(default=0) # n of upvotes on user's comments
 
@@ -142,6 +142,32 @@ class UserActivityStats(models.Model):
         verbose_name = 'User activity stats'
         verbose_name_plural = 'User activity stats'
 
-
     def __str__(self):
         return f'Stats for: {self.profile.username}'
+
+    def get_comment_upvotes(self):
+        comments = self.profile.comments.all()
+        upvotes = sum([comment.commentstats.upvotes for comment in comments])
+        return upvotes
+
+    def get_post_upvotes(self):
+        posts = self.profile.posts.all()
+        upvotes = sum([post.poststats.upvotes for post in posts])
+        return upvotes
+
+    def get_post_downvotes(self):
+        posts = self.profile.posts.all()
+        downvotes = sum([post.poststats.downvotes for post in posts])
+        return downvotes
+
+    def get_upvote_rate(self):
+        upvotes = self.get_post_upvotes()
+        downvotes = self.get_post_downvotes()
+
+        try:
+            rate = int(upvotes / (upvotes + downvotes) * 100) or 0
+            return rate
+        except ZeroDivisionError:
+            return 0
+
+

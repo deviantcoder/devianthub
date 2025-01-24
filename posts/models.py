@@ -137,7 +137,7 @@ class VotePost(models.Model):
 class Comment(MPTTModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='comments')
 
     body = models.TextField(blank=True)
 

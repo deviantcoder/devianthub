@@ -18,11 +18,15 @@
     
     <div class="d-flex justify-content-between text-center mt-3" style="font-size: 13px;">
         <div>
-            <strong>292</strong>
+            <strong>
+                {{ profile.activity_stats.get_post_upvotes }}
+            </strong>
             <div class="stat-text-sm">Post Upvotes</div>
         </div>
         <div>
-            <strong>1.2k</strong>
+            <strong>
+                {{ profile.activity_stats.get_comment_upvotes }}
+            </strong>
             <div class="stat-text-sm">Comment Upvotes</div>
         </div>
         <div>

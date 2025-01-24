@@ -39,7 +39,10 @@ class PostMediaAdmin(admin.ModelAdmin):
 
 @admin.register(PostStats)
 class PostStatsAdmin(admin.ModelAdmin):
-    list_display = ['post', 'upvotes', 'downvotes', 'comments', 'reposts']
+    list_display = ['post', 'post_user', 'upvotes', 'downvotes', 'comments', 'reposts']
+
+    def post_user(self, obj):
+        return obj.post.user.username
 
 
 @admin.register(VotePost)
